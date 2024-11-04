@@ -31,6 +31,7 @@ public class OG_MovementByMouse : MonoBehaviour
 
     void Update()
     {
+        // Update mouse position
         mousePosition = Input.mousePosition;
         mousePosition = Camera.main.ScreenToWorldPoint(new Vector3(mousePosition.x, mousePosition.y, 10));
         mousePosition.z = 0;
@@ -38,44 +39,30 @@ public class OG_MovementByMouse : MonoBehaviour
         // If mouse button is pressed
         if (Input.GetMouseButtonDown(0) && !placeSelected)
         {
-            positionDesired = mousePosition;
+            positionDesired = mousePosition; // Store desired position at click
+            playerPosition = transform.position; // Set player position at the time of click
             elapsedTime = 0; // Reset elapsed time
+            controlPoint = (playerPosition + positionDesired) / 2 + new Vector3(0, -1f, 0); // Set initial control point
             lineRenderer.enabled = true;  // Enable LineRenderer when starting path selection
-        }
-        else if (!Input.GetMouseButtonDown(0) && !isMoving)
-        {
-            lineRenderer.enabled = true;
-            UpdateLineRenderer(mousePosition);
         }
 
         // While dragging the mouse
         if (Input.GetMouseButton(0) && !placeSelected)
         {
-            float dragDistance = Vector3.Distance(playerPosition, mousePosition);
-            float maxDistance = playerBase.GetRange(); // Get the range from PlayerBase
-            dragDistance = Mathf.Min(dragDistance, maxDistance); // Limit the drag distance
-
-            float curveIntensity = Mathf.Clamp(dragDistance / 100f, 0, 2f);
-
-            // Adjust control point to make the curve bend to the right
-            controlPoint = (playerPosition + mousePosition) / 2 + new Vector3(0, -curveIntensity, 0); // Inverted Y offset
-
-            // Generate smoother curve points for the LineRenderer
-            List<Vector3> smoothCurvePoints = GenerateBezierCurve(playerPosition, controlPoint, positionDesired, curveResolution);
-            lineRenderer.positionCount = smoothCurvePoints.Count;
-            lineRenderer.SetPositions(smoothCurvePoints.ToArray());
+            // Update the end position while dragging
+            UpdateLineRenderer(mousePosition);
         }
 
         // When the mouse button is released
         if (Input.GetMouseButtonUp(0) && !isMoving)
         {
             placeSelected = true;
-
+            positionDesired = mousePosition;
             // Calculate the distance to the desired position
             float distanceToTarget = Vector3.Distance(playerPosition, positionDesired);
             moveDuration = distanceToTarget / velocity; // Set move duration based on distance and velocity
             elapsedTime = 0; // Reset elapsed time
-            lineRenderer.enabled = false;  
+            lineRenderer.enabled = false;
         }
 
         // Movement along the Bezier curve
@@ -86,7 +73,8 @@ public class OG_MovementByMouse : MonoBehaviour
 
             // Calculate normalized time (0 to 1) for the Bezier curve
             float t = Mathf.Clamp01(elapsedTime / moveDuration);
-            transform.position = BezierCurve(t, playerPosition, controlPoint, positionDesired);
+            Vector3 newPosition = BezierCurve(t, playerPosition, controlPoint, positionDesired);
+            transform.position = newPosition; // Update the player's position
 
             // Check if we have reached the end of the curve
             if (t >= 1f)
@@ -100,14 +88,9 @@ public class OG_MovementByMouse : MonoBehaviour
 
     private void UpdateLineRenderer(Vector3 targetPosition)
     {
-        float dragDistance = Vector3.Distance(playerPosition, targetPosition);
-        float maxDistance = playerBase.GetRange(); // Get the range from PlayerBase
-        dragDistance = Mathf.Min(dragDistance, maxDistance); // Limit the drag distance
-
-        float curveIntensity = Mathf.Clamp(dragDistance / 100f, 0, 2f);
-
-        // Adjust control point to make the curve bend to the right
-        controlPoint = (playerPosition + targetPosition) / 2 + new Vector3(0, -curveIntensity, 0); // Inverted Y offset
+        // Update the control point based on the initial position and the new target position
+        float curveIntensity = Mathf.Clamp(Vector3.Distance(playerPosition, targetPosition) / 100f, 0, 2f);
+        controlPoint = (playerPosition + positionDesired) /2 + new Vector3(0, -curveIntensity, 0); // Adjust height
 
         // Generate smoother curve points for the LineRenderer
         List<Vector3> smoothCurvePoints = GenerateBezierCurve(playerPosition, controlPoint, targetPosition, curveResolution);
