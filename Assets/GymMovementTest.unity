@@ -583,7 +583,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 5
-  range: 5
+  range: 2
 --- !u!50 &871648642
 Rigidbody2D:
   serializedVersion: 5

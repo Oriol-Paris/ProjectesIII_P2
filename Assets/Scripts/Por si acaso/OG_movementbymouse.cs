@@ -8,8 +8,7 @@ public class OG_MovementByMouse : MonoBehaviour
     Vector3 playerPosition;
     bool placeSelected;
     bool isMoving;
-    float moveDuration; // Total time to move
-    float elapsedTime;  // Time elapsed since the start of the move
+    float t; // Parameter to control position along the curve
     [SerializeField] private float velocity; // Speed in units per second
     [SerializeField] LineRenderer lineRenderer;
     private Vector3 controlPoint;
@@ -41,7 +40,17 @@ public class OG_MovementByMouse : MonoBehaviour
         {
             positionDesired = mousePosition; // Store desired position at click
             playerPosition = transform.position; // Set player position at the time of click
-            elapsedTime = 0; // Reset elapsed time
+
+            // Limit positionDesired to within PlayerBase range
+            float range = playerBase.GetRange();
+            float distanceToTarget = Vector3.Distance(playerPosition, positionDesired);
+            if (distanceToTarget > range)
+            {
+                Vector3 direction = (positionDesired - playerPosition).normalized;
+                positionDesired = playerPosition + direction * range; // Clamp to maximum range
+            }
+
+            t = 0; // Reset t parameter
             controlPoint = (playerPosition + positionDesired) / 2 + new Vector3(0, -1f, 0); // Set initial control point
             lineRenderer.enabled = true;  // Enable LineRenderer when starting path selection
         }
@@ -49,7 +58,15 @@ public class OG_MovementByMouse : MonoBehaviour
         // While dragging the mouse
         if (Input.GetMouseButton(0) && !placeSelected)
         {
-            // Update the end position while dragging
+            // Update the end position while dragging, within range limit
+            float range = playerBase.GetRange();
+            float distanceToTarget = Vector3.Distance(playerPosition, mousePosition);
+            if (distanceToTarget > range)
+            {
+                Vector3 direction = (mousePosition - playerPosition).normalized;
+                mousePosition = playerPosition + direction * range; // Clamp to maximum range
+            }
+
             UpdateLineRenderer(mousePosition);
         }
 
@@ -58,10 +75,6 @@ public class OG_MovementByMouse : MonoBehaviour
         {
             placeSelected = true;
             positionDesired = mousePosition;
-            // Calculate the distance to the desired position
-            float distanceToTarget = Vector3.Distance(playerPosition, positionDesired);
-            moveDuration = distanceToTarget / velocity; // Set move duration based on distance and velocity
-            elapsedTime = 0; // Reset elapsed time
             lineRenderer.enabled = false;
         }
 
@@ -69,10 +82,12 @@ public class OG_MovementByMouse : MonoBehaviour
         if (placeSelected)
         {
             isMoving = true;
-            elapsedTime += Time.deltaTime; // Increment elapsed time
 
-            // Calculate normalized time (0 to 1) for the Bezier curve
-            float t = Mathf.Clamp01(elapsedTime / moveDuration);
+            // Calculate the increment for t based on velocity and curve length
+            float distanceToTarget = Vector3.Distance(playerPosition, positionDesired);
+            float tIncrement = (velocity * Time.deltaTime) / distanceToTarget;  // Fixed increment based on speed
+
+            t = Mathf.Clamp01(t + tIncrement); // Increment t, clamping it between 0 and 1
             Vector3 newPosition = BezierCurve(t, playerPosition, controlPoint, positionDesired);
             transform.position = newPosition; // Update the player's position
 
@@ -90,7 +105,7 @@ public class OG_MovementByMouse : MonoBehaviour
     {
         // Update the control point based on the initial position and the new target position
         float curveIntensity = Mathf.Clamp(Vector3.Distance(playerPosition, targetPosition) / 100f, 0, 2f);
-        controlPoint = (playerPosition + positionDesired) /2 + new Vector3(0, -curveIntensity, 0); // Adjust height
+        controlPoint = positionDesired + new Vector3(0, -curveIntensity, 0); // Adjust height
 
         // Generate smoother curve points for the LineRenderer
         List<Vector3> smoothCurvePoints = GenerateBezierCurve(playerPosition, controlPoint, targetPosition, curveResolution);
