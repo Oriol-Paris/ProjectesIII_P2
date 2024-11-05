@@ -3,23 +3,23 @@ using UnityEngine;
 
 public class OG_MovementByMouse : MonoBehaviour
 {
-    Vector3 mousePosition;
-    Vector3 positionDesired;
-    Vector3 playerPosition;
+    public Vector3 mousePosition;
+    public Vector3 positionDesired;
+    public Vector3 playerPosition;
     bool placeSelected;
     bool isMoving;
-    float t; // Parameter to control position along the curve
-    [SerializeField] private float velocity; // Speed in units per second
+    public float t; // Parameter to control position along the curve
+    [SerializeField] public float velocity; // Speed in units per second
     [SerializeField] LineRenderer lineRenderer;
-    private Vector3 controlPoint;
-    [SerializeField] private int curveResolution = 20;  // Higher number for smoother curve in LineRenderer
+    public Vector3 controlPoint;
+    [SerializeField] public int curveResolution = 20;  // Higher number for smoother curve in LineRenderer
 
     // Reference to the PlayerBase script
     [SerializeField] private PlayerBase playerBase;
 
     void Start()
     {
-        lineRenderer = GetComponent<LineRenderer>();
+        
         placeSelected = false;
         playerPosition = transform.position;
         lineRenderer.enabled = false;  // Start with LineRenderer disabled
@@ -73,9 +73,24 @@ public class OG_MovementByMouse : MonoBehaviour
         // When the mouse button is released
         if (Input.GetMouseButtonUp(0) && !isMoving)
         {
-            placeSelected = true;
             positionDesired = mousePosition;
-            lineRenderer.enabled = false;
+            // Limit positionDesired to within PlayerBase range
+            float range = playerBase.GetRange();
+            float distanceToTarget = Vector3.Distance(playerPosition, positionDesired);
+            if (distanceToTarget > range)
+            {
+                Vector3 direction = (positionDesired - playerPosition).normalized;
+                positionDesired = playerPosition + direction * range; // Clamp to maximum range
+                placeSelected = true;
+                lineRenderer.enabled = false;
+            }
+            else
+            {
+                positionDesired = mousePosition;
+                placeSelected = true;
+                lineRenderer.enabled = false;
+            }
+            
         }
 
         // Movement along the Bezier curve
