@@ -104,7 +104,7 @@ public class OG_MovementByMouse : MonoBehaviour
 
             t = Mathf.Clamp01(t + tIncrement); // Increment t, clamping it between 0 and 1
             Vector3 newPosition = BezierCurve(t, playerPosition, controlPoint, positionDesired);
-            transform.position = newPosition; // Update the player's position
+            GetComponent<PlayerActionManager>().UpdateAction(newPosition); // Update the player's position
 
             // Check if we have reached the end of the curve
             if (t >= 1f)

@@ -6,18 +6,11 @@ public abstract class BulletPrefab : MonoBehaviour
     [SerializeField] public float speed;
     [SerializeField] public float damage;
     [SerializeField] public bool isFromPlayer;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+
+    private void OnBecameInvisible()
     {
-        
+        Destroy(this);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-    public abstract void Shoot(Vector3 origin, Vector3 target);
-
-    
+    public void SetFromPlayer(bool val) { isFromPlayer = val; }
 }

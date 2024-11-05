@@ -13,26 +13,24 @@ public class GunBullet : BulletPrefab
     {
         
     }
-    public override void Shoot(Vector3 origin, Vector3 target){
-
-        transform.position = Vector3.Lerp(origin, target, speed);
-
-    }
-    private void OnCollisionEnter2D(Collision2D collision)
+    public void OnCollisionEnter2D(Collision2D collision)
     {
         if (isFromPlayer)
         {
-            if (!collision.gameObject.CompareTag("Player"))
+            if (collision.gameObject.GetComponent<EnemyMovement>() != null)
+            {
+                //Pupa a enemy
+                Debug.Log("Bullet Hit Enemy");
+                Destroy(this);
+            }
+        } 
+        else
+        {
+            if (collision.gameObject.GetComponent<PlayerBase>() != null)
             {
                 //Pupa
-                Destroy(gameObject);
-            }
-        } else
-        {
-            if (collision.gameObject.CompareTag("Enemy"))
-            {
-                //Pupa a enmy
-                Destroy(gameObject);
+                collision.gameObject.GetComponent<PlayerBase>().Damage();
+                Destroy(this);
             }
         }
     }

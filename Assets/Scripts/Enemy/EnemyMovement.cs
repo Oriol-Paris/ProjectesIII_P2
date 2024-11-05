@@ -11,7 +11,6 @@ public class EnemyMovement : MonoBehaviour
     private Vector3 PlayerPos;
     float moveTime;
     [SerializeField] private GameObject bulletShot;
-    GunBullet bullet;
     [SerializeField] private float velocity;
     [SerializeField] private float range;
     // Start is called before the first frame update
@@ -30,9 +29,6 @@ public class EnemyMovement : MonoBehaviour
         if (Vector3.Distance(PlayerPos, transform.position) < range && Player.GetIsMoving()) 
         {
             PlayerPos = Player.GetPosition();
-            bulletShot = Instantiate(bulletShot);
-            bullet = bulletShot.GetComponent<GunBullet>();
-            bullet.Shoot(transform.position, PlayerPos);
         }
         else
         {
