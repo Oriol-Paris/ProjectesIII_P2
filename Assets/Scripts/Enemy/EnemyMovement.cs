@@ -29,22 +29,31 @@ public class EnemyMovement : MonoBehaviour
         if (Vector3.Distance(PlayerPos, transform.position) < range && Player.GetIsMoving()) 
         {
             PlayerPos = Player.GetPosition();
+            FollowPlayer(transform.position, PlayerPos, moveTime);
         }
-        else
+        
+        
+        if (Player.GetIsMoving() == true)
         {
-            if (Player.GetIsMoving() == true)
-            {
-                FollowPlayer(transform.position, PlayerPos, moveTime);
+            FollowPlayer(transform.position, PlayerPos, moveTime);
 
-            }
-            if (Player.GetIsMoving() == false)
-            {
-                PlayerPos = Player.GetPosition();
-            }
         }
+        if (Player.GetIsMoving() == false)
+        {
+            PlayerPos = Player.GetPosition();
+        }
+        
     }
     private void FollowPlayer(Vector3 origin, Vector3 target, float speed)
     {
         transform.position = Vector3.MoveTowards(origin,target,speed);
+    }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Bullet"))
+        {
+            Destroy(this);
+            Destroy(collision.gameObject);
+        }
     }
 }

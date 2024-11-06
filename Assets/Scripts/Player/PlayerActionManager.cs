@@ -4,14 +4,17 @@ using UnityEngine;
 public class PlayerActionManager : MonoBehaviour
 {
     PlayerBase player;
-    GameObject bullet;
+    public GameObject bulletToInstantiate;
 
     [SerializeField]
     public GameObject bulletPrefab;
+    public GunBullet gunBullet;
 
     private void Start()
     {
         player = GetComponent<PlayerBase>();
+        bulletPrefab = GameObject.Find("GunBullet");
+        gunBullet = bulletPrefab.GetComponent<GunBullet>();
     }
 
     public void UpdateAction(Vector3 newPos)
@@ -20,13 +23,17 @@ public class PlayerActionManager : MonoBehaviour
             UpdateLinearMovement(newPos);
         else if (player.GetIsShoooting())
         {
-            if (bullet == null)
+            if (gunBullet == null)
             {
-                bullet = Instantiate(bulletPrefab);
-                bullet.GetComponent<GunBullet>().SetFromPlayer(true);
+
+                bulletPrefab = bulletToInstantiate;
+                gunBullet = bulletPrefab.GetComponent<GunBullet>();
+
             }
-                
+
+
             Shoot(newPos);
+            
         }
     }
 
@@ -37,6 +44,17 @@ public class PlayerActionManager : MonoBehaviour
 
     private void Shoot(Vector3 newPos)
     {
-        bullet.transform.position = newPos;
+        gunBullet.transform.position = newPos;
+        if (gunBullet.isHit)
+        {
+            
+            Destroy(gunBullet);
+            Destroy(gunBullet);
+            Destroy(bulletPrefab);
+            player.SetRange(player.GetOldRange());
+
+        }
+
     }
+
 }

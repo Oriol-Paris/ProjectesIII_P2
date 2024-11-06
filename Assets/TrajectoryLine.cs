@@ -39,7 +39,7 @@ public class TrajectoryLine : MonoBehaviour
             float timeOffset = (i * Time.fixedDeltaTime * curveResolution);
 
             segments[i] = segments[0] + startVelocity * timeOffset;
-            lineRenderer.SetPosition(i, segments[i]);
+            //lineRenderer.SetPosition(i, segments[i]);
         }
     }
 }

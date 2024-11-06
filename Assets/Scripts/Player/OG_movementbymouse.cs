@@ -34,6 +34,7 @@ public class OG_MovementByMouse : MonoBehaviour
         mousePosition = Input.mousePosition;
         mousePosition = Camera.main.ScreenToWorldPoint(new Vector3(mousePosition.x, mousePosition.y, 10));
         mousePosition.z = 0;
+        
 
         // If mouse button is pressed
         if (Input.GetMouseButtonDown(0) && !placeSelected)
@@ -97,7 +98,7 @@ public class OG_MovementByMouse : MonoBehaviour
         if (placeSelected)
         {
             isMoving = true;
-
+            lineRenderer.enabled = false;
             // Calculate the increment for t based on velocity and curve length
             float distanceToTarget = Vector3.Distance(playerPosition, positionDesired);
             float tIncrement = (velocity * Time.deltaTime) / distanceToTarget;  // Fixed increment based on speed
@@ -118,6 +119,7 @@ public class OG_MovementByMouse : MonoBehaviour
 
     private void UpdateLineRenderer(Vector3 targetPosition)
     {
+      
         // Update the control point based on the initial position and the new target position
         float curveIntensity = Mathf.Clamp(Vector3.Distance(playerPosition, targetPosition) / 100f, 0, 2f);
         controlPoint = positionDesired + new Vector3(0, -curveIntensity, 0); // Adjust height
