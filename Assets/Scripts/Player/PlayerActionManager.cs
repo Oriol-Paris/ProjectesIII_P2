@@ -10,6 +10,9 @@ public class PlayerActionManager : MonoBehaviour
     public GameObject bulletPrefab;
     public GunBullet gunBullet;
 
+    bool isMoving = true;
+    bool isShooting = true;
+
     private void Start()
     {
         player = GetComponent<PlayerBase>();
@@ -19,21 +22,28 @@ public class PlayerActionManager : MonoBehaviour
 
     public void UpdateAction(Vector3 newPos)
     {
-        if (player.GetIsMoving())
+        if (player.GetIsMoving() && (!player.GetComponent<OG_MovementByMouse>().GetIsMoving() || isMoving))
+        {
+            isMoving = true;
             UpdateLinearMovement(newPos);
-        else if (player.GetIsShoooting())
+        }
+        else if (player.GetIsShoooting() && (!player.GetComponent<OG_MovementByMouse>().GetIsMoving() || isShooting))
         {
             if (gunBullet == null)
             {
-
                 bulletPrefab = bulletToInstantiate;
                 gunBullet = bulletPrefab.GetComponent<GunBullet>();
 
             }
 
-
+            isShooting = true;
             Shoot(newPos);
-            
+        }
+
+        if(!player.GetComponent<OG_MovementByMouse>().GetIsMoving())
+        {
+            isMoving = false;
+            isShooting = false;
         }
     }
 
@@ -47,7 +57,6 @@ public class PlayerActionManager : MonoBehaviour
         gunBullet.transform.position = newPos;
         if (gunBullet.isHit)
         {
-            
             Destroy(gunBullet);
             Destroy(gunBullet);
             Destroy(bulletPrefab);
@@ -56,5 +65,4 @@ public class PlayerActionManager : MonoBehaviour
         }
 
     }
-
 }

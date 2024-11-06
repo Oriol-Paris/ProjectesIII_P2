@@ -283,6 +283,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f263461156138f44afbe9f44d9f2293, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bulletToInstantiate: {fileID: 0}
   bulletPrefab: {fileID: 3902284504202754535}
   gunBullet: {fileID: 4950906316339930204}
 --- !u!114 &8584045141074783902
