@@ -18,6 +18,7 @@ public class PlayerActionManager : MonoBehaviour
     {
         player = GetComponent<PlayerBase>();
         //bulletPrefab = bulletToInstantiate;
+        if(bulletPrefab != null )
         gunBullet = bulletPrefab.GetComponent<GunBullet>();
     }
 
