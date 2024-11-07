@@ -21,14 +21,16 @@ public class GunBullet : BulletPrefab
         if (isFromPlayer)
         {
            
-            if (collision.gameObject.CompareTag("Enemy"))
+            if (collision.gameObject.GetComponent<EnemyBase>()!=null)
             {
+                if (collision.gameObject.GetComponent<EnemyBase>().GetHealth() > 0) { 
+                collision.gameObject.GetComponent<EnemyBase>().Damage(damage);
                 isHit = true;
                 Destroy(this.gameObject);
                 Destroy(this);
                 Debug.Log(isHit);
-                Destroy(collision.gameObject);
-                
+                }
+
             }
             if (isHit)
             {

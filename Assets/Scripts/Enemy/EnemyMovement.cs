@@ -10,14 +10,18 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField]private OG_MovementByMouse Player;
     private Vector3 PlayerPos;
     float moveTime;
+    EnemyBase enemyStats;
     [SerializeField] private GameObject bulletShot;
     [SerializeField] private float velocity;
     [SerializeField] private float range;
+    
     // Start is called before the first frame update
     void Start()
     {
         
         Player = FindAnyObjectByType<OG_MovementByMouse>();
+        enemyStats = GetComponent<EnemyBase>();
+        
     }
 
     // Update is called once per frame
@@ -25,6 +29,8 @@ public class EnemyMovement : MonoBehaviour
     {
         moveTime = Time.deltaTime * velocity;
 
+        if (enemyStats.isAlive)
+        {
 
         if (Vector3.Distance(PlayerPos, transform.position) < range && Player.GetIsMoving()) 
         {
@@ -42,18 +48,13 @@ public class EnemyMovement : MonoBehaviour
         {
             PlayerPos = Player.GetPosition();
         }
+        }
         
+
     }
     private void FollowPlayer(Vector3 origin, Vector3 target, float speed)
     {
         transform.position = Vector3.MoveTowards(origin,target,speed);
     }
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("Bullet"))
-        {
-            Destroy(this);
-            Destroy(collision.gameObject);
-        }
-    }
+    
 }
