@@ -15,6 +15,7 @@ public class OG_MovementByMouse : MonoBehaviour
     public Vector3 controlPoint;
     [SerializeField] public int curveResolution = 20;  // Higher number for smoother curve in LineRenderer
     private float playerVelocity;
+    private float bulletVelocity;
     // Reference to the PlayerBase script
     [SerializeField] private PlayerBase playerBase;
 
@@ -27,6 +28,7 @@ public class OG_MovementByMouse : MonoBehaviour
         playerVelocity = velocity;
         // Get the PlayerBase component
         playerBase = GetComponent<PlayerBase>();
+        bulletVelocity = GetComponent<PlayerActionManager>().gunBullet.speed;
     }
 
     void Update()
@@ -108,19 +110,19 @@ public class OG_MovementByMouse : MonoBehaviour
             
             if(GetComponent<PlayerActionManager>().bulletPrefab != null&& GetComponent<PlayerActionManager>().isShooting)
             {
-                
+                velocity = bulletVelocity;
                 //Lerpeo al disparar
                 Vector3 newPosition = BezierCurve(t, playerPosition, controlPoint, positionDesired);
-                velocity = GetComponent<PlayerActionManager>().gunBullet.speed;
                // GetComponent<PlayerActionManager>().isShooting = true;
                 GetComponent<PlayerActionManager>().UpdateAction(newPosition, t); // Update the player's position
+                
+
 
             }
-            if (GetComponent<PlayerActionManager>().isMoving)
+            else if (GetComponent<PlayerActionManager>().isMoving)
             {
                 velocity = playerVelocity;
                 Vector3 newPosition = BezierCurve(t, playerPosition, controlPoint, positionDesired);
-
                 //GetComponent<PlayerActionManager>().isShooting = false;
                 GetComponent<PlayerActionManager>().UpdateAction(newPosition, t); // Update the player's position
 
@@ -178,4 +180,5 @@ public class OG_MovementByMouse : MonoBehaviour
     public bool GetIsMoving() { return isMoving; }
     public Vector3 GetPosition() { return playerPosition; }
     public void SetPositionDesired(Vector3 position) { positionDesired = position;}
+    public Vector3 GetPositionDesired() { return positionDesired; }
 }

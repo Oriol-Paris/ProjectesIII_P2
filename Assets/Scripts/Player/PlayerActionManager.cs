@@ -39,16 +39,16 @@ public class PlayerActionManager : MonoBehaviour
                     bulletPrefab = Instantiate(bulletToInstantiate);
                 
                     gunBullet = bulletPrefab.GetComponent<GunBullet>();
-                
-
-
 
             }
 
             if(bulletPrefab!=null) {
                 isShooting = true;
                 bulletPrefab.SetActive(true);
-            Shoot(newPos);
+                Shoot(newPos);
+                if(bulletPrefab.transform.position == player.GetComponent<OG_MovementByMouse>().GetPositionDesired() ) {
+                    Destroy(bulletPrefab); bulletPrefab = null;
+                }
             }
 
 
