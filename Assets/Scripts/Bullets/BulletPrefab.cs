@@ -9,7 +9,7 @@ public abstract class BulletPrefab : MonoBehaviour
 
     private void OnBecameInvisible()
     {
-        Destroy(this);
+        //Destroy(this);
     }
 
     public void SetFromPlayer(bool val) { isFromPlayer = val; }

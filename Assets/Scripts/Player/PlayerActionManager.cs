@@ -10,17 +10,18 @@ public class PlayerActionManager : MonoBehaviour
     public GameObject bulletPrefab;
     public GunBullet gunBullet;
 
-    bool isMoving = true;
-    bool isShooting = true;
+    public bool isMoving = true;
+    public bool isShooting = true;
+    bool lastIsHit;
 
     private void Start()
     {
         player = GetComponent<PlayerBase>();
-        bulletPrefab = GameObject.Find("GunBullet");
+        //bulletPrefab = bulletToInstantiate;
         gunBullet = bulletPrefab.GetComponent<GunBullet>();
     }
 
-    public void UpdateAction(Vector3 newPos)
+    public void UpdateAction(Vector3 newPos, float t)
     {
         if (player.GetIsMoving() && (!player.GetComponent<OG_MovementByMouse>().GetIsMoving() || isMoving))
         {
@@ -29,21 +30,42 @@ public class PlayerActionManager : MonoBehaviour
         }
         else if (player.GetIsShoooting() && (!player.GetComponent<OG_MovementByMouse>().GetIsMoving() || isShooting))
         {
-            if (gunBullet == null)
+            if (bulletPrefab==null&&t<0.01f)
             {
-                bulletPrefab = bulletToInstantiate;
-                gunBullet = bulletPrefab.GetComponent<GunBullet>();
+                
+                    Debug.Log("AAAAA");
+
+                    bulletPrefab = Instantiate(bulletToInstantiate);
+                
+                    gunBullet = bulletPrefab.GetComponent<GunBullet>();
+                
+
+
 
             }
 
+            if(bulletPrefab!=null) { 
             isShooting = true;
+            bulletPrefab.SetActive(true);
             Shoot(newPos);
-        }
+            }
 
-        if(!player.GetComponent<OG_MovementByMouse>().GetIsMoving())
+
+
+
+        }
+        if (!isShooting)
+        {
+
+            
+
+        }
+        if (!player.GetComponent<OG_MovementByMouse>().GetIsMoving())
         {
             isMoving = false;
             isShooting = false;
+            
+
         }
     }
 
@@ -54,15 +76,9 @@ public class PlayerActionManager : MonoBehaviour
 
     private void Shoot(Vector3 newPos)
     {
+       
         gunBullet.transform.position = newPos;
-        if (gunBullet.isHit)
-        {
-            Destroy(gunBullet);
-            Destroy(gunBullet);
-            Destroy(bulletPrefab);
-            player.SetRange(player.GetOldRange());
-
-        }
+        
 
     }
 }

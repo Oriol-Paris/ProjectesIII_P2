@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class OG_MovementByMouse : MonoBehaviour
@@ -104,8 +105,18 @@ public class OG_MovementByMouse : MonoBehaviour
             float tIncrement = (velocity * Time.deltaTime) / distanceToTarget;  // Fixed increment based on speed
 
             t = Mathf.Clamp01(t + tIncrement); // Increment t, clamping it between 0 and 1
-            Vector3 newPosition = BezierCurve(t, playerPosition, controlPoint, positionDesired);
-            GetComponent<PlayerActionManager>().UpdateAction(newPosition); // Update the player's position
+            
+            if(GetComponent<PlayerActionManager>().bulletPrefab != null&& GetComponent<PlayerActionManager>().isShooting)
+            {
+                Vector3 newPosition = BezierCurve(t, playerPosition, controlPoint, positionDesired);
+                GetComponent<PlayerActionManager>().UpdateAction(newPosition, t); // Update the player's position
+
+            } else if (GetComponent<PlayerActionManager>().isMoving)
+            {
+                Vector3 newPosition = BezierCurve(t, playerPosition, controlPoint, positionDesired);
+                GetComponent<PlayerActionManager>().UpdateAction(newPosition, t); // Update the player's position
+
+            }
 
             // Check if we have reached the end of the curve
             if (t >= 1f)
@@ -157,4 +168,5 @@ public class OG_MovementByMouse : MonoBehaviour
 
     public bool GetIsMoving() { return isMoving; }
     public Vector3 GetPosition() { return playerPosition; }
+    public void SetPositionDesired(Vector3 position) { positionDesired = position;}
 }

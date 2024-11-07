@@ -13,10 +13,12 @@ public class PlayerBase : MonoBehaviour
     [SerializeField] OG_MovementByMouse checkMovement;
     private bool isMoving;
     private bool isShoooting;
+    private bool isAlive;
 
     // Start is called before the first frame update
     void Start()
     {
+        isAlive = true;
         isMoving = true;
         isShoooting = false;
         oldRange = range;
@@ -32,6 +34,7 @@ public class PlayerBase : MonoBehaviour
                 isMoving = true;
                 isShoooting = false;
                 range = oldRange;
+                
             }
             if (Input.GetKeyDown(KeyCode.Alpha2))
             {
@@ -49,7 +52,16 @@ public class PlayerBase : MonoBehaviour
     {
         if(collision.gameObject.GetComponent<EnemyMovement>() != null)
         {
-            Damage();
+            if(health >0)
+            {
+                Damage();
+            }
+            else
+            {
+                Destroy(this.gameObject);
+                Debug.Log("YOU DIED");
+            }
+            
         }
     }
 
