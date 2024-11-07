@@ -286,6 +286,8 @@ MonoBehaviour:
   bulletToInstantiate: {fileID: 0}
   bulletPrefab: {fileID: 3902284504202754535}
   gunBullet: {fileID: 4950906316339930204}
+  isMoving: 1
+  isShooting: 1
 --- !u!114 &8584045141074783902
 MonoBehaviour:
   m_ObjectHideFlags: 0

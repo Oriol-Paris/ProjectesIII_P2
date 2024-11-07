@@ -4,7 +4,10 @@ using UnityEngine;
 public class CombatManager : MonoBehaviour
 {
     public List<PlayerBase> playerParty = new List<PlayerBase>();  // Lista para jugadores
-    public EnemyMovement[] enemyParty;  // Array para enemigos
+    public EnemyBase[] enemyParty;  // Array para enemigos
+    bool allEnemiesDead;
+    int turnNumber;
+    [SerializeField] Canvas winCondition;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -17,14 +20,31 @@ public class CombatManager : MonoBehaviour
         {
             playerParty.Add(player);
         }
-
+        winCondition.enabled = false;
         // Obtener todos los objetos de tipo EnemyMovement en la escena
-        enemyParty = GameObject.FindObjectsByType<EnemyMovement>(FindObjectsSortMode.None);
+        enemyParty = GameObject.FindObjectsByType<EnemyBase>(FindObjectsSortMode.None);
+        allEnemiesDead = true;
     }
 
     // Update is called once per frame
     void Update()
     {
-        // Lógica de combate u otros eventos
+        allEnemiesDead = true;
+
+        for (int i = 0; i<enemyParty.Length; i++)
+        {
+            if (enemyParty[i].isAlive)
+                allEnemiesDead = false;
+            winCondition.enabled = false;
+        }
+        if(allEnemiesDead)
+        {
+            winCondition.enabled = true;
+            for(int i = 0; i<playerParty.Count; i++)
+            {
+                playerParty[i].victory = true;
+            }
+        }
+
     }
 }

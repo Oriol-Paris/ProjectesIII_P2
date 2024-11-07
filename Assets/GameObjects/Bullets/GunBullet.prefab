@@ -104,9 +104,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   range: 10
-  speed: 1
+  speed: 5
   damage: 1
   isFromPlayer: 1
+  velocity: {x: 1, y: 1, z: 1}
   isHit: 0
 --- !u!58 &7500978838100454023
 CircleCollider2D:

@@ -14,6 +14,7 @@ public class PlayerBase : MonoBehaviour
     private bool isMoving;
     private bool isShoooting;
     private bool isAlive;
+    public bool victory;
 
     // Start is called before the first frame update
     void Start()
@@ -23,28 +24,40 @@ public class PlayerBase : MonoBehaviour
         isShoooting = false;
         oldRange = range;
         checkMovement = GetComponent<OG_MovementByMouse>();
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(!checkMovement.GetIsMoving()) { 
-            if (Input.GetKeyDown(KeyCode.Alpha1))
+        if (!victory)
+        {
+            if (isAlive)
             {
-                isMoving = true;
-                isShoooting = false;
-                range = oldRange;
-                
-            }
-            if (Input.GetKeyDown(KeyCode.Alpha2))
-            {
-                isMoving = false;
-                isShoooting = true;
-                range = shootingRange;
-            
-            }
-        }
+                if (!checkMovement.GetIsMoving())
+                {
+                    if (Input.GetKeyDown(KeyCode.Alpha1))
+                    {
+                        isMoving = true;
+                        isShoooting = false;
+                        range = oldRange;
 
+                    }
+                    if (Input.GetKeyDown(KeyCode.Alpha2))
+                    {
+                        isMoving = false;
+                        isShoooting = true;
+                        range = shootingRange;
+
+                    }
+                }
+            }
+        } else
+        {
+            isMoving = false;
+            isShoooting = false;
+            checkMovement.enabled = false;
+        }
 
     }
 
@@ -58,7 +71,7 @@ public class PlayerBase : MonoBehaviour
             }
             else
             {
-                Destroy(this.gameObject);
+                isAlive = false;
                 Debug.Log("YOU DIED");
             }
             

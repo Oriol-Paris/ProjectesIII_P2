@@ -14,7 +14,7 @@ public class OG_MovementByMouse : MonoBehaviour
     [SerializeField] LineRenderer lineRenderer;
     public Vector3 controlPoint;
     [SerializeField] public int curveResolution = 20;  // Higher number for smoother curve in LineRenderer
-
+    private float playerVelocity;
     // Reference to the PlayerBase script
     [SerializeField] private PlayerBase playerBase;
 
@@ -24,7 +24,7 @@ public class OG_MovementByMouse : MonoBehaviour
         placeSelected = false;
         playerPosition = transform.position;
         lineRenderer.enabled = false;  // Start with LineRenderer disabled
-
+        playerVelocity = velocity;
         // Get the PlayerBase component
         playerBase = GetComponent<PlayerBase>();
     }
@@ -108,12 +108,20 @@ public class OG_MovementByMouse : MonoBehaviour
             
             if(GetComponent<PlayerActionManager>().bulletPrefab != null&& GetComponent<PlayerActionManager>().isShooting)
             {
+                
+                //Lerpeo al disparar
                 Vector3 newPosition = BezierCurve(t, playerPosition, controlPoint, positionDesired);
+                velocity = GetComponent<PlayerActionManager>().gunBullet.speed;
+               // GetComponent<PlayerActionManager>().isShooting = true;
                 GetComponent<PlayerActionManager>().UpdateAction(newPosition, t); // Update the player's position
 
-            } else if (GetComponent<PlayerActionManager>().isMoving)
+            }
+            if (GetComponent<PlayerActionManager>().isMoving)
             {
+                velocity = playerVelocity;
                 Vector3 newPosition = BezierCurve(t, playerPosition, controlPoint, positionDesired);
+
+                //GetComponent<PlayerActionManager>().isShooting = false;
                 GetComponent<PlayerActionManager>().UpdateAction(newPosition, t); // Update the player's position
 
             }
@@ -124,6 +132,7 @@ public class OG_MovementByMouse : MonoBehaviour
                 placeSelected = false;
                 isMoving = false;
                 playerPosition = transform.position; // Update player position to the new position
+                velocity = playerVelocity;
             }
         }
     }

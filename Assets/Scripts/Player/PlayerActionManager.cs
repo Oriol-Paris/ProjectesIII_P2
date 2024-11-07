@@ -27,13 +27,14 @@ public class PlayerActionManager : MonoBehaviour
         {
             isMoving = true;
             UpdateLinearMovement(newPos);
+           
         }
         else if (player.GetIsShoooting() && (!player.GetComponent<OG_MovementByMouse>().GetIsMoving() || isShooting))
         {
             if (bulletPrefab==null&&t<0.01f)
             {
-                
-                    Debug.Log("AAAAA");
+                isShooting = true;
+                Debug.Log("AAAAA");
 
                     bulletPrefab = Instantiate(bulletToInstantiate);
                 
@@ -44,9 +45,9 @@ public class PlayerActionManager : MonoBehaviour
 
             }
 
-            if(bulletPrefab!=null) { 
-            isShooting = true;
-            bulletPrefab.SetActive(true);
+            if(bulletPrefab!=null) {
+                isShooting = true;
+                bulletPrefab.SetActive(true);
             Shoot(newPos);
             }
 
@@ -72,6 +73,7 @@ public class PlayerActionManager : MonoBehaviour
     private void UpdateLinearMovement(Vector3 newPos)
     {
         GetComponent<Transform>().position = newPos;
+        
     }
 
     private void Shoot(Vector3 newPos)
