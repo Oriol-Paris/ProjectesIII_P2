@@ -8,80 +8,51 @@ public class PlayerActionManager : MonoBehaviour
 
     [SerializeField]
     public GameObject bulletPrefab;
-    public GunBullet gunBullet;
 
     public bool isMoving = true;
     public bool isShooting = true;
-    bool lastIsHit;
+    public bool isHealing = true; // New flag for healing
+
+    private ActiveAction moveAction;
+    private ActiveAction shootAction;
+    private PassiveAction healAction; // New action
+
+    private CombatManager combatManager;
 
     private void Start()
     {
         player = GetComponent<PlayerBase>();
-        //bulletPrefab = bulletToInstantiate;
-        if(bulletPrefab != null )
-        gunBullet = bulletPrefab.GetComponent<GunBullet>();
+        moveAction = gameObject.AddComponent<MoveAction>();
+        shootAction = gameObject.AddComponent<ShootAction>();
+        healAction = gameObject.AddComponent<HealAction>(); // Instantiate the new action
+        ((ShootAction)shootAction).bulletToInstantiate = bulletToInstantiate;
+
+        combatManager = FindObjectOfType<CombatManager>();
     }
 
     public void UpdateAction(Vector3 newPos, float t)
     {
+        if (combatManager != null && combatManager.allEnemiesDead)
+        {
+            return; // Do not execute any actions if victory condition is met
+        }
+
         if (player.GetIsMoving() && (!player.GetComponent<OG_MovementByMouse>().GetIsMoving() || isMoving))
         {
             isMoving = true;
-            UpdateLinearMovement(newPos);
-           
+            moveAction.Execute(player, newPos);
         }
         else if (player.GetIsShoooting() && (!player.GetComponent<OG_MovementByMouse>().GetIsMoving() || isShooting))
         {
-            if (bulletPrefab==null&&t<0.01f)
-            {
-                isShooting = true;
-                Debug.Log("AAAAA");
-
-                    bulletPrefab = Instantiate(bulletToInstantiate);
-                
-                    gunBullet = bulletPrefab.GetComponent<GunBullet>();
-
-            }
-
-            if(bulletPrefab!=null) {
-                isShooting = true;
-                bulletPrefab.SetActive(true);
-                Shoot(newPos);
-                if(bulletPrefab.transform.position == player.GetComponent<OG_MovementByMouse>().GetPositionDesired() ) {
-                    Destroy(bulletPrefab); bulletPrefab = null;
-                }
-            }
-
-
-
-
+            isShooting = true;
+            shootAction.Execute(player, newPos);
         }
-        if (!isShooting)
-        {
 
-            
-
-        }
         if (!player.GetComponent<OG_MovementByMouse>().GetIsMoving())
         {
             isMoving = false;
             isShooting = false;
-            
-
+            isHealing = false; // Reset healing flag
         }
-    }
-
-    private void UpdateLinearMovement(Vector3 newPos)
-    {
-        GetComponent<Transform>().position = newPos;
-        
-    }
-
-    private void Shoot(Vector3 newPos)
-    {
-       
-        gunBullet.transform.position = newPos;
-        
-
     }
 }

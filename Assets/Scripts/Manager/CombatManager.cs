@@ -5,7 +5,7 @@ public class CombatManager : MonoBehaviour
 {
     public List<PlayerBase> playerParty = new List<PlayerBase>();  // Lista para jugadores
     public EnemyBase[] enemyParty;  // Array para enemigos
-    bool allEnemiesDead;
+    public bool allEnemiesDead;
     int turnNumber;
     [SerializeField] Canvas winCondition;
 
