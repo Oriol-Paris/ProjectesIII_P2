@@ -190,4 +190,3 @@ MonoBehaviour:
   velocity: 2
   range: 5
   minDistance: 2
-  isReloading: 0

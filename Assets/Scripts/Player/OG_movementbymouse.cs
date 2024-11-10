@@ -106,6 +106,7 @@ public class OG_MovementByMouse : MonoBehaviour
         // Movement along the Bezier curve
         if (placeSelected)
         {
+            playerBase.SetInAction(true);
             isMoving = true;
             lineRenderer.enabled = false;
             // Calculate the increment for t based on velocity and curve length
@@ -133,6 +134,7 @@ public class OG_MovementByMouse : MonoBehaviour
             // Check if we have reached the end of the curve
             if (t >= 1f)
             {
+                playerBase.SetInAction(false); //Player no longer in action
                 placeSelected = false;
                 isMoving = false;
                 playerPosition = transform.position; // Update player position to the new position

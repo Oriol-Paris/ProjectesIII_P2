@@ -1,7 +1,10 @@
 using UnityEngine;
 using System.Collections;
+
 public class TrajectoryLine : MonoBehaviour
 {
+    #region VARIABLES
+
     [Header("References")]
     [SerializeField] private OG_MovementByMouse m_MovementByMouse;
     [SerializeField] private Transform playerPos;
@@ -10,8 +13,11 @@ public class TrajectoryLine : MonoBehaviour
     [SerializeField] private int segmentCount = 50;
     private Vector3[] segments;
     private LineRenderer lineRenderer;
-
     private float speed;
+
+    #endregion
+    
+
     void Start()
     {
         segments=new Vector3[segmentCount];

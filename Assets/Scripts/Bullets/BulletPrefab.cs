@@ -7,12 +7,6 @@ public abstract class BulletPrefab : MonoBehaviour
     [SerializeField] public int damage;
     [SerializeField] public bool isFromPlayer;
     public Vector3 velocity;
-    
-
-    public void Update()
-    {
-        this.transform.position = velocity * Time.deltaTime;
-    }
 
     private void OnBecameInvisible()
     {

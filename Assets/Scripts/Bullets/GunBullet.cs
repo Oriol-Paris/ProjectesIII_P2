@@ -4,12 +4,12 @@ public class GunBullet : BulletPrefab
 {
     public bool isHit;
     private Vector3 targetPosition; // Target position the bullet is moving towards
-    private float speed = 10f; // Speed of the bullet (adjust as needed)
     private float lifetime = 5f; // Lifetime in seconds before auto-destruction
 
     void Start()
     {
         isHit = false;
+        speed = 10f;
     }
 
     void Update()

@@ -5,29 +5,34 @@ using UnityEngine;
 
 public class PlayerBase : MonoBehaviour
 {
+    #region VARIABLES
+
+    public enum Actions { MOVE, SHOOT, HEAL, SELECTING, NOTHING };
+
     [SerializeField] private int health;
     private int actionPoints;
     [SerializeField] private float range;
     [SerializeField] private float oldRange;
     [SerializeField] private float shootingRange;
     [SerializeField] OG_MovementByMouse checkMovement;
-    private bool isMoving;
-    private bool isShoooting;
+    Actions action;
+
+    private bool isInAction;
     private bool isAlive;
     public bool victory;
-    public bool isHealing;
 
-    // Start is called before the first frame update
+    #endregion
+
     void Start()
     {
+        action = Actions.MOVE;
         isAlive = true;
-        isMoving = true;
-        isShoooting = false;
+        victory = false;
+        isInAction = false;
         oldRange = range;
         checkMovement = GetComponent<OG_MovementByMouse>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (!victory)
@@ -38,23 +43,17 @@ public class PlayerBase : MonoBehaviour
                 {
                     if (Input.GetKeyDown(KeyCode.Alpha1))
                     {
-                        isMoving = true;
-                        isShoooting = false;
-                        isHealing = false;
+                        action = Actions.MOVE;
                         range = oldRange;
                     }
                     if (Input.GetKeyDown(KeyCode.Alpha2))
                     {
-                        isMoving = false;
-                        isShoooting = true;
-                        isHealing = false;
+                        action = Actions.SHOOT;
                         range = shootingRange;
                     }
                     if (Input.GetKeyDown(KeyCode.Alpha3))
                     {
-                        isMoving = false;
-                        isShoooting = false;
-                        isHealing = true;
+                        action = Actions.HEAL;
                         range = oldRange;
                         Heal(1); // Execute healing immediately
                     }
@@ -62,10 +61,7 @@ public class PlayerBase : MonoBehaviour
             }
             else
             {
-                isMoving = false;
-                isShoooting = false;
-                isHealing = false;
-                checkMovement.enabled = false;
+                action = Actions.NOTHING;
             }
         }
     }
@@ -86,12 +82,23 @@ public class PlayerBase : MonoBehaviour
         }
     }
 
-    public void Damage(int val = 1) { health -= val; Debug.Log("OOF"); }
-    public void Heal(int amount) { health += amount; Debug.Log("Healed by " + amount); } // New heal method
-    public float GetRange() { return range; }
-    public void SetRange(float newRange) { range = newRange; }
+    #region GETTERS
+
     public float GetOldRange() { return oldRange; }
-    public bool GetIsMoving() { return isMoving; }
-    public bool GetIsShoooting() { return isShoooting; }
+    public float GetRange() { return range; }
+    public Actions GetAction() { return action; }
+    public bool GetInAction() { return isInAction; }
+
+    #endregion
+
+
+    #region SETTERS
+
+    public void Damage(int val = 1) { health -= val; Debug.Log("OOF"); }
+    public void Heal(int amount) { health += amount; Debug.Log("Healed by " + amount); action = Actions.NOTHING; } // New heal method
+    public void SetRange(float newRange) { range = newRange; }
+    public void SetInAction(bool newVal) { isInAction = newVal; }
+
+    #endregion
 }
 
