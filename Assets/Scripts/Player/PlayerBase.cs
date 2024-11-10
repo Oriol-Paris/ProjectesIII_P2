@@ -15,6 +15,7 @@ public class PlayerBase : MonoBehaviour
     private bool isShoooting;
     private bool isAlive;
     public bool victory;
+    public bool isHealing;
 
     // Start is called before the first frame update
     void Start()
@@ -24,7 +25,6 @@ public class PlayerBase : MonoBehaviour
         isShoooting = false;
         oldRange = range;
         checkMovement = GetComponent<OG_MovementByMouse>();
-        
     }
 
     // Update is called once per frame
@@ -40,32 +40,41 @@ public class PlayerBase : MonoBehaviour
                     {
                         isMoving = true;
                         isShoooting = false;
+                        isHealing = false;
                         range = oldRange;
-
                     }
                     if (Input.GetKeyDown(KeyCode.Alpha2))
                     {
                         isMoving = false;
                         isShoooting = true;
+                        isHealing = false;
                         range = shootingRange;
-
+                    }
+                    if (Input.GetKeyDown(KeyCode.Alpha3))
+                    {
+                        isMoving = false;
+                        isShoooting = false;
+                        isHealing = true;
+                        range = oldRange;
+                        Heal(1); // Execute healing immediately
                     }
                 }
             }
-        } else
-        {
-            isMoving = false;
-            isShoooting = false;
-            checkMovement.enabled = false;
+            else
+            {
+                isMoving = false;
+                isShoooting = false;
+                isHealing = false;
+                checkMovement.enabled = false;
+            }
         }
-
     }
 
-    public void OnCollisionEnter2D(Collision2D collision)
+    void OnCollisionEnter2D(Collision2D collision)
     {
-        if(collision.gameObject.GetComponent<EnemyMovement>() != null)
+        if (collision.gameObject.GetComponent<EnemyMovement>() != null)
         {
-            if(health >0)
+            if (health > 0)
             {
                 Damage();
             }
@@ -74,14 +83,15 @@ public class PlayerBase : MonoBehaviour
                 isAlive = false;
                 Debug.Log("YOU DIED");
             }
-            
         }
     }
 
     public void Damage(int val = 1) { health -= val; Debug.Log("OOF"); }
+    public void Heal(int amount) { health += amount; Debug.Log("Healed by " + amount); } // New heal method
     public float GetRange() { return range; }
     public void SetRange(float newRange) { range = newRange; }
     public float GetOldRange() { return oldRange; }
     public bool GetIsMoving() { return isMoving; }
     public bool GetIsShoooting() { return isShoooting; }
 }
+
