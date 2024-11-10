@@ -21,6 +21,8 @@ public class PlayerActionManager : MonoBehaviour
 
     private CombatManager combatManager;
 
+    private bool hasShot = false; // Flag to track if a shot has been fired
+
     #endregion
 
     private void Start()
@@ -46,17 +48,22 @@ public class PlayerActionManager : MonoBehaviour
             isMoving = true;
             moveAction.Execute(player, newPos);
         }
-        else if (player.GetAction() == PlayerBase.Actions.SHOOT && (!player.GetComponent<OG_MovementByMouse>().GetIsMoving() || isShooting))
+        else if (player.GetAction() == PlayerBase.Actions.SHOOT && (!player.GetComponent<OG_MovementByMouse>().GetIsMoving() || isShooting) && !hasShot)
         {
             isShooting = true;
+            hasShot = true; // Set the flag to indicate a shot has been fired
             shootAction.Execute(player, newPos);
         }
 
-        if (!player.GetComponent<OG_MovementByMouse>().GetIsMoving())
+        if (player.GetComponent<OG_MovementByMouse>().t >= 1)
         {
-            isMoving = false;
-            isShooting = false;
-            isHealing = false;
+            ResetFlags();
         }
+    }
+
+    public void ResetFlags()
+    {
+        Debug.Log("RESET");
+        hasShot = false; // Reset the flag when the player stops moving
     }
 }

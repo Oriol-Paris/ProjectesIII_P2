@@ -20,6 +20,7 @@ public class OG_MovementByMouse : MonoBehaviour
     [SerializeField] private PlayerBase playerBase;
 
     private CombatManager combatManager;
+    private PlayerActionManager playerActionManager; // Reference to PlayerActionManager
 
     void Start()
     {
@@ -32,6 +33,7 @@ public class OG_MovementByMouse : MonoBehaviour
         bulletVelocity = GetComponent<OG_MovementByMouse>().bulletVelocity;
 
         combatManager = FindObjectOfType<CombatManager>();
+        playerActionManager = GetComponent<PlayerActionManager>(); // Get the PlayerActionManager component
     }
 
     void Update()
@@ -115,20 +117,18 @@ public class OG_MovementByMouse : MonoBehaviour
 
             t = Mathf.Clamp01(t + tIncrement); // Increment t, clamping it between 0 and 1
 
-            if (GetComponent<PlayerActionManager>().bulletPrefab != null && GetComponent<PlayerActionManager>().isShooting)
+            if (playerActionManager.bulletPrefab != null && playerActionManager.isShooting)
             {
                 velocity = bulletVelocity;
                 //Lerpeo al disparar
                 Vector3 newPosition = BezierCurve(t, playerPosition, controlPoint, positionDesired);
-                // GetComponent<PlayerActionManager>().isShooting = true;
-                GetComponent<PlayerActionManager>().UpdateAction(newPosition, t); // Update the player's position
+                playerActionManager.UpdateAction(newPosition, t); // Update the player's position
             }
-            else if (GetComponent<PlayerActionManager>().isMoving)
+            else if (playerActionManager.isMoving)
             {
                 velocity = playerVelocity;
                 Vector3 newPosition = BezierCurve(t, playerPosition, controlPoint, positionDesired);
-                //GetComponent<PlayerActionManager>().isShooting = false;
-                GetComponent<PlayerActionManager>().UpdateAction(newPosition, t); // Update the player's position
+                playerActionManager.UpdateAction(newPosition, t); // Update the player's position
             }
 
             // Check if we have reached the end of the curve
@@ -139,6 +139,7 @@ public class OG_MovementByMouse : MonoBehaviour
                 isMoving = false;
                 playerPosition = transform.position; // Update player position to the new position
                 velocity = playerVelocity;
+                playerActionManager.ResetFlags(); // Call ResetFlags to reset the flags
             }
         }
     }

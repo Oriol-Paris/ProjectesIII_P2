@@ -7,18 +7,25 @@ public class ShootAction : ActiveAction
 
     public override void Execute(PlayerBase player, Vector3 targetPosition)
     {
-        if (bulletPrefab == null)
+        if (bulletToInstantiate == null)
         {
-            bulletPrefab = Instantiate(bulletToInstantiate);
+            Debug.LogError("Bullet prefab is not set.");
+            return;
         }
 
-        GunBullet gunBullet = bulletPrefab.GetComponent<GunBullet>();
-        gunBullet.transform.position = targetPosition;
+        // Instantiate the bullet at the player's position
+        GameObject bulletInstance = Instantiate(bulletToInstantiate, player.transform.position, Quaternion.identity);
 
-        if (bulletPrefab.transform.position == player.GetComponent<OG_MovementByMouse>().GetPositionDesired())
+        // Get the GunBullet component and set the direction
+        GunBullet gunBullet = bulletInstance.GetComponent<GunBullet>();
+        if (gunBullet != null)
         {
-            Destroy(bulletPrefab);
-            bulletPrefab = null;
+            Vector3 direction = (targetPosition - player.transform.position).normalized;
+            gunBullet.Shoot(direction);
+        }
+        else
+        {
+            Debug.LogError("GunBullet component not found on the instantiated bullet.");
         }
     }
 }

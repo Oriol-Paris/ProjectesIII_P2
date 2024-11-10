@@ -5,11 +5,11 @@ public class GunBullet : BulletPrefab
     public bool isHit;
     private Vector3 targetPosition; // Target position the bullet is moving towards
     private float lifetime = 5f; // Lifetime in seconds before auto-destruction
+    private float speed = 10f; // Speed of the bullet
 
     void Start()
     {
         isHit = false;
-        speed = 10f;
     }
 
     void Update()
@@ -51,7 +51,8 @@ public class GunBullet : BulletPrefab
 
     public void Shoot(Vector3 direction)
     {
-        targetPosition = transform.position + direction * 20f; // Set target position in the direction, adjust range as needed
+        // Set target position in the direction, adjust range as needed
+        targetPosition = transform.position + direction.normalized * 20f; 
     }
 
     private void DestroyBullet()
