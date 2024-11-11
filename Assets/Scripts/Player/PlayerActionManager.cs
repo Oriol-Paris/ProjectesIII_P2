@@ -6,7 +6,7 @@ public class PlayerActionManager : MonoBehaviour
     #region VARIABLES
 
     PlayerBase player;
-    public GameObject bulletToInstantiate;
+    public GameObject bulletToInstantiate; //Ideally this should be list/vector when having multiple bullet types to shoot
 
     [SerializeField]
     public GameObject bulletPrefab;
@@ -18,7 +18,6 @@ public class PlayerActionManager : MonoBehaviour
     private ActiveAction moveAction;
     private ActiveAction shootAction;
     private PassiveAction healAction; // New action
-
     private CombatManager combatManager;
 
     private bool hasShot = false; // Flag to track if a shot has been fired

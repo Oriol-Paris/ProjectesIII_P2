@@ -14,9 +14,10 @@ public abstract class BulletPrefab : MonoBehaviour
     }
 
     public void SetFromPlayer(bool val) { isFromPlayer = val; }
-
+    public abstract void Shoot(Vector3 direction);
     public void SetVelocity(float newSpeed)
     {
         speed = newSpeed;
     }
+    public int GetRange() { return range; }
 }

@@ -16,7 +16,7 @@ public class PlayerBase : MonoBehaviour
     [SerializeField] private float shootingRange;
     [SerializeField] OG_MovementByMouse checkMovement;
     Actions action;
-
+    [SerializeField] public List<Actions> availableActions;
     private bool isInAction;
     private bool isAlive;
     public bool victory;
@@ -25,12 +25,15 @@ public class PlayerBase : MonoBehaviour
 
     void Start()
     {
+
         action = Actions.MOVE;
         isAlive = true;
         victory = false;
         isInAction = false;
         oldRange = range;
         checkMovement = GetComponent<OG_MovementByMouse>();
+        shootingRange = GetComponent<PlayerActionManager>().bulletToInstantiate.GetComponent<BulletPrefab>().GetRange();
+        Debug.Log(shootingRange);
     }
 
     void Update()
@@ -43,25 +46,43 @@ public class PlayerBase : MonoBehaviour
                 {
                     if (Input.GetKeyDown(KeyCode.Alpha1))
                     {
-                        action = Actions.MOVE;
-                        range = oldRange;
+                        action = availableActions[0];
+                        
                     }
                     if (Input.GetKeyDown(KeyCode.Alpha2))
                     {
-                        action = Actions.SHOOT;
-                        range = shootingRange;
+                        action = availableActions[1];
+
                     }
                     if (Input.GetKeyDown(KeyCode.Alpha3))
                     {
-                        action = Actions.HEAL;
-                        range = oldRange;
-                        Heal(1); // Execute healing immediately
+                        action = availableActions[2];
+                    }
+                    if (Input.GetKeyDown(KeyCode.Alpha4))
+                    {
+                        if (availableActions.Count<4)
+                        {
+                            availableActions.Add(Actions.HEAL);
+                        }
+                        action = availableActions[3];
                     }
                 }
             }
             else
             {
                 action = Actions.NOTHING;
+            }
+            if(action == Actions.SHOOT)
+            {
+                range = shootingRange;
+            }
+            else
+            {
+                range = oldRange;
+            }
+            if(action == Actions.HEAL)
+            {
+                Heal(1); // Execute healing immediately
             }
         }
     }

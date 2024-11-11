@@ -17,10 +17,10 @@ public class ShootAction : ActiveAction
         GameObject bulletInstance = Instantiate(bulletToInstantiate, player.transform.position, Quaternion.identity);
 
         // Get the GunBullet component and set the direction
-        GunBullet gunBullet = bulletInstance.GetComponent<GunBullet>();
+        BulletPrefab gunBullet = bulletInstance.GetComponent<BulletPrefab>();
         if (gunBullet != null)
         {
-            Vector3 direction = (targetPosition - player.transform.position).normalized;
+            Vector3 direction = (targetPosition - player.transform.position).normalized*gunBullet.GetRange();
             gunBullet.Shoot(direction);
         }
         else
