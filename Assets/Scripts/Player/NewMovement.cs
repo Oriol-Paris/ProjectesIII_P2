@@ -178,7 +178,7 @@ public class NewMovement : MonoBehaviour
 
         t = Mathf.Clamp01(t + tIncrement); // Increment t, clamping it between 0 and 1
 
-        if (GetComponent<PlayerActionManager>().bulletPrefab != null && GetComponent<PlayerActionManager>().isShooting)
+        if (GetComponent<PlayerBase>().activeStyle != null && GetComponent<PlayerActionManager>().isShooting)
         {
             velocity = bulletVelocity;
             //Lerpeo al disparar

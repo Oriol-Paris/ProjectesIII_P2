@@ -28,11 +28,12 @@ public class OG_MovementByMouse : MonoBehaviour
         playerPosition = transform.position;
         lineRenderer.enabled = false;  // Start with LineRenderer disabled
         playerVelocity = velocity;
+
         // Get the PlayerBase component
         playerBase = GetComponent<PlayerBase>();
         bulletVelocity = GetComponent<OG_MovementByMouse>().bulletVelocity;
 
-        combatManager = FindObjectOfType<CombatManager>();
+        combatManager = FindAnyObjectByType<CombatManager>();
         playerActionManager = GetComponent<PlayerActionManager>(); // Get the PlayerActionManager component
     }
 
@@ -117,7 +118,7 @@ public class OG_MovementByMouse : MonoBehaviour
 
             t = Mathf.Clamp01(t + tIncrement); // Increment t, clamping it between 0 and 1
 
-            if (playerActionManager.bulletPrefab != null && playerActionManager.isShooting)
+            if (playerBase.activeStyle != null && playerActionManager.isShooting)
             {
                 velocity = bulletVelocity;
                 //Lerpeo al disparar

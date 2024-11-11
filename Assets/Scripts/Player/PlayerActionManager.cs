@@ -6,18 +6,15 @@ public class PlayerActionManager : MonoBehaviour
     #region VARIABLES
 
     PlayerBase player;
-    public GameObject bulletToInstantiate; //Ideally this should be list/vector when having multiple bullet types to shoot
 
-    [SerializeField]
-    public GameObject bulletPrefab;
+    public Dictionary<PlayerBase.ActionEnum, ActiveAction> activeActions;
+    public Dictionary<PlayerBase.ActionEnum, PassiveAction> passiveActions;
+    //public Dictionary<PlayerBase.ActionEnum, SingleUseAction> singleUseActions;
 
     public bool isMoving = true;
     public bool isShooting = true;
     public bool isHealing = true; // New flag for healing
 
-    private ActiveAction moveAction;
-    private ActiveAction shootAction;
-    private PassiveAction healAction; // New action
     private CombatManager combatManager;
 
     private bool hasShot = false; // Flag to track if a shot has been fired
@@ -27,10 +24,10 @@ public class PlayerActionManager : MonoBehaviour
     private void Start()
     {
         player = GetComponent<PlayerBase>();
-        moveAction = gameObject.AddComponent<MoveAction>();
-        shootAction = gameObject.AddComponent<ShootAction>();
-        healAction = gameObject.AddComponent<HealAction>(); // Instantiate the new action
-        ((ShootAction)shootAction).bulletToInstantiate = bulletToInstantiate;
+
+        activeActions.Add(PlayerBase.ActionEnum.MOVE, new MoveAction());
+        activeActions.Add(PlayerBase.ActionEnum.SHOOT, new ShootAction());
+        passiveActions.Add(PlayerBase.ActionEnum.HEAL, new HealAction());
 
         combatManager = FindAnyObjectByType<CombatManager>();
     }
@@ -42,16 +39,17 @@ public class PlayerActionManager : MonoBehaviour
             return; // Do not execute any actions if victory condition is met
         }
 
-        if (player.GetAction() == PlayerBase.Actions.MOVE && (!player.GetComponent<OG_MovementByMouse>().GetIsMoving() || isMoving))
+        if (player.GetAction().m_action == PlayerBase.ActionEnum.MOVE && (!player.GetComponent<OG_MovementByMouse>().GetIsMoving() || isMoving))
         {
             isMoving = true;
-            moveAction.Execute(player, newPos);
+            activeActions[PlayerBase.ActionEnum.MOVE].Execute(player, newPos);
         }
-        else if (player.GetAction() == PlayerBase.Actions.SHOOT && (!player.GetComponent<OG_MovementByMouse>().GetIsMoving() || isShooting) && !hasShot)
+        else if (player.GetAction().m_action == PlayerBase.ActionEnum.SHOOT && (!player.GetComponent<OG_MovementByMouse>().GetIsMoving() || isShooting) && !hasShot)
         {
             isShooting = true;
             hasShot = true; // Set the flag to indicate a shot has been fired
-            shootAction.Execute(player, newPos);
+            ((ShootAction)activeActions[PlayerBase.ActionEnum.SHOOT]).bulletPrefab = player.activeStyle.m_prefab;
+            activeActions[PlayerBase.ActionEnum.SHOOT].Execute(player, newPos);
         }
 
         if (player.GetComponent<OG_MovementByMouse>().t >= 1)

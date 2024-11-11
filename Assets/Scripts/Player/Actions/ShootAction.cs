@@ -1,20 +1,21 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class ShootAction : ActiveAction
 {
+    public GameObject spawnedBullet;
     public GameObject bulletPrefab;
-    public GameObject bulletToInstantiate;
 
     public override void Execute(PlayerBase player, Vector3 targetPosition)
     {
-        if (bulletToInstantiate == null)
+        if (bulletPrefab == null)
         {
             Debug.LogError("Bullet prefab is not set.");
             return;
         }
 
         // Instantiate the bullet at the player's position
-        GameObject bulletInstance = Instantiate(bulletToInstantiate, player.transform.position, Quaternion.identity);
+        GameObject bulletInstance = Instantiate(bulletPrefab, player.transform.position, Quaternion.identity);
 
         // Get the GunBullet component and set the direction
         BulletPrefab gunBullet = bulletInstance.GetComponent<BulletPrefab>();
