@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe6b8f5bf0e5ea24fa2c8558c5c006ce, type: 3}
+  m_Name: PlayerData
+  m_EditorClassIdentifier: 
+  health: 10
+  actionPoints: 5
+  baseRange: 3
+  exp: 0
+  isAlive: 1
+  victory: 0
+  gun:
+    prefab: {fileID: 4841340973275302747, guid: 8c280260248f7e449925f58bc503ee3b, type: 3}
+    range: 5
+  shotgun:
+    prefab: {fileID: 4841340973275302747, guid: 10864d5b051bdc44e928dd42003a1950, type: 3}
+    range: 4
+  availableActions:
+  - actionType: 0
+    action: 0
+    key: 49
+    style:
+      prefab: {fileID: 6993864842785556067, guid: 135a33f42603095498418b3997897017, type: 3}
+      range: 3
+  - actionType: 0
+    action: 1
+    key: 50
+    style:
+      prefab: {fileID: 4841340973275302747, guid: 8c280260248f7e449925f58bc503ee3b, type: 3}
+      range: 6
