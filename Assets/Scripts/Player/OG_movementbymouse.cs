@@ -19,25 +19,35 @@ public class OG_MovementByMouse : MonoBehaviour
     // Reference to the PlayerBase script
     [SerializeField] private PlayerBase playerBase;
 
+    private CombatManager combatManager;
+    private PlayerActionManager playerActionManager; // Reference to PlayerActionManager
+
     void Start()
     {
-        
         placeSelected = false;
         playerPosition = transform.position;
         lineRenderer.enabled = false;  // Start with LineRenderer disabled
         playerVelocity = velocity;
+
         // Get the PlayerBase component
         playerBase = GetComponent<PlayerBase>();
-        bulletVelocity = GetComponent<PlayerActionManager>().gunBullet.speed;
+        bulletVelocity = GetComponent<OG_MovementByMouse>().bulletVelocity;
+
+        combatManager = FindAnyObjectByType<CombatManager>();
+        playerActionManager = GetComponent<PlayerActionManager>(); // Get the PlayerActionManager component
     }
 
     void Update()
     {
+        if (combatManager != null && combatManager.allEnemiesDead)
+        {
+            return; // Do not allow any mouse interactions if victory condition is met
+        }
+
         // Update mouse position
         mousePosition = Input.mousePosition;
         mousePosition = Camera.main.ScreenToWorldPoint(new Vector3(mousePosition.x, mousePosition.y, 10));
         mousePosition.z = 0;
-        
 
         // If mouse button is pressed
         if (Input.GetMouseButtonDown(0) && !placeSelected)
@@ -94,12 +104,12 @@ public class OG_MovementByMouse : MonoBehaviour
                 placeSelected = true;
                 lineRenderer.enabled = false;
             }
-            
         }
 
         // Movement along the Bezier curve
         if (placeSelected)
         {
+            playerBase.SetInAction(true);
             isMoving = true;
             lineRenderer.enabled = false;
             // Calculate the increment for t based on velocity and curve length
@@ -107,41 +117,36 @@ public class OG_MovementByMouse : MonoBehaviour
             float tIncrement = (velocity * Time.deltaTime) / distanceToTarget;  // Fixed increment based on speed
 
             t = Mathf.Clamp01(t + tIncrement); // Increment t, clamping it between 0 and 1
-            
-            if(GetComponent<PlayerActionManager>().bulletPrefab != null&& GetComponent<PlayerActionManager>().isShooting)
+
+            if (playerBase.activeStyle != null && playerActionManager.isShooting)
             {
                 velocity = bulletVelocity;
                 //Lerpeo al disparar
                 Vector3 newPosition = BezierCurve(t, playerPosition, controlPoint, positionDesired);
-               // GetComponent<PlayerActionManager>().isShooting = true;
-                GetComponent<PlayerActionManager>().UpdateAction(newPosition, t); // Update the player's position
-                
-
-
+                playerActionManager.UpdateAction(newPosition, t); // Update the player's position
             }
-            else if (GetComponent<PlayerActionManager>().isMoving)
+            else if (playerActionManager.isMoving)
             {
                 velocity = playerVelocity;
                 Vector3 newPosition = BezierCurve(t, playerPosition, controlPoint, positionDesired);
-                //GetComponent<PlayerActionManager>().isShooting = false;
-                GetComponent<PlayerActionManager>().UpdateAction(newPosition, t); // Update the player's position
-
+                playerActionManager.UpdateAction(newPosition, t); // Update the player's position
             }
 
             // Check if we have reached the end of the curve
             if (t >= 1f)
             {
+                playerBase.SetInAction(false); //Player no longer in action
                 placeSelected = false;
                 isMoving = false;
                 playerPosition = transform.position; // Update player position to the new position
                 velocity = playerVelocity;
+                playerActionManager.ResetFlags(); // Call ResetFlags to reset the flags
             }
         }
     }
 
     private void UpdateLineRenderer(Vector3 targetPosition)
     {
-      
         // Update the control point based on the initial position and the new target position
         float curveIntensity = Mathf.Clamp(Vector3.Distance(playerPosition, targetPosition) / 100f, 0, 2f);
         controlPoint = positionDesired + new Vector3(0, -curveIntensity, 0); // Adjust height
@@ -179,6 +184,6 @@ public class OG_MovementByMouse : MonoBehaviour
 
     public bool GetIsMoving() { return isMoving; }
     public Vector3 GetPosition() { return playerPosition; }
-    public void SetPositionDesired(Vector3 position) { positionDesired = position;}
+    public void SetPositionDesired(Vector3 position) { positionDesired = position; }
     public Vector3 GetPositionDesired() { return positionDesired; }
 }

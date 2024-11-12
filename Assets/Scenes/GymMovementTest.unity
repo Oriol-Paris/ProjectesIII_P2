@@ -522,10 +522,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 156c13fe524c46347affeaf187cceb5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_MovementByMouse: {fileID: 871648644}
-  playerPos: {fileID: 871648640}
-  curveResolution: 3.5
-  segmentCount: 50
 --- !u!1 &871648636
 GameObject:
   m_ObjectHideFlags: 0
@@ -632,6 +628,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 5
   range: 3
+  oldRange: 0
+  shootingRange: 0
+  checkMovement: {fileID: 0}
+  victory: 0
 --- !u!50 &871648642
 Rigidbody2D:
   serializedVersion: 5
@@ -1226,7 +1226,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef213062deee36343a9c717057e33f36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Player: {fileID: 0}
+  Player: {fileID: 871648644}
   bulletShot: {fileID: 4841340973275302747, guid: 10864d5b051bdc44e928dd42003a1950, type: 3}
   velocity: 2
   range: 5
@@ -1368,6 +1368,10 @@ PrefabInstance:
     - target: {fileID: 4841340973275302747, guid: 10864d5b051bdc44e928dd42003a1950, type: 3}
       propertyPath: m_Name
       value: GunBullet
+      objectReference: {fileID: 0}
+    - target: {fileID: 4841340973275302747, guid: 10864d5b051bdc44e928dd42003a1950, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
