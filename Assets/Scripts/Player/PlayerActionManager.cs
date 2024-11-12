@@ -20,9 +20,14 @@ public class PlayerActionManager : MonoBehaviour
     private bool hasShot = false; // Flag to track if a shot has been fired
 
     #endregion
-
+    private void Awake()
+    {
+        activeActions = new Dictionary<PlayerBase.ActionEnum, ActiveAction>();
+        passiveActions = new Dictionary<PlayerBase.ActionEnum, PassiveAction>();
+    }
     private void Start()
     {
+        
         player = GetComponent<PlayerBase>();
 
         activeActions.Add(PlayerBase.ActionEnum.MOVE, new MoveAction());
@@ -44,12 +49,15 @@ public class PlayerActionManager : MonoBehaviour
             isMoving = true;
             activeActions[PlayerBase.ActionEnum.MOVE].Execute(player, newPos);
         }
-        else if (player.GetAction().m_action == PlayerBase.ActionEnum.SHOOT && (!player.GetComponent<OG_MovementByMouse>().GetIsMoving() || isShooting) && !hasShot)
+        if (player.GetAction().m_action == PlayerBase.ActionEnum.SHOOT && (!player.GetComponent<OG_MovementByMouse>().GetIsMoving() || isShooting))
         {
+            if (!hasShot) { 
             isShooting = true;
             hasShot = true; // Set the flag to indicate a shot has been fired
             ((ShootAction)activeActions[PlayerBase.ActionEnum.SHOOT]).bulletPrefab = player.activeStyle.m_prefab;
             activeActions[PlayerBase.ActionEnum.SHOOT].Execute(player, newPos);
+            }
+
         }
 
         if (player.GetComponent<OG_MovementByMouse>().t >= 1)

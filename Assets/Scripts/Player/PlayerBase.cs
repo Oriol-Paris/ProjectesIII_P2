@@ -52,7 +52,7 @@ public class PlayerBase : MonoBehaviour
     OG_MovementByMouse checkMovement;
 
     public Action activeAction {  get; private set; }
-    private List<Action> availableActions;
+    private List<Action> availableActions = new List<Action>();
 
     private bool isInAction;
     private bool isAlive;
@@ -95,6 +95,7 @@ public class PlayerBase : MonoBehaviour
                     }
                 }
             }
+            
 
             if (activeAction.m_style != null)
             {
@@ -113,6 +114,7 @@ public class PlayerBase : MonoBehaviour
         else
         {
             activeAction = Action.nothing;
+            Debug.Log("Doing jackshit");
         }
     }
 
