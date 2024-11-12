@@ -1,11 +1,34 @@
+using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "ScriptablePlayerStats", menuName = "Scriptable Objects/ScriptablePlayerStats")]
-public class ScriptablePlayerStats : ScriptableObject
+[CreateAssetMenu(fileName = "PlayerData", menuName = "ScriptableObjects/PlayerData")]
+public class PlayerData : ScriptableObject
 {
-    PlayerBase player;
-    private void Awake()
+    public int health;
+    public int actionPoints;
+    public int baseRange;
+    public int exp;
+    public bool isAlive;
+    public bool victory;
+
+    [System.Serializable]
+    public class BulletStyle
     {
-        player = FindAnyObjectByType<PlayerBase>();
+        public GameObject prefab;
+        public int range;
+    }
+
+    public BulletStyle gun;
+    public BulletStyle shotgun;
+
+    public List<ActionData> availableActions = new List<ActionData>();
+
+    [System.Serializable]
+    public class ActionData
+    {
+        public PlayerBase.ActionType actionType;
+        public PlayerBase.ActionEnum action;
+        public KeyCode key;
+        public BulletStyle style;
     }
 }

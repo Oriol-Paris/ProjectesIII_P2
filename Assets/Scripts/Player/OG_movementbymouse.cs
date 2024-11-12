@@ -7,8 +7,8 @@ public class OG_MovementByMouse : MonoBehaviour
     public Vector3 mousePosition;
     public Vector3 positionDesired;
     public Vector3 playerPosition;
-    bool placeSelected;
-    bool isMoving;
+    public bool placeSelected;
+    public bool isMoving;
     public float t; // Parameter to control position along the curve
     [SerializeField] public float velocity; // Speed in units per second
     [SerializeField] LineRenderer lineRenderer;
@@ -31,7 +31,7 @@ public class OG_MovementByMouse : MonoBehaviour
 
         // Get the PlayerBase component
         playerBase = GetComponent<PlayerBase>();
-        bulletVelocity = GetComponent<OG_MovementByMouse>().bulletVelocity;
+        bulletVelocity = playerVelocity;
 
         combatManager = FindAnyObjectByType<CombatManager>();
         playerActionManager = GetComponent<PlayerActionManager>(); // Get the PlayerActionManager component

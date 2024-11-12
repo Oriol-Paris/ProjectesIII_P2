@@ -10,7 +10,7 @@ public class EnemyBase : MonoBehaviour
     [SerializeField] private float range;
     [SerializeField] private float oldRange;//Esto para clase shooter
     [SerializeField] private float shootingRange;//Esto para cuando hagamos clase shooter
-    [SerializeField]SpriteRenderer spriteRenderer;
+    [SerializeField] SpriteRenderer spriteRenderer;
     [SerializeField] Collider2D collider;
     private bool isMoving;
     private bool isShoooting;
@@ -31,9 +31,9 @@ public class EnemyBase : MonoBehaviour
     void Update()
     {
 
-        if (health<=0)
+        if (health <= 0)
         {
-            isAlive=false;
+            isAlive = false;
             spriteRenderer.color = Color.grey;
             collider.enabled = false;
 
@@ -41,7 +41,7 @@ public class EnemyBase : MonoBehaviour
 
     }
 
-    
+
     public int GetHealth() { return health; }
     public void Damage(int val) { health -= val; Debug.Log("OOF"); }
     public float GetRange() { return range; }
