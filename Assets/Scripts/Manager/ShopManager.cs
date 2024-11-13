@@ -6,21 +6,13 @@ using UnityEngine.UI;
 
 public class ShopManager : MonoBehaviour
 {
-    public enum ShopItems { SHOTGUN, HEAL }
-
     public TextMeshProUGUI rerollText;
     [SerializeField] public List<TextMeshProUGUI> itemTexts;
     [SerializeField] public List<TextMeshProUGUI> pricePool;
-    public List<ShopItems> itemPool;
     public int rerollPrice;
 
     public void Start()
     {
-        itemPool = new List<ShopItems>();
-
-        itemPool.Add(ShopItems.SHOTGUN);
-        itemPool.Add(ShopItems.HEAL);
-
         itemTexts[0].text = "Shotgun";
         itemTexts[1].text = "Heal";
 
@@ -38,14 +30,30 @@ public class ShopManager : MonoBehaviour
             pricePool[i].text = Random.Range(50, 100).ToString();
         }
 
-        /*foreach (Button button in FindObjectsOfType<Button>())
+        /*
+        foreach (Button button in FindObjectsOfType<Button>())
         {
             button.GetComponent<GameObject>().SetActive(true);
-        }*/
+        }
+        */
     }
 
-    public void BuyItem()
+    public void BuyItem(TextMeshProUGUI tmp)
     {
-        //Do something
+        PlayerBase player = GetComponent<PlayerBase>();
+
+        switch(tmp.text)
+        {
+            case "Shotgun":
+                player.AddNewAction(new PlayerBase.Action(PlayerBase.ActionType.ACTIVE, PlayerBase.ActionEnum.SHOOT, KeyCode.Alpha3, player.playerData.shotgun));
+                break;
+
+            case "Heal":
+                player.AddNewAction(new PlayerBase.Action(PlayerBase.ActionType.PASSIVE, PlayerBase.ActionEnum.HEAL, KeyCode.Alpha4));
+                break;
+
+            default: 
+                break;
+        }
     }
 }
