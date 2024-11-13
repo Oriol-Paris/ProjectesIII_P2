@@ -15,6 +15,8 @@ public class PlayerActionManager : MonoBehaviour
     public bool isMoving = true;
     public bool isShooting = true;
     public bool isHealing = true; // New flag for healing
+    public bool turnAdded = false;
+    public int turnsDone = 0;
 
     private CombatManager combatManager;
     private bool hasShot = false; // Flag to track if a shot has been fired
@@ -76,6 +78,13 @@ public class PlayerActionManager : MonoBehaviour
         {
             isMoving = true;
             activeActions[PlayerBase.ActionEnum.MOVE].Execute(player, newPos);
+            if (!turnAdded)
+            {
+                turnAdded = true;
+                turnsDone++;
+                Debug.Log(turnsDone);
+            }
+
         }
 
         if (currentAction.m_action == PlayerBase.ActionEnum.SHOOT && (!player.GetComponent<OG_MovementByMouse>().GetIsMoving() || isShooting))
@@ -86,12 +95,25 @@ public class PlayerActionManager : MonoBehaviour
                 hasShot = true; // Set the flag to indicate a shot has been fired
                 ((ShootAction)activeActions[PlayerBase.ActionEnum.SHOOT]).bulletPrefab = player.activeStyle.prefab;
                 activeActions[PlayerBase.ActionEnum.SHOOT].Execute(player, newPos);
+                if (!turnAdded)
+                {
+                    turnAdded = true;
+                    turnsDone++;
+                    Debug.Log(turnsDone);
+                }
+
             }
         }
 
         if (currentAction.m_action == PlayerBase.ActionEnum.HEAL && isHealing)
         {
             passiveActions[PlayerBase.ActionEnum.HEAL].Execute(player, newPos);
+            if (!turnAdded)
+            {
+                turnAdded = true;
+                turnsDone++;
+                Debug.Log(turnsDone);
+            }
         }
 
         if (player.GetComponent<OG_MovementByMouse>().t >= 1)
@@ -104,5 +126,6 @@ public class PlayerActionManager : MonoBehaviour
     {
         Debug.Log("RESET");
         hasShot = false; // Reset the flag when the player stops moving
+        turnAdded = false;
     }
 }

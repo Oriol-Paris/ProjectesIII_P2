@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class CombatManager : MonoBehaviour
@@ -6,8 +7,10 @@ public class CombatManager : MonoBehaviour
     public List<PlayerBase> playerParty = new List<PlayerBase>();  // Lista para jugadores
     public EnemyBase[] enemyParty;  // Array para enemigos
     public bool allEnemiesDead;
-    int turnNumber;
+    [SerializeField] private int numberOfTurns;
     [SerializeField] Canvas winCondition;
+
+    private bool hasCalculatedExp = false;  // Bandera para controlar que la suma de experiencia solo se haga una vez
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -21,7 +24,8 @@ public class CombatManager : MonoBehaviour
             playerParty.Add(player);
         }
         winCondition.enabled = false;
-        // Obtener todos los objetos de tipo EnemyMovement en la escena
+
+        // Obtener todos los objetos de tipo EnemyBase en la escena
         enemyParty = GameObject.FindObjectsByType<EnemyBase>(FindObjectsSortMode.None);
         allEnemiesDead = true;
     }
@@ -31,20 +35,34 @@ public class CombatManager : MonoBehaviour
     {
         allEnemiesDead = true;
 
-        for (int i = 0; i<enemyParty.Length; i++)
+        for (int i = 0; i < enemyParty.Length; i++)
         {
             if (enemyParty[i].isAlive)
                 allEnemiesDead = false;
-            winCondition.enabled = false;
-        }
-        if(allEnemiesDead)
-        {
-            winCondition.enabled = true;
-            for(int i = 0; i<playerParty.Count; i++)
-            {
-                playerParty[i].victory = true;
-            }
         }
 
+        // Si todos los enemigos están muertos y aún no hemos calculado la experiencia
+        if (allEnemiesDead && !hasCalculatedExp)
+        {
+            // Habilitar la condición de victoria
+            winCondition.enabled = true;
+
+            // Realizar el cálculo de la experiencia
+            for (int i = 0; i < playerParty.Count; i++)
+            {
+                playerParty[i].victory = true;
+                if (playerParty[i].GetIsAlive())
+                {
+                    playerParty[i].exp++;  // Sumar una experiencia básica
+                    int turnsExpDifference = numberOfTurns - playerParty[i].turnsDone.turnsDone;
+                    turnsExpDifference = Mathf.Max(0, turnsExpDifference);
+                    playerParty[i].exp += turnsExpDifference; // Ajustar por los turnos
+                }
+                playerParty[i].playerData.exp = playerParty[i].exp;
+            }
+
+            // Marcar que ya se calculó la experiencia
+            hasCalculatedExp = true;
+        }
     }
 }

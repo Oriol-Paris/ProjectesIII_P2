@@ -26,6 +26,7 @@ public class PlayerBase : MonoBehaviour
         public PlayerData.BulletStyle m_style { get; private set; }
 
         public void ChangeKey(KeyCode newKey) { m_key = newKey; }
+
     }
 
     #region VARIABLES
@@ -37,6 +38,7 @@ public class PlayerBase : MonoBehaviour
     public float range;
     public int exp = 0;
     private OG_MovementByMouse checkMovement;
+    public PlayerActionManager turnsDone;
 
     public Action activeAction { get; private set; }
     private List<Action> availableActions = new List<Action>();
@@ -55,7 +57,7 @@ public class PlayerBase : MonoBehaviour
         isAlive = playerData.isAlive;
         victory = playerData.victory;
         isInAction = false;
-
+        turnsDone = GetComponent<PlayerActionManager>();
         checkMovement = GetComponent<OG_MovementByMouse>();
     }
 
@@ -131,6 +133,7 @@ public class PlayerBase : MonoBehaviour
     #region GETTERS
 
     public float GetRange() { return range; }
+    public bool GetIsAlive() { return isAlive; }
     public Action GetAction() { return activeAction; }
     public bool GetInAction() { return isInAction; }
 
