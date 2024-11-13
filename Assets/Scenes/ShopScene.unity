@@ -789,9 +789,11 @@ MonoBehaviour:
   itemTexts:
   - {fileID: 2083637612}
   - {fileID: 2132271375}
-  pricePool:
+  pricePool: 0000000000000000
+  priceTexts:
   - {fileID: 1715944780}
   - {fileID: 1103848686}
+  player: {fileID: 0}
   rerollPrice: 1
 --- !u!114 &1232424836
 MonoBehaviour:
@@ -1336,9 +1338,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '0
-
-'
+  m_text: 1
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
