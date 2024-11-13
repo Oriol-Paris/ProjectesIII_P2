@@ -10,7 +10,7 @@ public class ShopManager : MonoBehaviour
     [SerializeField] public List<TextMeshProUGUI> itemTexts;
     [SerializeField] public List<int> pricePool;
     [SerializeField] public List<TextMeshProUGUI> priceTexts;
-    [SerializeField] PlayerBase player;
+    [SerializeField] public PlayerBase player;
 
     public int rerollPrice;
 
@@ -18,28 +18,27 @@ public class ShopManager : MonoBehaviour
     {
         itemTexts[0].text = "Shotgun";
         itemTexts[1].text = "Heal";
-
+        priceTexts[0].text = pricePool[0].ToString();
+        priceTexts[1].text = pricePool[1].ToString();
         pricePool[0] = Random.Range(5, 10);
         pricePool[1] = Random.Range(5, 10);
     }
 
     public void Reroll()
     {
-        rerollPrice++;
-        rerollText.text = rerollPrice+"";
+        if(player.playerData.exp>=rerollPrice) { 
+            
+            player.playerData.exp -= rerollPrice;
+            rerollPrice++;
+            rerollText.text = rerollPrice+"";
 
-        for(int i = 0; i < pricePool.Count; i++)
-        {
+            for(int i = 0; i < pricePool.Count; i++)
+            {
             pricePool[i] = Random.Range(5, 10);
             priceTexts[i].text = pricePool[i]+"";
+            }
         }
-
-        /*
-        foreach (Button button in FindObjectsOfType<Button>())
-        {
-            button.GetComponent<GameObject>().SetActive(true);
-        }
-        */
+        
     }
 
     public void BuyItem(TextMeshProUGUI tmp)
@@ -53,10 +52,11 @@ public class ShopManager : MonoBehaviour
                     if (player.playerData.exp >= pricePool[i])
                     {
                         player.playerData.exp -= pricePool[i];
+                        player.playerData.availableActions.Add(new PlayerData.ActionData
+                        (PlayerBase.ActionType.ACTIVE, PlayerBase.ActionEnum.SHOOT, KeyCode.Alpha3, player.playerData.shotgun));
                     }
+                    
                 }
-                player.playerData.availableActions.Add(new PlayerData.ActionData(PlayerBase.ActionType.ACTIVE,PlayerBase.ActionEnum.SHOOT,KeyCode.Alpha3,player.playerData.shotgun));
-                //player.AddNewAction(new PlayerBase.Action(PlayerBase.ActionType.ACTIVE, PlayerBase.ActionEnum.SHOOT, KeyCode.Alpha3, player.playerData.shotgun));
                 break;
 
             case "Heal":
@@ -65,9 +65,10 @@ public class ShopManager : MonoBehaviour
                     if (player.playerData.exp >= pricePool[i])
                     {
                         player.playerData.exp -= pricePool[i];
+                        player.AddNewAction(new PlayerBase.Action(PlayerBase.ActionType.PASSIVE, PlayerBase.ActionEnum.HEAL, KeyCode.Alpha4));
+
                     }
                 }
-                player.AddNewAction(new PlayerBase.Action(PlayerBase.ActionType.PASSIVE, PlayerBase.ActionEnum.HEAL, KeyCode.Alpha4));
                 break;
 
             default: 
