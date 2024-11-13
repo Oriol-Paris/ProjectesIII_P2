@@ -18,7 +18,9 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] private float range;
 
     #endregion
-    
+
+    public enum ActionEnum { MOVE, SHOOT, HEAL, MELEE, NOTHING };
+
     void Start()
     {
         Player = FindAnyObjectByType<OG_MovementByMouse>();
@@ -50,3 +52,4 @@ public class EnemyMovement : MonoBehaviour
         }
     }
 }
+
