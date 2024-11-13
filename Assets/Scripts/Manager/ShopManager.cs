@@ -6,26 +6,21 @@ using UnityEngine.UI;
 
 public class ShopManager : MonoBehaviour
 {
-    public enum ShopItems { SHOTGUN, HEAL }
-
     public TextMeshProUGUI rerollText;
     [SerializeField] public List<TextMeshProUGUI> itemTexts;
-    [SerializeField] public List<TextMeshProUGUI> pricePool;
-    public List<ShopItems> itemPool;
+    [SerializeField] public List<int> pricePool;
+    [SerializeField] public List<TextMeshProUGUI> priceTexts;
+    [SerializeField] PlayerBase player;
+
     public int rerollPrice;
 
     public void Start()
     {
-        itemPool = new List<ShopItems>();
-
-        itemPool.Add(ShopItems.SHOTGUN);
-        itemPool.Add(ShopItems.HEAL);
-
         itemTexts[0].text = "Shotgun";
         itemTexts[1].text = "Heal";
 
-        pricePool[0].text = Random.Range(50, 100)+"";
-        pricePool[1].text = Random.Range(50, 100)+"";
+        pricePool[0] = Random.Range(5, 10);
+        pricePool[1] = Random.Range(5, 10);
     }
 
     public void Reroll()
@@ -35,17 +30,48 @@ public class ShopManager : MonoBehaviour
 
         for(int i = 0; i < pricePool.Count; i++)
         {
-            pricePool[i].text = Random.Range(50, 100).ToString();
+            pricePool[i] = Random.Range(5, 10);
+            priceTexts[i].text = pricePool[i]+"";
         }
 
-        /*foreach (Button button in FindObjectsOfType<Button>())
+        /*
+        foreach (Button button in FindObjectsOfType<Button>())
         {
             button.GetComponent<GameObject>().SetActive(true);
-        }*/
+        }
+        */
     }
 
-    public void BuyItem()
+    public void BuyItem(TextMeshProUGUI tmp)
     {
-        //Do something
+       
+
+        switch(tmp.text)
+        {
+            case "Shotgun":
+                for (int i = 0; i < pricePool.Count; i++) { 
+                    if (player.playerData.exp >= pricePool[i])
+                    {
+                        player.playerData.exp -= pricePool[i];
+                    }
+                }
+                player.playerData.availableActions.Add(new PlayerData.ActionData(PlayerBase.ActionType.ACTIVE,PlayerBase.ActionEnum.SHOOT,KeyCode.Alpha3,player.playerData.shotgun));
+                //player.AddNewAction(new PlayerBase.Action(PlayerBase.ActionType.ACTIVE, PlayerBase.ActionEnum.SHOOT, KeyCode.Alpha3, player.playerData.shotgun));
+                break;
+
+            case "Heal":
+                for (int i = 0; i < pricePool.Count; i++)
+                {
+                    if (player.playerData.exp >= pricePool[i])
+                    {
+                        player.playerData.exp -= pricePool[i];
+                    }
+                }
+                player.AddNewAction(new PlayerBase.Action(PlayerBase.ActionType.PASSIVE, PlayerBase.ActionEnum.HEAL, KeyCode.Alpha4));
+                break;
+
+            default: 
+                break;
+        }
     }
 }

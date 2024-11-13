@@ -26,6 +26,13 @@ public class PlayerData : ScriptableObject
     [System.Serializable]
     public class ActionData
     {
+        public ActionData(PlayerBase.ActionType _actionType, PlayerBase.ActionEnum _action,KeyCode _key,BulletStyle _style)  
+        {
+            actionType = _actionType;
+            action = _action;
+            key = _key;
+            style = _style;
+        }
         public PlayerBase.ActionType actionType;
         public PlayerBase.ActionEnum action;
         public KeyCode key;
