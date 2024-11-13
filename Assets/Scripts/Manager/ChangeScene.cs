@@ -1,9 +1,12 @@
+using TMPro;
 using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class ChangeScene : MonoBehaviour
 {
+    [SerializeField] TextMeshProUGUI expValue;
+    [SerializeField] CombatManager expObtained;
     public void GoToShop()
     {
         SceneManager.LoadScene("ShopScene");
@@ -17,6 +20,6 @@ public class ChangeScene : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        expValue.text = "Exp: "+expObtained.playerParty[0].exp+"";
     }
 }

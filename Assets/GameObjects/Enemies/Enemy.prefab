@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4733029159631704140}
   - component: {fileID: 779711176196000108}
   - component: {fileID: 4449962838169955803}
-  - component: {fileID: 7931825162647696330}
+  - component: {fileID: 3400037044067970028}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Enemy
@@ -170,7 +170,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 7
---- !u!114 &7931825162647696330
+--- !u!114 &3400037044067970028
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -179,13 +179,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 2547532622408290678}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c17e5123fbabe654889f170ba81e81a4, type: 3}
+  m_Script: {fileID: 11500000, guid: 6ff018788fa94464086a1c065bb491b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   health: 1
-  range: 0
-  oldRange: 0
-  shootingRange: 0
-  spriteRenderer: {fileID: 0}
-  collider: {fileID: 0}
-  isAlive: 0
+  range: 3
+  oldRange: 4
+  shootingRange: 5
+  spriteRenderer: {fileID: 7086546256689271642}
+  collider: {fileID: 779711176196000108}
+  isAlive: 1

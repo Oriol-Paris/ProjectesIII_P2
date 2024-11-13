@@ -5,36 +5,64 @@ public class PlayerActionManager : MonoBehaviour
 {
     #region VARIABLES
 
-    PlayerBase player;
+    private PlayerBase player;
+    private PlayerData playerData;
 
+    // Dictionaries to store actions by type
     public Dictionary<PlayerBase.ActionEnum, ActiveAction> activeActions;
     public Dictionary<PlayerBase.ActionEnum, PassiveAction> passiveActions;
-    //public Dictionary<PlayerBase.ActionEnum, SingleUseAction> singleUseActions;
 
     public bool isMoving = true;
     public bool isShooting = true;
     public bool isHealing = true; // New flag for healing
+    public bool turnAdded = false;
+    public int turnsDone = 0;
 
     private CombatManager combatManager;
-
     private bool hasShot = false; // Flag to track if a shot has been fired
 
     #endregion
+
     private void Awake()
     {
         activeActions = new Dictionary<PlayerBase.ActionEnum, ActiveAction>();
         passiveActions = new Dictionary<PlayerBase.ActionEnum, PassiveAction>();
     }
+
     private void Start()
     {
-        
         player = GetComponent<PlayerBase>();
+        playerData = player.playerData; // Load playerData from PlayerBase
 
-        activeActions.Add(PlayerBase.ActionEnum.MOVE, new MoveAction());
-        activeActions.Add(PlayerBase.ActionEnum.SHOOT, new ShootAction());
-        passiveActions.Add(PlayerBase.ActionEnum.HEAL, new HealAction());
-
+        InitializeActions();
         combatManager = FindAnyObjectByType<CombatManager>();
+    }
+
+    private void InitializeActions()
+    {
+        foreach (var actionData in playerData.availableActions)
+        {
+            switch (actionData.actionType)
+            {
+                case PlayerBase.ActionType.ACTIVE:
+                    if (actionData.action == PlayerBase.ActionEnum.MOVE)
+                    {
+                        activeActions.Add(actionData.action, new MoveAction());
+                    }
+                    else if (actionData.action == PlayerBase.ActionEnum.SHOOT)
+                    {
+                        activeActions.Add(actionData.action, new ShootAction());
+                    }
+                    break;
+                case PlayerBase.ActionType.PASSIVE:
+                    if (actionData.action == PlayerBase.ActionEnum.HEAL)
+                    {
+                        passiveActions.Add(actionData.action, new HealAction());
+                    }
+                    break;
+                    // Add other cases if you have SingleUse or other action types
+            }
+        }
     }
 
     public void UpdateAction(Vector3 newPos, float t)
@@ -44,20 +72,48 @@ public class PlayerActionManager : MonoBehaviour
             return; // Do not execute any actions if victory condition is met
         }
 
-        if (player.GetAction().m_action == PlayerBase.ActionEnum.MOVE && (!player.GetComponent<OG_MovementByMouse>().GetIsMoving() || isMoving))
+        var currentAction = player.GetAction();
+
+        if (currentAction.m_action == PlayerBase.ActionEnum.MOVE && (!player.GetComponent<OG_MovementByMouse>().GetIsMoving() || isMoving))
         {
             isMoving = true;
             activeActions[PlayerBase.ActionEnum.MOVE].Execute(player, newPos);
-        }
-        if (player.GetAction().m_action == PlayerBase.ActionEnum.SHOOT && (!player.GetComponent<OG_MovementByMouse>().GetIsMoving() || isShooting))
-        {
-            if (!hasShot) { 
-            isShooting = true;
-            hasShot = true; // Set the flag to indicate a shot has been fired
-            ((ShootAction)activeActions[PlayerBase.ActionEnum.SHOOT]).bulletPrefab = player.activeStyle.m_prefab;
-            activeActions[PlayerBase.ActionEnum.SHOOT].Execute(player, newPos);
+            if (!turnAdded)
+            {
+                turnAdded = true;
+                turnsDone++;
+                Debug.Log(turnsDone);
             }
 
+        }
+
+        if (currentAction.m_action == PlayerBase.ActionEnum.SHOOT && (!player.GetComponent<OG_MovementByMouse>().GetIsMoving() || isShooting))
+        {
+            if (!hasShot)
+            {
+                isShooting = true;
+                hasShot = true; // Set the flag to indicate a shot has been fired
+                ((ShootAction)activeActions[PlayerBase.ActionEnum.SHOOT]).bulletPrefab = player.activeStyle.prefab;
+                activeActions[PlayerBase.ActionEnum.SHOOT].Execute(player, newPos);
+                if (!turnAdded)
+                {
+                    turnAdded = true;
+                    turnsDone++;
+                    Debug.Log(turnsDone);
+                }
+
+            }
+        }
+
+        if (currentAction.m_action == PlayerBase.ActionEnum.HEAL && isHealing)
+        {
+            passiveActions[PlayerBase.ActionEnum.HEAL].Execute(player, newPos);
+            if (!turnAdded)
+            {
+                turnAdded = true;
+                turnsDone++;
+                Debug.Log(turnsDone);
+            }
         }
 
         if (player.GetComponent<OG_MovementByMouse>().t >= 1)
@@ -70,5 +126,6 @@ public class PlayerActionManager : MonoBehaviour
     {
         Debug.Log("RESET");
         hasShot = false; // Reset the flag when the player stops moving
+        turnAdded = false;
     }
 }

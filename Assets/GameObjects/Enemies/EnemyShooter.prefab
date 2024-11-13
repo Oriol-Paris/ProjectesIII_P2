@@ -163,15 +163,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 2547532622408290678}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c17e5123fbabe654889f170ba81e81a4, type: 3}
+  m_Script: {fileID: 11500000, guid: 6ff018788fa94464086a1c065bb491b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   health: 1
-  range: 0
-  oldRange: 0
-  shootingRange: 0
-  spriteRenderer: {fileID: 0}
-  collider: {fileID: 0}
+  range: 5
+  oldRange: 5
+  shootingRange: 8
+  spriteRenderer: {fileID: 7086546256689271642}
+  collider: {fileID: 779711176196000108}
   isAlive: 0
 --- !u!114 &-5676328429409097243
 MonoBehaviour:
