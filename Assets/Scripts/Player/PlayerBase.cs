@@ -6,7 +6,7 @@ public class PlayerBase : MonoBehaviour
 {
     public PlayerData playerData; // Reference to the ScriptableObject containing player data
 
-    public enum ActionEnum { MOVE, SHOOT, HEAL, NOTHING };
+    public enum ActionEnum { MOVE, SHOOT, HEAL, MELEE, NOTHING };
     public enum ActionType { ACTIVE, PASSIVE, SINGLE_USE };
 
     [System.Serializable]
@@ -72,7 +72,7 @@ public class PlayerBase : MonoBehaviour
         foreach (var actionData in playerData.availableActions)
         {
             availableActions.Add(new Action(
-                ActionType.ACTIVE,
+                actionData.actionType,
                 actionData.action,
                 actionData.key,
                 actionData.style
