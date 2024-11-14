@@ -15,7 +15,7 @@ MonoBehaviour:
   health: 10
   actionPoints: 5
   baseRange: 3
-  exp: 11
+  exp: 5
   isAlive: 1
   victory: 0
   gun:
@@ -37,3 +37,51 @@ MonoBehaviour:
     style:
       prefab: {fileID: 4841340973275302747, guid: 8c280260248f7e449925f58bc503ee3b, type: 3}
       range: 6
+  - actionType: 0
+    action: 3
+    key: 51
+    style:
+      prefab: {fileID: 6993864842785556067, guid: 135a33f42603095498418b3997897017, type: 3}
+      range: 6
+  - actionType: 0
+    action: 1
+    key: 51
+    style:
+      prefab: {fileID: 4841340973275302747, guid: 10864d5b051bdc44e928dd42003a1950, type: 3}
+      range: 4
+  - actionType: 0
+    action: 1
+    key: 51
+    style:
+      prefab: {fileID: 4841340973275302747, guid: 10864d5b051bdc44e928dd42003a1950, type: 3}
+      range: 4
+  - actionType: 0
+    action: 1
+    key: 51
+    style:
+      prefab: {fileID: 4841340973275302747, guid: 10864d5b051bdc44e928dd42003a1950, type: 3}
+      range: 4
+  - actionType: 0
+    action: 1
+    key: 51
+    style:
+      prefab: {fileID: 4841340973275302747, guid: 10864d5b051bdc44e928dd42003a1950, type: 3}
+      range: 4
+  - actionType: 0
+    action: 1
+    key: 51
+    style:
+      prefab: {fileID: 4841340973275302747, guid: 10864d5b051bdc44e928dd42003a1950, type: 3}
+      range: 4
+  - actionType: 0
+    action: 1
+    key: 51
+    style:
+      prefab: {fileID: 4841340973275302747, guid: 10864d5b051bdc44e928dd42003a1950, type: 3}
+      range: 4
+  - actionType: 0
+    action: 1
+    key: 51
+    style:
+      prefab: {fileID: 4841340973275302747, guid: 10864d5b051bdc44e928dd42003a1950, type: 3}
+      range: 4

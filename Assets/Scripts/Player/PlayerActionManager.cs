@@ -53,6 +53,10 @@ public class PlayerActionManager : MonoBehaviour
                     {
                         activeActions.Add(actionData.action, new ShootAction());
                     }
+                    else if (actionData.action == PlayerBase.ActionEnum.MELEE)
+                    {
+                        activeActions.Add(actionData.action, new MeleeAction());
+                    }
                     break;
                 case PlayerBase.ActionType.PASSIVE:
                     if (actionData.action == PlayerBase.ActionEnum.HEAL)
@@ -78,13 +82,6 @@ public class PlayerActionManager : MonoBehaviour
         {
             isMoving = true;
             activeActions[PlayerBase.ActionEnum.MOVE].Execute(player, newPos);
-            if (!turnAdded)
-            {
-                turnAdded = true;
-                turnsDone++;
-                Debug.Log(turnsDone);
-            }
-
         }
 
         if (currentAction.m_action == PlayerBase.ActionEnum.SHOOT && (!player.GetComponent<OG_MovementByMouse>().GetIsMoving() || isShooting))
@@ -95,28 +92,21 @@ public class PlayerActionManager : MonoBehaviour
                 hasShot = true; // Set the flag to indicate a shot has been fired
                 ((ShootAction)activeActions[PlayerBase.ActionEnum.SHOOT]).bulletPrefab = player.activeStyle.prefab;
                 activeActions[PlayerBase.ActionEnum.SHOOT].Execute(player, newPos);
-                if (!turnAdded)
-                {
-                    turnAdded = true;
-                    turnsDone++;
-                    Debug.Log(turnsDone);
-                }
-
             }
+        }
+
+        if (currentAction.m_action == PlayerBase.ActionEnum.MELEE && (!player.GetComponent<OG_MovementByMouse>().GetIsMoving() || isMoving))
+        {
+            isMoving = true;
+            activeActions[PlayerBase.ActionEnum.MELEE].Execute(player, newPos);
         }
 
         if (currentAction.m_action == PlayerBase.ActionEnum.HEAL && isHealing)
         {
             passiveActions[PlayerBase.ActionEnum.HEAL].Execute(player, newPos);
-            if (!turnAdded)
-            {
-                turnAdded = true;
-                turnsDone++;
-                Debug.Log(turnsDone);
-            }
         }
 
-        if (player.GetComponent<OG_MovementByMouse>().t >= 1)
+        if (t >= 1)
         {
             ResetFlags();
         }
