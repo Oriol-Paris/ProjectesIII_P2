@@ -21,15 +21,16 @@ public class ShopManager : MonoBehaviour
         boughtItem.enabled = false;
         itemTexts[0].text = "Shotgun";
         itemTexts[1].text = "Heal";
-        priceTexts[0].text = pricePool[0].ToString();
-        priceTexts[1].text = pricePool[1].ToString();
         pricePool[0] = Random.Range(5, 10);
         pricePool[1] = Random.Range(5, 10);
+        priceTexts[0].text = pricePool[0].ToString();
+        priceTexts[1].text = pricePool[1].ToString();
+        
         currentXP.text = player.playerData.exp + "";
     }
     public void Update()
     {
-        currentXP.text = player.playerData.exp + "";
+        currentXP.text = "Current EXP: "+player.playerData.exp + "";
     }
     public void Reroll()
     {
@@ -38,6 +39,7 @@ public class ShopManager : MonoBehaviour
             player.playerData.exp -= rerollPrice;
             rerollPrice++;
             rerollText.text = rerollPrice+"";
+            boughtItem.enabled = false;
 
             for(int i = 0; i < pricePool.Count; i++)
             {
@@ -55,13 +57,15 @@ public class ShopManager : MonoBehaviour
         switch(tmp.text)
         {
             case "Shotgun":
-                for (int i = 0; i < pricePool.Count; i++) { 
+                for (int i = 0; i < pricePool.Count; i++) {
+                    if (itemTexts[i].text == "Shotgun")
                     if (player.playerData.exp >= pricePool[i])
                     {
                         player.playerData.exp -= pricePool[i];
-                        player.playerData.availableActions.Add(new PlayerData.ActionData
-                        (PlayerBase.ActionType.ACTIVE, PlayerBase.ActionEnum.SHOOT, KeyCode.Alpha3, player.playerData.shotgun));
-                        boughtItem.enabled = true;
+                            player.playerData.availableActions.Add(new PlayerData.ActionData
+                                                            (PlayerBase.ActionType.PASSIVE, PlayerBase.ActionEnum.SHOOT,
+                                                            (KeyCode)System.Enum.Parse(typeof(KeyCode), "Alpha" + (player.playerData.availableActions.Count + 1)),
+                                                            player.playerData.shotgun)); boughtItem.enabled = true;
                         boughtItem.text = "Just bought: Shotgun";
                     }
                     else
@@ -76,19 +80,22 @@ public class ShopManager : MonoBehaviour
             case "Heal":
                 for (int i = 0; i < pricePool.Count; i++)
                 {
-                    if (player.playerData.exp >= pricePool[i])
-                    {
-                        player.playerData.exp -= pricePool[i];
-                        player.AddNewAction(new PlayerBase.Action(PlayerBase.ActionType.PASSIVE, PlayerBase.ActionEnum.HEAL, KeyCode.Alpha4));
-                        boughtItem.enabled = true;
-                        boughtItem.text = "Just bought: Heal";
-
-                    }
-                    else
-                    {
-                        boughtItem.enabled = true;
-                        boughtItem.text = "Not enough experience";
-                    }
+                    if (itemTexts[i].text == "Heal")
+                        if (player.playerData.exp >= pricePool[i])
+                        {
+                            player.playerData.exp -= pricePool[i];
+                            player.playerData.availableActions.Add(new PlayerData.ActionData
+                                (PlayerBase.ActionType.PASSIVE, PlayerBase.ActionEnum.HEAL, 
+                                (KeyCode)System.Enum.Parse(typeof(KeyCode), "Alpha" + (player.playerData.availableActions.Count + 1)), 
+                                player.playerData.gun));
+                            boughtItem.enabled = true;
+                            boughtItem.text = "Just bought: Shotgun";
+                        }
+                        else
+                        {
+                            boughtItem.enabled = true;
+                            boughtItem.text = "Not enough experience";
+                        }
                 }
                 break;
 
