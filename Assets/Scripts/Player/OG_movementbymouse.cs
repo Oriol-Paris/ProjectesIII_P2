@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class OG_MovementByMouse : MonoBehaviour
@@ -112,25 +111,26 @@ public class OG_MovementByMouse : MonoBehaviour
             playerBase.SetInAction(true);
             isMoving = true;
             lineRenderer.enabled = false;
+
+            // Perform raycast to detect collisions
+            Vector3 destination = positionDesired;
+            RaycastHit hit;
+
+            if (Physics.Raycast(playerPosition, (destination - playerPosition).normalized, out hit, Vector3.Distance(playerPosition, destination)))
+            {
+                // Adjust destination to the point of collision
+                destination = hit.point;
+            }
+
             // Calculate the increment for t based on velocity and curve length
-            float distanceToTarget = Vector3.Distance(playerPosition, positionDesired);
+            float distanceToTarget = Vector3.Distance(playerPosition, destination);
             float tIncrement = (velocity * Time.deltaTime) / distanceToTarget;  // Fixed increment based on speed
 
             t = Mathf.Clamp01(t + tIncrement); // Increment t, clamping it between 0 and 1
 
-            if (playerBase.activeStyle != null && playerActionManager.isShooting)
-            {
-                velocity = bulletVelocity;
-                //Lerpeo al disparar
-                Vector3 newPosition = BezierCurve(t, playerPosition, controlPoint, positionDesired);
-                playerActionManager.UpdateAction(newPosition, t); // Update the player's position
-            }
-            else if (playerActionManager.isMoving)
-            {
-                velocity = playerVelocity;
-                Vector3 newPosition = BezierCurve(t, playerPosition, controlPoint, positionDesired);
-                playerActionManager.UpdateAction(newPosition, t); // Update the player's position
-            }
+            // Update the position along the path (Bezier curve or straight line if necessary)
+            Vector3 newPosition = BezierCurve(t, playerPosition, controlPoint, destination);
+            playerActionManager.UpdateAction(newPosition, t); // Update the player's position
 
             // Check if we have reached the end of the curve
             if (t >= 1f)
@@ -186,4 +186,26 @@ public class OG_MovementByMouse : MonoBehaviour
     public Vector3 GetPosition() { return playerPosition; }
     public void SetPositionDesired(Vector3 position) { positionDesired = position; }
     public Vector3 GetPositionDesired() { return positionDesired; }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Walls"))
+        {
+                //isMoving = false;
+                positionDesired = transform.position;
+                //t = 1;
+            
+        }
+    }
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Walls"))
+        {
+            if (isMoving)
+            {
+                isMoving = false;
+                positionDesired = transform.position;
+                t = 1;
+            }
+        }
+    }
 }
