@@ -13,10 +13,11 @@ public class EnemyMovementShooter : MonoBehaviour
     [SerializeField] private float velocity; // Movement speed
     [SerializeField] private float range; // Shooting range
     [SerializeField] private float minDistance = 2f; // Minimum distance before moving back
-
+    private bool haveChosenAnAction;
     private bool isReloading = false; // To control the "reload" wait after shooting
     private bool hasShot = false; // To ensure only one shot per turn
     private bool lastIsMovingState = false; // Track the last state of GetIsMoving to detect state change
+    
 
     void Start()
     {
@@ -40,9 +41,13 @@ public class EnemyMovementShooter : MonoBehaviour
             bool currentIsMoving = closestPlayer.GetIsMoving();
 
             // Only take action on a new turn (when GetIsMoving toggles from false to true)
-            if (!lastIsMovingState && currentIsMoving && !isReloading)
+            if(closestPlayer.t<=1&&currentIsMoving)
             {
-                TakeAction();
+                if (!haveChosenAnAction)
+                {
+                    TakeAction();
+                }
+                
             }
 
             // Update the last state of GetIsMoving
@@ -55,22 +60,27 @@ public class EnemyMovementShooter : MonoBehaviour
     {
         FindClosestPlayer();
         float distanceToPlayer = Vector3.Distance(transform.position, closestPlayerPos);
-
-        if (distanceToPlayer > range)
-        {
-            // Move towards the player if out of range
-            MoveTowardsPlayer();
-        }
-        else if (distanceToPlayer < minDistance)
-        {
-            // Move away from the player if too close
-            MoveAwayFromPlayer();
-        }
-        else if (!hasShot) // Shoot only once per turn
-        {
-            // In range, shoot
-            Shoot();
-            StartCoroutine(Reload());
+        if (!haveChosenAnAction) {
+            if (distanceToPlayer > range)
+            {
+                // Move towards the player if out of range
+                MoveTowardsPlayer();
+                
+            }
+            else if (distanceToPlayer < minDistance)
+            {
+                // Move away from the player if too close
+                MoveAwayFromPlayer();
+                
+            }
+            else if (!hasShot&&!isReloading) // Shoot only once per turn
+            {
+                // In range, shoot
+                Shoot();
+                StartCoroutine(Reload());
+                
+            }
+           
         }
     }
 
@@ -95,6 +105,7 @@ public class EnemyMovementShooter : MonoBehaviour
     private void MoveTowardsPlayer()
     {
         transform.position = Vector3.MoveTowards(transform.position, closestPlayerPos, moveTime);
+        
     }
 
     // Moves away from the closest player
@@ -102,6 +113,7 @@ public class EnemyMovementShooter : MonoBehaviour
     {
         Vector3 directionAway = (transform.position - closestPlayerPos).normalized;
         transform.position = Vector3.MoveTowards(transform.position, transform.position + directionAway, moveTime);
+          
     }
 
     // Shoots a bullet towards the closest player
@@ -118,7 +130,11 @@ public class EnemyMovementShooter : MonoBehaviour
     // Reload coroutine to wait until the next GetIsMoving toggle after shooting
     private IEnumerator Reload()
     {
+        Debug.Log("RELOAD");
         isReloading = true;
+        yield return new WaitUntil(() => closestPlayer.GetIsMoving() == false);
+        yield return new WaitUntil(() => closestPlayer.GetIsMoving() == true);
+        yield return new WaitUntil(() => closestPlayer.GetIsMoving() == false);
         yield return new WaitUntil(() => closestPlayer.GetIsMoving() == false);
         yield return new WaitUntil(() => closestPlayer.GetIsMoving() == true);
         isReloading = false;

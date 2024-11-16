@@ -118,7 +118,7 @@ public class PlayerActionManager : MonoBehaviour
 
     public void ResetFlags()
     {
-        Debug.Log("RESET");
+        
         hasShot = false; // Reset the flag when the player stops moving
         turnAdded = false;
     }
