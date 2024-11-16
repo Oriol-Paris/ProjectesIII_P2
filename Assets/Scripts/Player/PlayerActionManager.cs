@@ -21,12 +21,15 @@ public class PlayerActionManager : MonoBehaviour
     private CombatManager combatManager;
     private bool hasShot = false; // Flag to track if a shot has been fired
 
+    private Animator animationToExecute;
+
     #endregion
 
     private void Awake()
     {
         activeActions = new Dictionary<PlayerBase.ActionEnum, ActiveAction>();
         passiveActions = new Dictionary<PlayerBase.ActionEnum, PassiveAction>();
+        animationToExecute = GetComponent<Animator>();
     }
 
     private void Start()
@@ -82,6 +85,7 @@ public class PlayerActionManager : MonoBehaviour
         {
             isMoving = true;
             activeActions[PlayerBase.ActionEnum.MOVE].Execute(player, newPos);
+            animationToExecute.Play("Idle");
         }
 
         if (currentAction.m_action == PlayerBase.ActionEnum.SHOOT && (!player.GetComponent<OG_MovementByMouse>().GetIsMoving() || isShooting))
@@ -114,7 +118,7 @@ public class PlayerActionManager : MonoBehaviour
 
     public void ResetFlags()
     {
-        Debug.Log("RESET");
+        
         hasShot = false; // Reset the flag when the player stops moving
         turnAdded = false;
     }

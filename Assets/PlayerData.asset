@@ -15,7 +15,7 @@ MonoBehaviour:
   health: 10
   actionPoints: 5
   baseRange: 3
-  exp: 18
+  exp: 8
   isAlive: 1
   victory: 0
   gun:

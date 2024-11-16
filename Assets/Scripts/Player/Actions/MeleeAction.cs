@@ -31,12 +31,11 @@ public class MeleeAction : ActiveAction
                 {
                     // Deal damage to the enemy
                     enemy.Damage((int)damage);
-
+                    player.GetComponent<OG_MovementByMouse>().SetPositionDesired(player.transform.position); 
                     // Apply knockback to the enemy
                     Vector3 knockbackDirection = (enemy.transform.position - player.transform.position).normalized;
                     Vector3 knockbackTarget = enemy.transform.position + knockbackDirection * knockbackForce;
-                    StartCoroutine(ApplyKnockback(enemy, enemy.transform.position, knockbackTarget));
-                    
+                   
 
                     enemyHit = true;
                     break;
