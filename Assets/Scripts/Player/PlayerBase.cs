@@ -26,7 +26,6 @@ public class PlayerBase : MonoBehaviour
         public PlayerData.BulletStyle m_style { get; private set; }
 
         public void ChangeKey(KeyCode newKey) { m_key = newKey; }
-
     }
 
     #region VARIABLES
@@ -104,7 +103,7 @@ public class PlayerBase : MonoBehaviour
 
             if (activeAction.m_action == ActionEnum.HEAL)
             {
-                Heal(1); // Execute healing immediately
+                Heal(playerData.healAmount); // Use healAmount from playerData
             }
         }
         else

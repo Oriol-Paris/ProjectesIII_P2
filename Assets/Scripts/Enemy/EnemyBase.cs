@@ -12,6 +12,7 @@ public class EnemyBase : MonoBehaviour
     [SerializeField] private float shootingRange;//Esto para cuando hagamos clase shooter
     [SerializeField] SpriteRenderer spriteRenderer;
     [SerializeField] Collider2D collider;
+    [SerializeField] Rigidbody2D rb2d;
     private bool isMoving;
     private bool isShoooting;
     public bool isAlive;
@@ -25,6 +26,7 @@ public class EnemyBase : MonoBehaviour
         oldRange = range;
         spriteRenderer = GetComponent<SpriteRenderer>();
         collider = GetComponent<Collider2D>();
+        rb2d = GetComponent<Rigidbody2D>(); 
     }
 
     // Update is called once per frame
@@ -36,6 +38,7 @@ public class EnemyBase : MonoBehaviour
             isAlive = false;
             spriteRenderer.color = Color.grey;
             collider.enabled = false;
+            
 
         }
 

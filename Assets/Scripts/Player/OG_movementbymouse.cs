@@ -25,7 +25,7 @@ public class OG_MovementByMouse : MonoBehaviour
     {
         placeSelected = false;
         playerPosition = transform.position;
-        lineRenderer.enabled = false;  // Start with LineRenderer disabled
+       
         playerVelocity = velocity;
 
         // Get the PlayerBase component
@@ -38,6 +38,7 @@ public class OG_MovementByMouse : MonoBehaviour
 
     void Update()
     {
+        
         if (combatManager != null && combatManager.allEnemiesDead)
         {
             return; // Do not allow any mouse interactions if victory condition is met
@@ -51,6 +52,7 @@ public class OG_MovementByMouse : MonoBehaviour
         // If mouse button is pressed
         if (Input.GetMouseButtonDown(0) && !placeSelected)
         {
+            
             positionDesired = mousePosition; // Store desired position at click
             playerPosition = transform.position; // Set player position at the time of click
 
