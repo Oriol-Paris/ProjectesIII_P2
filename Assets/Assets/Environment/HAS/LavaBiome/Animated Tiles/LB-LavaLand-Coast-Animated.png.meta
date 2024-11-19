@@ -1022,7 +1022,43 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      LB-LavaLand-Coast-Animated_0: 6767829945581325670
+      LB-LavaLand-Coast-Animated_1: -6445774943944726012
+      LB-LavaLand-Coast-Animated_10: -3989638358387398882
+      LB-LavaLand-Coast-Animated_11: 2022674863172688673
+      LB-LavaLand-Coast-Animated_12: -7455456741508618678
+      LB-LavaLand-Coast-Animated_13: -8095564716884147758
+      LB-LavaLand-Coast-Animated_14: 9129216697282862046
+      LB-LavaLand-Coast-Animated_15: 2978511571253726900
+      LB-LavaLand-Coast-Animated_16: 6549718519372416139
+      LB-LavaLand-Coast-Animated_17: 1789642717228698930
+      LB-LavaLand-Coast-Animated_18: 2571957106331643003
+      LB-LavaLand-Coast-Animated_19: -558236082442341707
+      LB-LavaLand-Coast-Animated_2: -1243112369499026950
+      LB-LavaLand-Coast-Animated_20: -5591568666447222200
+      LB-LavaLand-Coast-Animated_21: -8625929996707017462
+      LB-LavaLand-Coast-Animated_22: -1373745585678621122
+      LB-LavaLand-Coast-Animated_23: 2316720944164653337
+      LB-LavaLand-Coast-Animated_24: -7737334760357932634
+      LB-LavaLand-Coast-Animated_25: -7197156794830243602
+      LB-LavaLand-Coast-Animated_26: -459064098265045080
+      LB-LavaLand-Coast-Animated_27: 9039681609609908144
+      LB-LavaLand-Coast-Animated_28: 480997010088883723
+      LB-LavaLand-Coast-Animated_29: 673401105075350897
+      LB-LavaLand-Coast-Animated_3: 629285963857498095
+      LB-LavaLand-Coast-Animated_30: 7861399817118575179
+      LB-LavaLand-Coast-Animated_31: -283207338362838677
+      LB-LavaLand-Coast-Animated_32: 3643956107999121304
+      LB-LavaLand-Coast-Animated_33: 6106504539191030771
+      LB-LavaLand-Coast-Animated_34: 7302189613667720427
+      LB-LavaLand-Coast-Animated_35: 2005216281293903908
+      LB-LavaLand-Coast-Animated_4: 2436455352643538284
+      LB-LavaLand-Coast-Animated_5: 8247750985298260374
+      LB-LavaLand-Coast-Animated_6: -1507736756903501535
+      LB-LavaLand-Coast-Animated_7: -2429091792112367485
+      LB-LavaLand-Coast-Animated_8: 1430834300122007666
+      LB-LavaLand-Coast-Animated_9: -9200493259100926452
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
