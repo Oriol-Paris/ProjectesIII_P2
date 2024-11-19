@@ -5,7 +5,7 @@ public class PlayerActionManager : MonoBehaviour
 {
     #region VARIABLES
 
-    private PlayerBase player;
+    [SerializeField] private PlayerBase player;
     private PlayerData playerData;
 
     // Dictionaries to store actions by type
@@ -35,6 +35,15 @@ public class PlayerActionManager : MonoBehaviour
     private void Start()
     {
         player = GetComponent<PlayerBase>();
+        if (player == null)
+        {
+            Debug.LogError("PlayerBase component not found on the GameObject.");
+        }
+        else
+        {
+            Debug.Log("PlayerBase component found and assigned.");
+        }
+
         playerData = player.playerData; // Load playerData from PlayerBase
 
         InitializeActions();
@@ -118,8 +127,10 @@ public class PlayerActionManager : MonoBehaviour
 
     public void ResetFlags()
     {
-        Debug.Log("RESET");
+        
         hasShot = false; // Reset the flag when the player stops moving
         turnAdded = false;
     }
+
+    public PlayerBase GetPlayer() { return player; }
 }
