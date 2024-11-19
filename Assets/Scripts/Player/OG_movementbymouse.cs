@@ -25,7 +25,7 @@ public class OG_MovementByMouse : MonoBehaviour
     {
         placeSelected = false;
         playerPosition = transform.position;
-        lineRenderer.enabled = false;  // Start with LineRenderer disabled
+       
         playerVelocity = velocity;
 
         // Get the PlayerBase component
@@ -38,6 +38,7 @@ public class OG_MovementByMouse : MonoBehaviour
 
     void Update()
     {
+        
         if (combatManager != null && combatManager.allEnemiesDead)
         {
             return; // Do not allow any mouse interactions if victory condition is met
@@ -51,6 +52,7 @@ public class OG_MovementByMouse : MonoBehaviour
         // If mouse button is pressed
         if (Input.GetMouseButtonDown(0) && !placeSelected)
         {
+            
             positionDesired = mousePosition; // Store desired position at click
             playerPosition = transform.position; // Set player position at the time of click
 
@@ -129,7 +131,7 @@ public class OG_MovementByMouse : MonoBehaviour
             t = Mathf.Clamp01(t + tIncrement); // Increment t, clamping it between 0 and 1
 
             // Update the position along the path (Bezier curve or straight line if necessary)
-            Vector3 newPosition = BezierCurve(t, playerPosition, controlPoint, destination);
+            Vector3 newPosition = Vector3.MoveTowards(transform.position, BezierCurve(t, playerPosition, controlPoint, destination),velocity);
             playerActionManager.UpdateAction(newPosition, t); // Update the player's position
 
             // Check if we have reached the end of the curve
@@ -184,16 +186,17 @@ public class OG_MovementByMouse : MonoBehaviour
 
     public bool GetIsMoving() { return isMoving; }
     public Vector3 GetPosition() { return playerPosition; }
+
     public void SetPositionDesired(Vector3 position) { positionDesired = position; }
     public Vector3 GetPositionDesired() { return positionDesired; }
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Walls"))
         {
-                //isMoving = false;
-                positionDesired = transform.position;
-                //t = 1;
-            
+            //isMoving = false;
+            positionDesired = transform.position;
+            //t = 1;
+
         }
     }
     private void OnCollisionStay2D(Collision2D collision)
