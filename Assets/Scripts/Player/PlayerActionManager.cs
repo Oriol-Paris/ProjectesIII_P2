@@ -90,14 +90,14 @@ public class PlayerActionManager : MonoBehaviour
 
         var currentAction = player.GetAction();
 
-        if (currentAction.m_action == PlayerBase.ActionEnum.MOVE && (!player.GetComponent<OG_MovementByMouse>().GetIsMoving() || isMoving))
+        if (currentAction.m_action == PlayerBase.ActionEnum.MOVE && (!player.GetComponent<OG_MovementByMouse>().isMoving|| isMoving))
         {
             isMoving = true;
             activeActions[PlayerBase.ActionEnum.MOVE].Execute(player, newPos);
             animationToExecute.Play("Idle");
         }
 
-        if (currentAction.m_action == PlayerBase.ActionEnum.SHOOT && (!player.GetComponent<OG_MovementByMouse>().GetIsMoving() || isShooting))
+        if (currentAction.m_action == PlayerBase.ActionEnum.SHOOT && (!player.GetComponent<OG_MovementByMouse>().isMoving || isShooting))
         {
             if (!hasShot)
             {

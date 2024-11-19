@@ -39,12 +39,16 @@ public class ShopManager : MonoBehaviour
             rerollText.text = rerollPrice + "";
             boughtItem.enabled = false;
 
-            for (int i = 0; i < pricePool.Count; i++)
+            // Clear existing buttons and price pool
+            foreach (var button in buttons)
             {
-                int randomPrice = Random.Range(10, 100); // Random price between 10 and 100
-                pricePool[i] = randomPrice;
-                buttons[i].transform.Find("Price").GetComponent<TextMeshProUGUI>().text = randomPrice.ToString();
+                Destroy(button);
             }
+            buttons.Clear();
+            pricePool.Clear();
+
+            // Re-initialize the shop with new actions and prices
+            InitializeShop();
         }
     }
 
@@ -55,13 +59,13 @@ public class ShopManager : MonoBehaviour
 
         if (actionData != null)
         {
-            // Check if the action already exists in the player's available actions
-            bool actionExists = player.playerData.availableActions.Exists(action => action.action == actionData.action && action.style == actionData.style);
+            // Check if the action type already exists in the player's available actions
+            bool actionExists = player.playerData.availableActions.Exists(action => action.action == actionData.action);
 
             if (actionExists)
             {
                 boughtItem.enabled = true;
-                boughtItem.text = "Action already equipped";
+                IncreaseStat(actionData);
                 return;
             }
 
@@ -94,13 +98,16 @@ public class ShopManager : MonoBehaviour
         switch (actionData.action)
         {
             case PlayerBase.ActionEnum.SHOOT:
+                boughtItem.text = "Increased bullet damage and range";
                 actionData.style.damage += 1; // Increase bullet damage
                 actionData.style.range += 3; // Increase bullet range
                 break;
             case PlayerBase.ActionEnum.HEAL:
+                boughtItem.text = "Increased healing amount";
                 player.playerData.healAmount += 5; // Increase healing value
                 break;
             case PlayerBase.ActionEnum.MOVE:
+                boughtItem.text = "Increased move range";
                 actionData.style.range += 1;
                 player.playerData.baseRange += 1; // Increase move range
                 break;
