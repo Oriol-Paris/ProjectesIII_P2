@@ -241,6 +241,7 @@ GameObject:
   - component: {fileID: 2397320857897054631}
   - component: {fileID: 1294959136354244614}
   - component: {fileID: 73541132482798089}
+  - component: {fileID: 498754982940256858}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -301,6 +302,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f263461156138f44afbe9f44d9f2293, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 0}
   isMoving: 1
   isShooting: 1
   isHealing: 1
@@ -420,6 +422,23 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &498754982940256858
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6993864842785556067}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65f5a2370e62d6a4db4eec9c8fac8380, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mousePosition: {x: 10, y: 5, z: 0}
+  playerPosition: {x: 0, y: 0, z: 0}
+  positionDesired: {x: 0, y: 0, z: 0}
+  lineRenderer: {fileID: 1145941097933022349}
+  range: 5
 --- !u!1001 &8433085831469232828
 PrefabInstance:
   m_ObjectHideFlags: 0
