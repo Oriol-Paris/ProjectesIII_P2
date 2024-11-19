@@ -10,6 +10,7 @@ public class GunBullet : BulletPrefab
     {
         isHit = false;
         speed = 10f;
+        damage = FindObjectOfType<PlayerBase>().playerData.gun.damage; // Use updated damage value
     }
 
     void Update()
