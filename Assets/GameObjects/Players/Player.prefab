@@ -204,6 +204,7 @@ MonoBehaviour:
   controlPoint: {x: 0, y: 0, z: 0}
   curveResolution: 25
   playerBase: {fileID: 8584045141074783902}
+  movementTimeLimit: 5
 --- !u!114 &1251202436317223770
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -313,7 +314,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!95 &73541132482798089
 Animator:
   serializedVersion: 7
@@ -407,7 +408,6 @@ MonoBehaviour:
   playerPosition: {x: 0, y: 0, z: 0}
   positionDesired: {x: 0, y: 0, z: 0}
   lineRenderer: {fileID: 1145941097933022349}
-  range: 5
 --- !u!114 &1251141132472822132
 MonoBehaviour:
   m_ObjectHideFlags: 0

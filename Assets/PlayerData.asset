@@ -14,27 +14,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 10
   actionPoints: 5
-  baseRange: 5
-  exp: 488865
+  baseRange: 6
+  exp: 488798
   isAlive: 1
   victory: 0
   gun:
     prefab: {fileID: 4841340973275302747, guid: 8c280260248f7e449925f58bc503ee3b, type: 3}
-    range: 18
-    damage: 7
+    range: 93
+    damage: 32
   shotgun:
     prefab: {fileID: 4841340973275302747, guid: 10864d5b051bdc44e928dd42003a1950, type: 3}
-    range: 15
-    damage: 5
+    range: 33
+    damage: 11
   healStyle:
     prefab: {fileID: 0}
     range: 0
     damage: 0
   moveStyle:
     prefab: {fileID: 0}
-    range: 44
+    range: 45
     damage: 0
-  healAmount: 1
+  healAmount: 21
   availableActions:
   - actionType: 0
     action: 0
@@ -50,5 +50,5 @@ MonoBehaviour:
     key: 50
     style:
       prefab: {fileID: 4841340973275302747, guid: 8c280260248f7e449925f58bc503ee3b, type: 3}
-      range: 18
-      damage: 7
+      range: 93
+      damage: 32
