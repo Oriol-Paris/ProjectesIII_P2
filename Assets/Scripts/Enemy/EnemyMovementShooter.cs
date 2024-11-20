@@ -13,6 +13,7 @@ public class EnemyMovementShooter : MonoBehaviour
     [SerializeField] private float velocity; // Movement speed
     [SerializeField] private float range; // Shooting range
     [SerializeField] private float minDistance = 2f; // Minimum distance before moving back
+    public Animator fx;
     private bool haveChosenAnAction;
     private bool isReloading = false; // To control the "reload" wait after shooting
     private bool hasShot = false; // To ensure only one shot per turn
@@ -65,22 +66,22 @@ public class EnemyMovementShooter : MonoBehaviour
             {
                 // Move towards the player if out of range
                 MoveTowardsPlayer();
-                
+                this.GetComponent<Animator>().SetBool("isMoving", true);
             }
             else if (distanceToPlayer < minDistance)
             {
                 // Move away from the player if too close
                 MoveAwayFromPlayer();
-                
+                this.GetComponent<Animator>().SetBool("isMoving", true);
             }
             else if (!hasShot&&!isReloading) // Shoot only once per turn
             {
                 // In range, shoot
-                Shoot();
+                this.GetComponent<Animator>().SetBool("isMoving", false);
+                StartCoroutine(AttackCoroutine());
                 StartCoroutine(Reload());
-                
             }
-           
+
         }
     }
 
@@ -139,5 +140,17 @@ public class EnemyMovementShooter : MonoBehaviour
         yield return new WaitUntil(() => closestPlayer.GetIsMoving() == true);
         isReloading = false;
         hasShot = false; // Reset shooting state for the next turn
+    }
+
+    private IEnumerator AttackCoroutine()
+    {
+        fx.SetTrigger("playFX");
+        this.GetComponent<Animator>().SetTrigger("attack");
+
+        yield return new WaitForSeconds(0.8f);
+
+        Shoot();
+
+        fx.ResetTrigger("playFX");
     }
 }

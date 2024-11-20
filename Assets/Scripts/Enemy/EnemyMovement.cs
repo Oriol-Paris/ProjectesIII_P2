@@ -33,23 +33,35 @@ public class EnemyMovement : MonoBehaviour
 
         if (enemyStats.isAlive)
         {
-            if (Vector3.Distance(PlayerPos, transform.position) < range && Player.isMoving)
+            if(PlayerPos.x < this.GetComponent<Rigidbody2D>().position.x)
+                this.GetComponent<SpriteRenderer>().flipX = true;
+            else
+                this.GetComponent<SpriteRenderer>().flipX = false;
+
+
+            if ((Vector3.Distance(PlayerPos, transform.position) < range && Player.isMoving) || Player.GetComponent<PlayerBase>().GetInAction())
             {
+                this.GetComponent<Animator>().SetBool("isMoving", true);
                 PlayerPos = Player.GetPosition();
                 transform.position = Vector3.MoveTowards(transform.position, PlayerPos, moveTime);
             }
-
-            if (Player.GetComponent<PlayerBase>().GetInAction())
+            else
             {
-                transform.position = Vector3.MoveTowards(transform.position, PlayerPos, moveTime);
-
-            }
-
-            if (Player.GetComponent<PlayerBase>().GetInAction())
-            {
-                PlayerPos = Player.GetPosition();
+                this.GetComponent<Animator>().SetBool("isMoving", false);
             }
         }
+    }
+
+    IEnumerator AttackCoroutine()
+    {
+        this.GetComponent<Animator>().SetTrigger("attack");
+
+        yield return new WaitForSeconds(1);
+    }
+
+    public void Attack()
+    {
+        StartCoroutine(AttackCoroutine());
     }
 }
 

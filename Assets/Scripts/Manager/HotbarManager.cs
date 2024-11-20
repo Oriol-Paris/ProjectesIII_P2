@@ -41,12 +41,13 @@ public class HotbarManager : MonoBehaviour
 
     void UpdateHotbar()
     {
-        var player = playerActionManager.GetPlayer();
-        if (player == null)
+        if (playerActionManager == null)
         {
             Debug.LogError("Player is null in HotbarManager.");
             return;
         }
+
+        var player = playerActionManager.GetPlayer();
 
         var currentAction = player.GetAction();
 

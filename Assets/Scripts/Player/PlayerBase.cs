@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -117,6 +118,9 @@ public class PlayerBase : MonoBehaviour
     {
         if (collision.gameObject.GetComponent<EnemyMovement>() != null)
         {
+            collision.gameObject.GetComponent<EnemyMovement>().Attack();
+            this.GetComponent<Animator>().SetTrigger("hit");
+
             if (health > 0)
             {
                 Damage();
@@ -127,6 +131,15 @@ public class PlayerBase : MonoBehaviour
                 Debug.Log("YOU DIED");
             }
         }
+    }
+
+    IEnumerator DeathCoroutine()
+    {
+        this.GetComponent<Animator>().SetBool("isDead", true);
+        activeAction = Action.nothing;
+        isAlive = false;
+
+        yield return new WaitForSeconds(1);
     }
 
     #region GETTERS
