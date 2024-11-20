@@ -6,7 +6,7 @@ public class PlayerBase : MonoBehaviour
 {
     public PlayerData playerData; // Reference to the ScriptableObject containing player data
 
-    public enum ActionEnum { MOVE, SHOOT, HEAL, NOTHING };
+    public enum ActionEnum { MOVE, SHOOT, HEAL, MELEE, NOTHING };
     public enum ActionType { ACTIVE, PASSIVE, SINGLE_USE };
 
     [System.Serializable]
@@ -37,6 +37,7 @@ public class PlayerBase : MonoBehaviour
     public float range;
     public int exp = 0;
     private OG_MovementByMouse checkMovement;
+    public PlayerActionManager turnsDone;
 
     public Action activeAction { get; private set; }
     private List<Action> availableActions = new List<Action>();
@@ -55,7 +56,7 @@ public class PlayerBase : MonoBehaviour
         isAlive = playerData.isAlive;
         victory = playerData.victory;
         isInAction = false;
-
+        turnsDone = GetComponent<PlayerActionManager>();
         checkMovement = GetComponent<OG_MovementByMouse>();
     }
 
@@ -70,7 +71,7 @@ public class PlayerBase : MonoBehaviour
         foreach (var actionData in playerData.availableActions)
         {
             availableActions.Add(new Action(
-                ActionType.ACTIVE,
+                actionData.actionType,
                 actionData.action,
                 actionData.key,
                 actionData.style
@@ -102,7 +103,7 @@ public class PlayerBase : MonoBehaviour
 
             if (activeAction.m_action == ActionEnum.HEAL)
             {
-                Heal(1); // Execute healing immediately
+                Heal(playerData.healAmount); // Use healAmount from playerData
             }
         }
         else
@@ -131,6 +132,7 @@ public class PlayerBase : MonoBehaviour
     #region GETTERS
 
     public float GetRange() { return range; }
+    public bool GetIsAlive() { return isAlive; }
     public Action GetAction() { return activeAction; }
     public bool GetInAction() { return isInAction; }
 

@@ -18,7 +18,9 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] private float range;
 
     #endregion
-    
+
+    public enum ActionEnum { MOVE, SHOOT, HEAL, MELEE, NOTHING };
+
     void Start()
     {
         Player = FindAnyObjectByType<OG_MovementByMouse>();
@@ -31,7 +33,7 @@ public class EnemyMovement : MonoBehaviour
 
         if (enemyStats.isAlive)
         {
-            if (Vector3.Distance(PlayerPos, transform.position) < range && Player.GetIsMoving())
+            if (Vector3.Distance(PlayerPos, transform.position) < range && Player.isMoving)
             {
                 PlayerPos = Player.GetPosition();
                 transform.position = Vector3.MoveTowards(transform.position, PlayerPos, moveTime);
@@ -50,3 +52,4 @@ public class EnemyMovement : MonoBehaviour
         }
     }
 }
+

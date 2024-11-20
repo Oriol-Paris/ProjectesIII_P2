@@ -11,6 +11,7 @@ public class Shotgun : BulletPrefab
     {
         speed = 10f;
         isHit = false;
+        damage = FindObjectOfType<PlayerBase>().playerData.shotgun.damage; // Use updated damage value
     }
 
     void Update()
@@ -53,7 +54,7 @@ public class Shotgun : BulletPrefab
     public override void Shoot(Vector3 direction)
     {
         // Set target position in the direction, adjust range as needed
-        targetPosition = transform.position + direction.normalized+offset * 20f;
+        targetPosition = transform.position + direction.normalized + offset * 20f;
     }
 
     private void DestroyBullet()
