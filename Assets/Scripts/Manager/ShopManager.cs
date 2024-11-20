@@ -72,8 +72,6 @@ public class ShopManager : MonoBehaviour
                     boughtItem.enabled = true;
                     IncreaseStat(player.playerData.availableActions[i]);
                     return;
-                    
-                    
                 }
 
             }
