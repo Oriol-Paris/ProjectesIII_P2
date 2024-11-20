@@ -43,5 +43,6 @@ public class PlayerData : ScriptableObject
         public PlayerBase player;
         public KeyCode key;
         public BulletStyle style;
+        
     }
 }
