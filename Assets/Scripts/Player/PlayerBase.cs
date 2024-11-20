@@ -53,7 +53,10 @@ public class PlayerBase : MonoBehaviour
     {
         LoadPlayerData();
 
-        activeAction = availableActions[0];
+        if (availableActions.Count > 0)
+        {
+            activeAction = availableActions[0];
+        }
         isAlive = playerData.isAlive;
         victory = playerData.victory;
         isInAction = false;

@@ -21,8 +21,8 @@ public class OG_MovementByMouse : MonoBehaviour
     private PlayerActionManager playerActionManager;
 
     // Timer variables
-    [SerializeField] private float movementTimeLimit = 5f; // Adjustable time limit
-    private float timer;
+    [SerializeField] public float movementTimeLimit = 5f; // Adjustable time limit
+    public float timer;
 
     void Start()
     {

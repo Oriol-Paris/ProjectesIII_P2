@@ -66,7 +66,10 @@ public class PlayerActionManager : MonoBehaviour
                     }
                     else if (actionData.action == PlayerBase.ActionEnum.SHOOT)
                     {
-                        activeActions.Add(actionData.action, new ShootAction());
+                        if (!activeActions.ContainsKey(actionData.action))
+                        {
+                            activeActions.Add(actionData.action, new ShootAction());
+                        }
                     }
                     else if (actionData.action == PlayerBase.ActionEnum.MELEE)
                     {

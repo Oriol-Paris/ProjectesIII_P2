@@ -1,28 +1,23 @@
 using UnityEngine;
 
-public class Shotgun : BulletPrefab
+public class LaserBullet : BulletPrefab
 {
     public bool isHit;
-    private Vector3 targetPosition; // Target position the bullet is moving towards
-    private float lifetime = 5f; // Lifetime in seconds before auto-destruction
-    private Vector3 offset; // Offset for the bullet
+    private Vector3 targetPosition;
+    private float lifetime = 5f;
 
     void Start()
     {
         isHit = false;
-        speed = 10f;
-        damage = FindObjectOfType<PlayerBase>().playerData.gun.damage; // Use updated damage value
+        speed = 20f;
+        damage = FindObjectOfType<PlayerBase>().playerData.gun.damage;
     }
 
     void Update()
     {
-        // Move towards the target position
         transform.position = Vector3.MoveTowards(transform.position, targetPosition, speed * Time.deltaTime);
-
-        // Decrease lifetime over time
         lifetime -= Time.deltaTime;
 
-        // Check if the bullet has reached its destination, hit something, or if its lifetime has expired
         if (isHit || Vector3.Distance(transform.position, targetPosition) < 0.1f || lifetime <= 0f)
         {
             DestroyBullet();
@@ -57,15 +52,7 @@ public class Shotgun : BulletPrefab
 
     public override void Shoot(Vector3 direction)
     {
-        // Default shoot implementation without offset
-        targetPosition = transform.position + direction.normalized * 20f;
-    }
-
-    public void Shoot(Vector3 direction, Vector3 offset)
-    {
-        this.offset = offset;
-        // Set target position in the direction with offset, adjust range as needed
-        targetPosition = transform.position + (direction + offset).normalized * 20f;
+        targetPosition = transform.position + direction.normalized * 30f; // Laser has a longer range
     }
 
     private void DestroyBullet()

@@ -23,6 +23,7 @@ public class PlayerData : ScriptableObject
     public BulletStyle shotgun;
     public BulletStyle healStyle; // Add this line for healing
     public BulletStyle moveStyle; // Add this line for moving
+    public BulletStyle laser; // Add this line for laser bullet
 
     public int healAmount = 10; 
 
