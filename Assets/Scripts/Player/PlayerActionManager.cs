@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,6 +8,7 @@ public class PlayerActionManager : MonoBehaviour
     #region VARIABLES
 
     [SerializeField] private PlayerBase player;
+    public Animator fx;
     private PlayerData playerData;
 
     // Dictionaries to store actions by type
@@ -94,7 +97,6 @@ public class PlayerActionManager : MonoBehaviour
         {
             isMoving = true;
             activeActions[PlayerBase.ActionEnum.MOVE].Execute(player, newPos);
-            animationToExecute.Play("Idle");
         }
 
         if (currentAction.m_action == PlayerBase.ActionEnum.SHOOT && (!player.GetComponent<OG_MovementByMouse>().isMoving || isShooting))
@@ -103,15 +105,14 @@ public class PlayerActionManager : MonoBehaviour
             {
                 isShooting = true;
                 hasShot = true; // Set the flag to indicate a shot has been fired
-                ((ShootAction)activeActions[PlayerBase.ActionEnum.SHOOT]).bulletPrefab = player.activeStyle.prefab;
-                activeActions[PlayerBase.ActionEnum.SHOOT].Execute(player, newPos);
+                StartCoroutine(AttackCoroutine(PlayerBase.ActionEnum.SHOOT, newPos));
             }
         }
 
         if (currentAction.m_action == PlayerBase.ActionEnum.MELEE && (!player.GetComponent<OG_MovementByMouse>().GetIsMoving() || isMoving))
         {
             isMoving = true;
-            activeActions[PlayerBase.ActionEnum.MELEE].Execute(player, newPos);
+            StartCoroutine(AttackCoroutine(PlayerBase.ActionEnum.MELEE, newPos));
         }
 
         if (currentAction.m_action == PlayerBase.ActionEnum.HEAL && isHealing)
@@ -133,4 +134,26 @@ public class PlayerActionManager : MonoBehaviour
     }
 
     public PlayerBase GetPlayer() { return player; }
+
+
+    public IEnumerator AttackCoroutine(PlayerBase.ActionEnum action, Vector3 newPos)
+    {
+        this.GetComponent<Animator>().SetTrigger("attack");
+        fx.SetTrigger("playFX");
+
+        yield return new WaitForSeconds(0.5f);
+
+        if(action == PlayerBase.ActionEnum.SHOOT)
+        {
+            ((ShootAction)activeActions[PlayerBase.ActionEnum.SHOOT]).bulletPrefab = player.activeStyle.prefab;
+            activeActions[PlayerBase.ActionEnum.SHOOT].Execute(player, newPos);
+        }
+        else
+        {
+            activeActions[PlayerBase.ActionEnum.MELEE].Execute(player, newPos);
+        }
+
+        fx.ResetTrigger("playFX");
+            
+    }
 }

@@ -35,6 +35,7 @@ public class EnemyBase : MonoBehaviour
 
         if (health <= 0)
         {
+            this.GetComponent<Animator>().SetBool("isDead", true);
             isAlive = false;
             spriteRenderer.color = Color.grey;
             collider.enabled = false;
