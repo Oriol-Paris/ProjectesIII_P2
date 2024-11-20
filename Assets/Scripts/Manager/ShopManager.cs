@@ -13,7 +13,7 @@ public class ShopManager : MonoBehaviour
     [SerializeField] public TextMeshProUGUI currentXP;
 
     public int rerollPrice;
-
+    bool actionExists;
     private List<PlayerData.ActionData> actionPool;
     private List<int> pricePool;
     private List<GameObject> buttons;
@@ -56,21 +56,28 @@ public class ShopManager : MonoBehaviour
     {
         string itemName = itemText.text;
         PlayerData.ActionData actionData = actionPool.Find(action => GetActionDisplayName(action) == itemName);
-
+        int index = buttons.FindIndex(button => button.transform.Find("Item Name").GetComponent<TextMeshProUGUI>().text == itemName);
         if (actionData != null)
         {
-            // Check if the action type already exists in the player's available actions
-            bool actionExists = player.playerData.availableActions.Exists(action => action.action == actionData.action);
+            for(int i = 0;i<player.playerData.availableActions.Count;i++) { 
+                
+                // Check if the action type already exists in the player's available actions
+                actionExists = player.playerData.availableActions.Exists(action => 
+                actionData.action == player.playerData.availableActions[i].action && actionData.style == player.playerData.availableActions[i].style);
+               
+                if (actionExists)
+                {
+                    
+                    player.playerData.exp -= pricePool[index];
+                    boughtItem.enabled = true;
+                    IncreaseStat(player.playerData.availableActions[i]);
+                    return;
+                    
+                    
+                }
 
-            if (actionExists)
-            {
-                boughtItem.enabled = true;
-                IncreaseStat(actionData);
-                return;
             }
-
-            int index = buttons.FindIndex(button => button.transform.Find("Item Name").GetComponent<TextMeshProUGUI>().text == itemName);
-            if (index != -1 && player.playerData.exp >= pricePool[index])
+            if (!actionExists&&index != -1 && player.playerData.exp >= pricePool[index])
             {
                 player.playerData.exp -= pricePool[index];
 
@@ -116,13 +123,13 @@ public class ShopManager : MonoBehaviour
 
     private void InitializeShop()
     {
+        PlayerData.ActionData shotgunShot = new PlayerData.ActionData(PlayerBase.ActionType.ACTIVE, PlayerBase.ActionEnum.SHOOT, KeyCode.None, player.playerData.shotgun);
+        PlayerData.ActionData gunShot = new PlayerData.ActionData(PlayerBase.ActionType.ACTIVE, PlayerBase.ActionEnum.SHOOT, KeyCode.None, player.playerData.gun);
+        PlayerData.ActionData heal = new PlayerData.ActionData(PlayerBase.ActionType.PASSIVE, PlayerBase.ActionEnum.HEAL, KeyCode.None, player.playerData.healStyle);
+        PlayerData.ActionData move = new PlayerData.ActionData(PlayerBase.ActionType.ACTIVE, PlayerBase.ActionEnum.MOVE, KeyCode.None, player.playerData.moveStyle);
         actionPool = new List<PlayerData.ActionData>
         {
-            new PlayerData.ActionData(PlayerBase.ActionType.ACTIVE, PlayerBase.ActionEnum.SHOOT, KeyCode.None, player.playerData.shotgun),
-            new PlayerData.ActionData(PlayerBase.ActionType.ACTIVE, PlayerBase.ActionEnum.SHOOT, KeyCode.None, player.playerData.gun),
-            new PlayerData.ActionData(PlayerBase.ActionType.PASSIVE, PlayerBase.ActionEnum.HEAL, KeyCode.None, player.playerData.healStyle),
-            new PlayerData.ActionData(PlayerBase.ActionType.ACTIVE, PlayerBase.ActionEnum.MOVE, KeyCode.None, player.playerData.moveStyle),
-            // Add other actions here
+            shotgunShot, gunShot, heal, move
         };
 
         pricePool = new List<int>(4);
