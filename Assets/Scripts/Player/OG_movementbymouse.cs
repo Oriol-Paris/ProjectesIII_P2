@@ -110,6 +110,11 @@ public class OG_MovementByMouse : MonoBehaviour
             Vector3 destination = positionDesired;
             RaycastHit hit;
 
+            if (destination.x < playerPosition.x)
+                playerBase.GetComponent<SpriteRenderer>().flipX = true;
+            else
+                playerBase.GetComponent<SpriteRenderer>().flipX = false;
+
             if (Physics.Raycast(playerPosition, (destination - playerPosition).normalized, out hit, Vector3.Distance(playerPosition, destination)))
             {
                 destination = hit.point;
