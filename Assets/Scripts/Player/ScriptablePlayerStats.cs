@@ -16,10 +16,15 @@ public class PlayerData : ScriptableObject
     {
         public GameObject prefab;
         public int range;
+        public int damage;
     }
 
     public BulletStyle gun;
     public BulletStyle shotgun;
+    public BulletStyle healStyle; // Add this line for healing
+    public BulletStyle moveStyle; // Add this line for moving
+
+    public int healAmount = 10; 
 
     public List<ActionData> availableActions = new List<ActionData>();
 
@@ -35,6 +40,7 @@ public class PlayerData : ScriptableObject
         }
         public PlayerBase.ActionType actionType;
         public PlayerBase.ActionEnum action;
+        public PlayerBase player;
         public KeyCode key;
         public BulletStyle style;
     }

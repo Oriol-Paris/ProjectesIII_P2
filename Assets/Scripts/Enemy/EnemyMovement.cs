@@ -33,7 +33,7 @@ public class EnemyMovement : MonoBehaviour
 
         if (enemyStats.isAlive)
         {
-            if (Vector3.Distance(PlayerPos, transform.position) < range && Player.GetIsMoving())
+            if (Vector3.Distance(PlayerPos, transform.position) < range && Player.isMoving)
             {
                 PlayerPos = Player.GetPosition();
                 transform.position = Vector3.MoveTowards(transform.position, PlayerPos, moveTime);

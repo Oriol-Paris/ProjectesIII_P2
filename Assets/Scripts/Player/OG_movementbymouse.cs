@@ -12,28 +12,31 @@ public class OG_MovementByMouse : MonoBehaviour
     [SerializeField] public float velocity; // Speed in units per second
     [SerializeField] LineRenderer lineRenderer;
     public Vector3 controlPoint;
-    [SerializeField] public int curveResolution = 20;  // Higher number for smoother curve in LineRenderer
+    [SerializeField] public int curveResolution = 20; // Higher number for smoother curve in LineRenderer
     private float playerVelocity;
     private float bulletVelocity;
-    // Reference to the PlayerBase script
     [SerializeField] private PlayerBase playerBase;
 
     private CombatManager combatManager;
-    private PlayerActionManager playerActionManager; // Reference to PlayerActionManager
+    private PlayerActionManager playerActionManager;
+
+    // Timer variables
+    [SerializeField] private float movementTimeLimit = 5f; // Adjustable time limit
+    private float timer;
 
     void Start()
     {
         placeSelected = false;
         playerPosition = transform.position;
-        lineRenderer.enabled = false;  // Start with LineRenderer disabled
-        playerVelocity = velocity;
 
-        // Get the PlayerBase component
+        playerVelocity = velocity;
         playerBase = GetComponent<PlayerBase>();
         bulletVelocity = playerVelocity;
 
         combatManager = FindAnyObjectByType<CombatManager>();
-        playerActionManager = GetComponent<PlayerActionManager>(); // Get the PlayerActionManager component
+        playerActionManager = GetComponent<PlayerActionManager>();
+
+        timer = movementTimeLimit; // Initialize timer
     }
 
     void Update()
@@ -43,57 +46,50 @@ public class OG_MovementByMouse : MonoBehaviour
             return; // Do not allow any mouse interactions if victory condition is met
         }
 
-        // Update mouse position
         mousePosition = Input.mousePosition;
         mousePosition = Camera.main.ScreenToWorldPoint(new Vector3(mousePosition.x, mousePosition.y, 10));
         mousePosition.z = 0;
 
-        // If mouse button is pressed
         if (Input.GetMouseButtonDown(0) && !placeSelected)
         {
-            positionDesired = mousePosition; // Store desired position at click
-            playerPosition = transform.position; // Set player position at the time of click
+            positionDesired = mousePosition;
+            playerPosition = transform.position;
 
-            // Limit positionDesired to within PlayerBase range
             float range = playerBase.GetRange();
             float distanceToTarget = Vector3.Distance(playerPosition, positionDesired);
             if (distanceToTarget > range)
             {
                 Vector3 direction = (positionDesired - playerPosition).normalized;
-                positionDesired = playerPosition + direction * range; // Clamp to maximum range
+                positionDesired = playerPosition + direction * range;
             }
 
-            t = 0; // Reset t parameter
-            controlPoint = (playerPosition + positionDesired) / 2 + new Vector3(0, -1f, 0); // Set initial control point
-            lineRenderer.enabled = true;  // Enable LineRenderer when starting path selection
+            t = 0;
+            controlPoint = (playerPosition + positionDesired) / 2 + new Vector3(0, -1f, 0);
+            lineRenderer.enabled = true;
         }
 
-        // While dragging the mouse
         if (Input.GetMouseButton(0) && !placeSelected)
         {
-            // Update the end position while dragging, within range limit
             float range = playerBase.GetRange();
             float distanceToTarget = Vector3.Distance(playerPosition, mousePosition);
             if (distanceToTarget > range)
             {
                 Vector3 direction = (mousePosition - playerPosition).normalized;
-                mousePosition = playerPosition + direction * range; // Clamp to maximum range
+                mousePosition = playerPosition + direction * range;
             }
 
             UpdateLineRenderer(mousePosition);
         }
 
-        // When the mouse button is released
         if (Input.GetMouseButtonUp(0) && !isMoving)
         {
             positionDesired = mousePosition;
-            // Limit positionDesired to within PlayerBase range
             float range = playerBase.GetRange();
             float distanceToTarget = Vector3.Distance(playerPosition, positionDesired);
             if (distanceToTarget > range)
             {
                 Vector3 direction = (positionDesired - playerPosition).normalized;
-                positionDesired = playerPosition + direction * range; // Clamp to maximum range
+                positionDesired = playerPosition + direction * range;
                 placeSelected = true;
                 lineRenderer.enabled = false;
             }
@@ -105,59 +101,64 @@ public class OG_MovementByMouse : MonoBehaviour
             }
         }
 
-        // Movement along the Bezier curve
         if (placeSelected)
         {
             playerBase.SetInAction(true);
             isMoving = true;
             lineRenderer.enabled = false;
 
-            // Perform raycast to detect collisions
             Vector3 destination = positionDesired;
             RaycastHit hit;
 
             if (Physics.Raycast(playerPosition, (destination - playerPosition).normalized, out hit, Vector3.Distance(playerPosition, destination)))
             {
-                // Adjust destination to the point of collision
                 destination = hit.point;
             }
 
-            // Calculate the increment for t based on velocity and curve length
             float distanceToTarget = Vector3.Distance(playerPosition, destination);
-            float tIncrement = (velocity * Time.deltaTime) / distanceToTarget;  // Fixed increment based on speed
+            float tIncrement = (velocity * Time.deltaTime) / distanceToTarget;
 
-            t = Mathf.Clamp01(t + tIncrement); // Increment t, clamping it between 0 and 1
+            t = Mathf.Clamp01(t + tIncrement);
 
-            // Update the position along the path (Bezier curve or straight line if necessary)
-            Vector3 newPosition = BezierCurve(t, playerPosition, controlPoint, destination);
-            playerActionManager.UpdateAction(newPosition, t); // Update the player's position
+            Vector3 newPosition = Vector3.MoveTowards(transform.position, BezierCurve(t, playerPosition, controlPoint, destination), velocity);
+            playerActionManager.UpdateAction(newPosition, t);
 
-            // Check if we have reached the end of the curve
             if (t >= 1f)
             {
-                playerBase.SetInAction(false); //Player no longer in action
-                placeSelected = false;
-                isMoving = false;
-                playerPosition = transform.position; // Update player position to the new position
-                velocity = playerVelocity;
-                playerActionManager.ResetFlags(); // Call ResetFlags to reset the flags
+                StopMovement();
+            }
+            else
+            {
+                timer -= Time.deltaTime; // Decrease timer
+                if (timer <= 0f)
+                {
+                    StopMovement();
+                }
             }
         }
     }
 
+    private void StopMovement()
+    {
+        playerBase.SetInAction(false);
+        placeSelected = false;
+        isMoving = false;
+        playerPosition = transform.position;
+        t = 1;
+        timer = movementTimeLimit; // Reset timer
+        playerActionManager.ResetFlags();
+    }
+
     private void UpdateLineRenderer(Vector3 targetPosition)
     {
-        // Update the control point based on the initial position and the new target position
         float curveIntensity = Mathf.Clamp(Vector3.Distance(playerPosition, targetPosition) / 100f, 0, 2f);
-        controlPoint = positionDesired + new Vector3(0, -curveIntensity, 0); // Adjust height
+        controlPoint = positionDesired + new Vector3(0, -curveIntensity, 0);
 
-        // Generate smoother curve points for the LineRenderer
         List<Vector3> smoothCurvePoints = GenerateBezierCurve(playerPosition, controlPoint, targetPosition, curveResolution);
         lineRenderer.positionCount = smoothCurvePoints.Count;
         lineRenderer.SetPositions(smoothCurvePoints.ToArray());
     }
 
-    // Generate a list of points for a smoother Bezier curve in LineRenderer
     private List<Vector3> GenerateBezierCurve(Vector3 p0, Vector3 p1, Vector3 p2, int resolution)
     {
         List<Vector3> points = new List<Vector3>();
@@ -169,33 +170,32 @@ public class OG_MovementByMouse : MonoBehaviour
         return points;
     }
 
-    // Calculate Bezier curve position
     private Vector3 BezierCurve(float t, Vector3 p0, Vector3 p1, Vector3 p2)
     {
         float u = 1 - t;
         float tt = t * t;
         float uu = u * u;
 
-        Vector3 p = uu * p0; // (1-t)^2 * P0
-        p += 2 * u * t * p1; // 2 * (1-t) * t * P1
-        p += tt * p2; // t^2 * P2
+        Vector3 p = uu * p0;
+        p += 2 * u * t * p1;
+        p += tt * p2;
         return p;
     }
 
     public bool GetIsMoving() { return isMoving; }
     public Vector3 GetPosition() { return playerPosition; }
+
     public void SetPositionDesired(Vector3 position) { positionDesired = position; }
     public Vector3 GetPositionDesired() { return positionDesired; }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Walls"))
         {
-                //isMoving = false;
-                positionDesired = transform.position;
-                //t = 1;
-            
+            positionDesired = transform.position;
         }
     }
+
     private void OnCollisionStay2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Walls"))
