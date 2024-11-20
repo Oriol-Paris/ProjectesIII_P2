@@ -24,6 +24,8 @@ public class OG_MovementByMouse : MonoBehaviour
     [SerializeField] public float movementTimeLimit = 5f; // Adjustable time limit
     public float timer;
 
+    private List<BulletPrefab> bullets = new List<BulletPrefab>();
+
     void Start()
     {
         placeSelected = false;
@@ -141,6 +143,15 @@ public class OG_MovementByMouse : MonoBehaviour
                 }
             }
         }
+        else if (!isMoving && !placeSelected)
+        {
+            // Resume all bullets when player starts moving again
+            foreach (var bullet in bullets)
+            {
+                if(bullet != null)
+                bullet.Resume();
+            }
+        }
     }
 
     private void StopMovement()
@@ -152,6 +163,13 @@ public class OG_MovementByMouse : MonoBehaviour
         t = 1;
         timer = movementTimeLimit; // Reset timer
         playerActionManager.ResetFlags();
+
+        // Pause all bullets
+        foreach (var bullet in bullets)
+        {
+            if(bullet != null)
+            bullet.Pause();
+        }
     }
 
     private void UpdateLineRenderer(Vector3 targetPosition)
@@ -212,5 +230,20 @@ public class OG_MovementByMouse : MonoBehaviour
                 t = 1;
             }
         }
+    }
+
+    public void RegisterBullet(BulletPrefab bullet)
+    {
+        bullets.Add(bullet);
+    }
+
+    public void UnregisterBullet(BulletPrefab bullet)
+    {
+        bullets.Remove(bullet);
+    }
+
+    public List<BulletPrefab> GetPausedBullets()
+    {
+        return bullets;
     }
 }

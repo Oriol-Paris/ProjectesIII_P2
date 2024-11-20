@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class BulletPrefab : MonoBehaviour
@@ -7,11 +8,27 @@ public abstract class BulletPrefab : MonoBehaviour
     [SerializeField] public int damage;
     [SerializeField] public bool isFromPlayer;
     public Vector3 velocity;
+    private bool isPaused = false;
+    private Vector3 pausedPosition;
+    protected Vector3 originalDirection;
+    protected Vector3 originalTargetPosition;
 
-    private void OnBecameInvisible()
+    private OG_MovementByMouse movementScript;
+
+    private void Start()
     {
-        //Destroy(this);
+        movementScript = FindObjectOfType<OG_MovementByMouse>();
+        if (movementScript != null)
+        {
+            movementScript.RegisterBullet(this);
+        }
     }
+
+    // Commenting out the OnBecameInvisible method for debugging
+    // private void OnBecameInvisible()
+    // {
+    //     DestroyBullet();
+    // }
 
     public void SetFromPlayer(bool val) { isFromPlayer = val; }
     public abstract void Shoot(Vector3 direction);
@@ -20,4 +37,33 @@ public abstract class BulletPrefab : MonoBehaviour
         speed = newSpeed;
     }
     public int GetRange() { return range; }
+
+    public void Pause()
+    {
+        isPaused = true;
+        pausedPosition = transform.position;
+    }
+
+    public void Resume()
+    {
+        isPaused = false;
+        transform.position = pausedPosition;
+        Shoot(originalDirection); // Resume shooting towards the original direction
+    }
+
+    protected bool IsPaused()
+    {
+        return isPaused;
+    }
+
+    protected void DestroyBullet()
+    {
+        if (movementScript != null)
+        {
+            movementScript.UnregisterBullet(this);
+        }
+        Destroy(gameObject);
+    }
+
+    public Vector3 GetOriginalDirection() { return originalDirection; }
 }

@@ -18,7 +18,6 @@ public class EnemyMovementShooter : MonoBehaviour
     private bool isReloading = false; // To control the "reload" wait after shooting
     private bool hasShot = false; // To ensure only one shot per turn
     private bool lastIsMovingState = false; // Track the last state of GetIsMoving to detect state change
-    
 
     void Start()
     {
@@ -42,13 +41,12 @@ public class EnemyMovementShooter : MonoBehaviour
             bool currentIsMoving = closestPlayer.GetIsMoving();
 
             // Only take action on a new turn (when GetIsMoving toggles from false to true)
-            if(closestPlayer.t<=1&&currentIsMoving)
+            if (closestPlayer.t <= 1 && currentIsMoving)
             {
                 if (!haveChosenAnAction)
                 {
                     TakeAction();
                 }
-                
             }
 
             // Update the last state of GetIsMoving
@@ -61,7 +59,8 @@ public class EnemyMovementShooter : MonoBehaviour
     {
         FindClosestPlayer();
         float distanceToPlayer = Vector3.Distance(transform.position, closestPlayerPos);
-        if (!haveChosenAnAction) {
+        if (!haveChosenAnAction)
+        {
             if (distanceToPlayer > range)
             {
                 // Move towards the player if out of range
@@ -74,14 +73,13 @@ public class EnemyMovementShooter : MonoBehaviour
                 MoveAwayFromPlayer();
                 this.GetComponent<Animator>().SetBool("isMoving", true);
             }
-            else if (!hasShot&&!isReloading) // Shoot only once per turn
+            else if (!hasShot && !isReloading) // Shoot only once per turn
             {
                 // In range, shoot
                 this.GetComponent<Animator>().SetBool("isMoving", false);
                 StartCoroutine(AttackCoroutine());
                 StartCoroutine(Reload());
             }
-
         }
     }
 
@@ -106,7 +104,6 @@ public class EnemyMovementShooter : MonoBehaviour
     private void MoveTowardsPlayer()
     {
         transform.position = Vector3.MoveTowards(transform.position, closestPlayerPos, moveTime);
-        
     }
 
     // Moves away from the closest player
@@ -114,7 +111,6 @@ public class EnemyMovementShooter : MonoBehaviour
     {
         Vector3 directionAway = (transform.position - closestPlayerPos).normalized;
         transform.position = Vector3.MoveTowards(transform.position, transform.position + directionAway, moveTime);
-          
     }
 
     // Shoots a bullet towards the closest player
@@ -125,6 +121,10 @@ public class EnemyMovementShooter : MonoBehaviour
         GunBullet bulletScript = bullet.GetComponent<GunBullet>();
         bulletScript.isFromPlayer = false;
         bulletScript.Shoot((closestPlayerPos - transform.position).normalized); // Set bullet direction
+
+        // Register the bullet with the closest player's movement script
+        closestPlayer.RegisterBullet(bulletScript);
+
         hasShot = true; // Mark that it has shot this turn
     }
 

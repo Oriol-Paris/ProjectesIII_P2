@@ -20,6 +20,8 @@ public class ShootAction : ActiveAction
             return;
         }
 
+        OG_MovementByMouse movementScript = player.GetComponent<OG_MovementByMouse>();
+
         // Instantiate the bullet at the player's position
         GameObject bulletInstance = Instantiate(bulletPrefab, player.transform.position, Quaternion.identity);
 
@@ -39,6 +41,7 @@ public class ShootAction : ActiveAction
                     if (shotgunBullet != null)
                     {
                         shotgunBullet.Shoot(direction, offset);
+                        movementScript.RegisterBullet(shotgunBullet);
                     }
                     else
                     {
@@ -49,10 +52,12 @@ public class ShootAction : ActiveAction
             else if (bullet is GunBullet)
             {
                 bullet.Shoot(direction);
+                movementScript.RegisterBullet(bullet);
             }
             else if (bullet is LaserBullet)
             {
                 bullet.Shoot(direction);
+                movementScript.RegisterBullet(bullet);
             }
             else
             {

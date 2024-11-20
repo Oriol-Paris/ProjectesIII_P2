@@ -1590,6 +1590,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1119983528}
   - component: {fileID: 1119983527}
+  - component: {fileID: 1119983529}
   m_Layer: 0
   m_Name: CombatManager
   m_TagString: Untagged
@@ -1629,6 +1630,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1119983529
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1119983526}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d22522c1d8adec64b89cbd598e7cfa2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  movementScript: {fileID: 2019313956}
 --- !u!1 &1152030640
 GameObject:
   m_ObjectHideFlags: 0
@@ -2576,6 +2590,17 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &2019313956 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8458478312620971982, guid: 135a33f42603095498418b3997897017, type: 3}
+  m_PrefabInstance: {fileID: 2096507413}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: befa5a8330344994286e20c10a68831e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2055184638
 GameObject:
   m_ObjectHideFlags: 0

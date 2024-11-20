@@ -15,6 +15,8 @@ public class LaserBullet : BulletPrefab
 
     void Update()
     {
+        if (IsPaused()) return;
+
         transform.position = Vector3.MoveTowards(transform.position, targetPosition, speed * Time.deltaTime);
         lifetime -= Time.deltaTime;
 
@@ -52,11 +54,8 @@ public class LaserBullet : BulletPrefab
 
     public override void Shoot(Vector3 direction)
     {
+        // Store the original direction and target position
+        originalDirection = direction;
         targetPosition = transform.position + direction.normalized * 30f; // Laser has a longer range
-    }
-
-    private void DestroyBullet()
-    {
-        Destroy(gameObject);
     }
 }
