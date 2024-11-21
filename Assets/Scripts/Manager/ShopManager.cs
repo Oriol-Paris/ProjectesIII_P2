@@ -59,22 +59,43 @@ public class ShopManager : MonoBehaviour
         int index = buttons.FindIndex(button => button.transform.Find("Item Name").GetComponent<TextMeshProUGUI>().text == itemName);
         if (actionData != null)
         {
-            for(int i = 0;i<player.playerData.availableActions.Count;i++) { 
-                
-                // Check if the action type already exists in the player's available actions
-                actionExists = player.playerData.availableActions.Exists(action => 
-                actionData.action == player.playerData.availableActions[i].action && actionData.style == player.playerData.availableActions[i].style);
-               
-                if (actionExists)
-                {
-                    
-                    player.playerData.exp -= pricePool[index];
-                    boughtItem.enabled = true;
-                    IncreaseStat(player.playerData.availableActions[i]);
-                    return;
-                }
+            bool actionExists = false;
+            PlayerData.ActionData repeatAction = null;
 
+            foreach (var playerAction in player.playerData.availableActions)
+            {
+                if(actionData.action == playerAction.action)
+                {
+                    if(actionData.action == PlayerBase.ActionEnum.SHOOT)
+                    {
+                        if(actionData.style == playerAction.style)
+                        {
+                            actionExists = true;
+                            repeatAction = playerAction;
+                        }
+                    }
+                    else
+                    {
+                        actionExists = true;
+                        repeatAction = playerAction;
+                    }
+                }
             }
+
+            if (actionExists)
+            {
+                for (int i = 0; i < player.playerData.availableActions.Count; ++i)
+                {
+                    if (player.playerData.availableActions[i] == repeatAction)
+                    {
+                        player.playerData.exp -= pricePool[index];
+                        boughtItem.enabled = true;
+                        IncreaseStat(player.playerData.availableActions[i]);
+                        return;
+                    }
+                }
+            }
+
             if (!actionExists&&index != -1 && player.playerData.exp >= pricePool[index])
             {
                 player.playerData.exp -= pricePool[index];
