@@ -68,8 +68,9 @@ public class ShopManager : MonoBehaviour
                 {
                     if(actionData.action == PlayerBase.ActionEnum.SHOOT)
                     {
-                        if(actionData.style == playerAction.style)
+                        if(actionData.style.prefab == playerAction.style.prefab)
                         {
+                            Debug.Log("MISMOESTILO");
                             actionExists = true;
                             repeatAction = playerAction;
                         }
