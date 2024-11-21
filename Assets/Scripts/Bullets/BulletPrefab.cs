@@ -3,6 +3,7 @@ using UnityEngine;
 
 public abstract class BulletPrefab : MonoBehaviour
 {
+    public bool isHit;
     [SerializeField] public int range;
     [SerializeField] public float speed;
     [SerializeField] public int damage;

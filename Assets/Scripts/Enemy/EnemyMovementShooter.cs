@@ -18,7 +18,7 @@ public class EnemyMovementShooter : MonoBehaviour
     private bool isReloading = false; // To control the "reload" wait after shooting
     private bool hasShot = false; // To ensure only one shot per turn
     private bool lastIsMovingState = false; // Track the last state of GetIsMoving to detect state change
-
+    float distanceToPlayer;
     void Start()
     {
         enemyStats = GetComponent<EnemyBase>();
@@ -48,7 +48,7 @@ public class EnemyMovementShooter : MonoBehaviour
                     TakeAction();
                 }
             }
-
+            
             // Update the last state of GetIsMoving
             lastIsMovingState = currentIsMoving;
         }
@@ -58,7 +58,7 @@ public class EnemyMovementShooter : MonoBehaviour
     private void TakeAction()
     {
         FindClosestPlayer();
-        float distanceToPlayer = Vector3.Distance(transform.position, closestPlayerPos);
+         distanceToPlayer = Vector3.Distance(transform.position, closestPlayerPos);
         if (!haveChosenAnAction)
         {
             if (distanceToPlayer > range)
@@ -146,8 +146,8 @@ public class EnemyMovementShooter : MonoBehaviour
     {
         fx.SetTrigger("playFX");
         this.GetComponent<Animator>().SetTrigger("attack");
-
         yield return new WaitForSeconds(0.8f);
+        closestPlayerPos = closestPlayer.GetPosition();
 
         Shoot();
 

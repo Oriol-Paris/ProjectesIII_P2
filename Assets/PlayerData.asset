@@ -15,7 +15,7 @@ MonoBehaviour:
   health: 10
   actionPoints: 5
   baseRange: 5
-  exp: 474449
+  exp: 474412
   isAlive: 1
   victory: 0
   gun:
@@ -56,3 +56,19 @@ MonoBehaviour:
       prefab: {fileID: 4841340973275302747, guid: 3db35f2e05067784492ec56c6b262789, type: 3}
       range: 5
       damage: 0
+  - actionType: 0
+    action: 1
+    player: {fileID: 0}
+    key: 51
+    style:
+      prefab: {fileID: 4841340973275302747, guid: 10864d5b051bdc44e928dd42003a1950, type: 3}
+      range: 135
+      damage: 45
+  - actionType: 0
+    action: 1
+    player: {fileID: 0}
+    key: 52
+    style:
+      prefab: {fileID: 4841340973275302747, guid: 8c280260248f7e449925f58bc503ee3b, type: 3}
+      range: 264
+      damage: 89

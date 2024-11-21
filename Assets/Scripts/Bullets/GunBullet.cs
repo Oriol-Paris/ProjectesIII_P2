@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class GunBullet : BulletPrefab
 {
-    public bool isHit;
     private Vector3 targetPosition; // Target position the bullet is moving towards
     //private float lifetime = 5f; // Lifetime in seconds before auto-destruction
 

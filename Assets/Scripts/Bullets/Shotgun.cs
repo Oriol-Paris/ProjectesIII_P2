@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class Shotgun : BulletPrefab
 {
-    public bool isHit;
     private Vector3 targetPosition; // Target position the bullet is moving towards
     //private float lifetime = 5f; // Lifetime in seconds before auto-destruction
     private Vector3 offset; // Offset for the bullet
@@ -28,6 +27,7 @@ public class Shotgun : BulletPrefab
         if (isHit || Vector3.Distance(transform.position, targetPosition) < 0.1f)
         {
             DestroyBullet();
+
         }
     }
 

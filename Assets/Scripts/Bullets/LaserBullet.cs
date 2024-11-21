@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class LaserBullet : BulletPrefab
 {
-    public bool isHit;
+    
     private Vector3 targetPosition;
     private float lifetime = 5f;
 
