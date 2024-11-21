@@ -59,7 +59,7 @@ public class EnemyMovementShooter : MonoBehaviour
     {
         FindClosestPlayer();
          distanceToPlayer = Vector3.Distance(transform.position, closestPlayerPos);
-        if (!haveChosenAnAction)
+        if (!haveChosenAnAction&&closestPlayer.isMoving)
         {
             if (distanceToPlayer > range)
             {

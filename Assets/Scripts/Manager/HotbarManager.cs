@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Data;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,10 +11,11 @@ public class HotbarManager : MonoBehaviour
     public GameObject actionSlotPrefab;
 
     private List<GameObject> actionSlots = new List<GameObject>();
-
+    float originalCount;
     void Start()
     {
         InitializeHotbar();
+        originalCount = actionSlots.Count;
     }
 
     void InitializeHotbar()
@@ -37,6 +39,15 @@ public class HotbarManager : MonoBehaviour
     void Update()
     {
         UpdateHotbar();
+        if(originalCount != actionSlots.Count) { 
+            foreach(var action in actionSlots)
+            {
+                Destroy(action);
+            }
+            actionSlots.Clear();
+            InitializeHotbar();
+            originalCount = actionSlots.Count;
+        }
     }
 
     void UpdateHotbar()

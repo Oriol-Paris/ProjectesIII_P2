@@ -43,17 +43,20 @@ public class OG_MovementByMouse : MonoBehaviour
 
     void Update()
     {
-        if(bullets.Count > 0)
+        if (bullets.Count > 0)
         {
-            for(int i = 0; i<bullets.Count; i++)
+            for (int i = 0; i < bullets.Count; i++)
             {
-                if (bullets[i].isHit)
+                if (bullets[i].isFromPlayer)
                 {
-                    isMoving = false;
-                    positionDesired = transform.position;
-                    t = 1;
-                    bullets.Remove(bullets[i]);
-                    return;
+                    if (bullets[i].isHit&&i==bullets.Count-1)
+                    {
+                        isMoving = false;
+                        positionDesired = transform.position;
+                        t = 1;
+                        bullets.Remove(bullets[i]);
+                        return;
+                    }
                 }
             }
         }
