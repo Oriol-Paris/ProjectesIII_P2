@@ -315,7 +315,8 @@ MonoBehaviour:
   controlPoint: {x: 0, y: 0, z: 0}
   curveResolution: 25
   playerBase: {fileID: 8584045141074783902}
-  movementTimeLimit: 5
+  movementTimeLimit: 2
+  timer: 0
 --- !u!114 &1251202436317223770
 MonoBehaviour:
   m_ObjectHideFlags: 0

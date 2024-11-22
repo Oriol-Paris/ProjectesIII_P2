@@ -41,7 +41,7 @@ public class EnemyMovementShooter : MonoBehaviour
             bool currentIsMoving = closestPlayer.GetIsMoving();
 
             // Only take action on a new turn (when GetIsMoving toggles from false to true)
-            if (closestPlayer.t <= 1 && currentIsMoving)
+            if (!currentIsMoving)
             {
                 if (!haveChosenAnAction)
                 {
