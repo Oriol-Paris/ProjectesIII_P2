@@ -2,15 +2,29 @@ using UnityEngine;
 using TMPro;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using static PlayerData;
+using UnityEngine.EventSystems;
 
 public class ShopManager : MonoBehaviour
 {
+    [System.Serializable]
+    public class ItemImage
+    {
+        public Sprite whiteImage;
+        public Sprite blackImage;
+    }
+
+
     public TextMeshProUGUI rerollText;
     [SerializeField] private GameObject buttonPrefab; // Reference to the button prefab
     public Transform buttonContainer; // Reference to the container where buttons will be instantiated
     [SerializeField] public PlayerBase player;
     [SerializeField] public TextMeshProUGUI boughtItem;
     [SerializeField] public TextMeshProUGUI currentXP;
+    public ItemImage moveImage;
+    public ItemImage gunImage;
+    public ItemImage shotgunImage;
+    public ItemImage healImage;
 
     public int rerollPrice;
     bool actionExists;
@@ -169,6 +183,12 @@ public class ShopManager : MonoBehaviour
             TextMeshProUGUI itemText = button.transform.Find("Item Name").GetComponent<TextMeshProUGUI>();
             itemText.text = GetActionDisplayName(actionData);
 
+            //Set item image
+            Image itemImage = button.transform.Find("Item Image").GetComponent<Image>();
+            itemImage.overrideSprite = GetActionImage(actionData);
+            itemImage.preserveAspect = true;
+            //itemImage.SetNativeSize();
+
             // Set price text
             int randomPrice = Random.Range(10, 100); // Random price between 10 and 100
             pricePool.Add(randomPrice);
@@ -180,15 +200,15 @@ public class ShopManager : MonoBehaviour
         }
     }
 
-    private string GetActionDisplayName(PlayerData.ActionData actionData)
+    public string GetActionDisplayName(PlayerData.ActionData actionData)
     {
         if (actionData.action == PlayerBase.ActionEnum.SHOOT)
         {
-            if (actionData.style == player.playerData.gun)
+            if (actionData.style.prefab == player.playerData.gun.prefab)
             {
                 return "Gun";
             }
-            else if (actionData.style == player.playerData.shotgun)
+            else if (actionData.style.prefab == player.playerData.shotgun.prefab)
             {
                 return "Shotgun";
             }
@@ -202,5 +222,29 @@ public class ShopManager : MonoBehaviour
             return "Move";
         }
         return actionData.action.ToString();
+    }
+
+    public Sprite GetActionImage(PlayerData.ActionData actionData)
+    {
+        if (actionData.action == PlayerBase.ActionEnum.SHOOT)
+        {
+            if (actionData.style.prefab == player.playerData.gun.prefab)
+            {
+                return gunImage.whiteImage;
+            }
+            else if (actionData.style.prefab == player.playerData.shotgun.prefab)
+            {
+                return shotgunImage.whiteImage;
+            }
+        }
+        else if (actionData.action == PlayerBase.ActionEnum.HEAL)
+        {
+            return healImage.whiteImage;
+        }
+        else if (actionData.action == PlayerBase.ActionEnum.MOVE)
+        {
+            return moveImage.whiteImage;
+        }
+        return null;
     }
 }

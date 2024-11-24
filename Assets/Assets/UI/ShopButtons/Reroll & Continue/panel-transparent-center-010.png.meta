@@ -1,13 +1,10 @@
 fileFormatVersion: 2
-guid: 6ea4b96ef39aab248b73d12d18866363
+guid: 7639ab2832fc73140ad04385348faa68
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 8512028223668650622
-    second: divider-fade-004_0
-  - first:
-      213: 5815035912326836149
-    second: divider-fade-004_1
+      213: 2739293242993378311
+    second: panel-transparent-center-010_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -49,13 +46,13 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 0
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 100
-  spriteBorder: {x: 0, y: 0, z: 48, w: 0}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
   alphaIsTransparency: 1
@@ -116,45 +113,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: divider-fade-004_0
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 15
-        width: 192
-        height: 13
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: e728edd129cc02670800000000000000
-      internalID: 8512028223668650622
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: divider-fade-004_1
+      name: panel-transparent-center-010_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 192
-        height: 13
+        width: 96
+        height: 96
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      border: {x: 24, y: 24, z: 24, w: 24}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 5bf61665a5823b050800000000000000
-      internalID: 5815035912326836149
+      spriteID: 7048f3ce0bce30620800000000000000
+      internalID: 2739293242993378311
       vertices: []
       indices: 
       edges: []
@@ -163,8 +138,8 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
-    internalID: 1537655665
+    spriteID: 21163171986afd846af3ba2e66e4cad3
+    internalID: 0
     vertices: []
     indices: 
     edges: []
@@ -173,8 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      divider-fade-004_0: 8512028223668650622
-      divider-fade-004_1: 5815035912326836149
+      panel-transparent-center-010_0: 2739293242993378311
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

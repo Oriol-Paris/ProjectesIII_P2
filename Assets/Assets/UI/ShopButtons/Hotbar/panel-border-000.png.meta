@@ -1,13 +1,22 @@
 fileFormatVersion: 2
-guid: 6ea4b96ef39aab248b73d12d18866363
+guid: 5becc3143c211964a90b16c9365ea189
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 8512028223668650622
-    second: divider-fade-004_0
+      213: 485108904590415294
+    second: panel-border-000_0
   - first:
-      213: 5815035912326836149
-    second: divider-fade-004_1
+      213: -3593952121745868572
+    second: panel-border-000_1
+  - first:
+      213: -2386002611303698987
+    second: panel-border-000_2
+  - first:
+      213: -5366129302878690854
+    second: panel-border-000_3
+  - first:
+      213: -4919003623880814802
+    second: panel-border-000_4
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -55,7 +64,7 @@ TextureImporter:
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 100
-  spriteBorder: {x: 0, y: 0, z: 48, w: 0}
+  spriteBorder: {x: 20, y: 20, z: 20, w: 20}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
   alphaIsTransparency: 1
@@ -116,12 +125,12 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: divider-fade-004_0
+      name: panel-border-000_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 15
-        width: 192
+        y: 83
+        width: 13
         height: 13
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -131,19 +140,41 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: e728edd129cc02670800000000000000
-      internalID: 8512028223668650622
+      spriteID: eb59d7f7af37bb600800000000000000
+      internalID: 485108904590415294
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: divider-fade-004_1
+      name: panel-border-000_1
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 192
+        x: 3
+        y: 3
+        width: 90
+        height: 90
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4e8739b3697bf1ec0800000000000000
+      internalID: -3593952121745868572
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: panel-border-000_2
+      rect:
+        serializedVersion: 2
+        x: 83
+        y: 83
+        width: 13
         height: 13
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -153,8 +184,52 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 5bf61665a5823b050800000000000000
-      internalID: 5815035912326836149
+      spriteID: 5dda610444733eed0800000000000000
+      internalID: -2386002611303698987
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: panel-border-000_3
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 13
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ad1e91b74dda785b0800000000000000
+      internalID: -5366129302878690854
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: panel-border-000_4
+      rect:
+        serializedVersion: 2
+        x: 83
+        y: 0
+        width: 13
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e2f89bd14403cbbb0800000000000000
+      internalID: -4919003623880814802
       vertices: []
       indices: 
       edges: []
@@ -173,8 +248,11 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      divider-fade-004_0: 8512028223668650622
-      divider-fade-004_1: 5815035912326836149
+      panel-border-000_0: 485108904590415294
+      panel-border-000_1: -3593952121745868572
+      panel-border-000_2: -2386002611303698987
+      panel-border-000_3: -5366129302878690854
+      panel-border-000_4: -4919003623880814802
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

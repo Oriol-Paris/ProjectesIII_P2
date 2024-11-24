@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Data;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -31,7 +32,19 @@ public class HotbarManager : MonoBehaviour
         foreach (var action in playerData.playerData.availableActions)
         {
             GameObject slot = Instantiate(actionSlotPrefab, hotbarPanel.transform);
-            slot.GetComponentInChildren<Text>().text = action.action.ToString();
+            slot.transform.Find("Action Name").GetComponent<TextMeshProUGUI>().text = FindAnyObjectByType<ShopManager>().GetActionDisplayName(action);
+            slot.transform.Find("Action Image").GetComponent<Image>().overrideSprite = FindAnyObjectByType<ShopManager>().GetActionImage(action);
+            slot.transform.Find("Action Image").GetComponent<Image>().preserveAspect = true;
+            slot.transform.Find("Action Type").GetComponent<TextMeshProUGUI>().text = action.actionType.ToString();
+
+            if(action.actionType == PlayerBase.ActionType.PASSIVE || action.actionType == PlayerBase.ActionType.SINGLE_USE)
+                slot.transform.Find("Action Stats").gameObject.SetActive(false);
+            else
+            {
+                slot.transform.Find("Action Stats").GetComponent<TextMeshProUGUI>().text = 
+                    "Range: " + action.style.range + "\nDamage: " + action.style.damage;
+            }
+
             actionSlots.Add(slot);
         }
     }
