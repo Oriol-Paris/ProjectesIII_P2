@@ -50,7 +50,7 @@ public class ShopManager : MonoBehaviour
         {
             player.playerData.exp -= rerollPrice;
             rerollPrice++;
-            rerollText.text = rerollPrice + "";
+            rerollText.text = rerollPrice + " EXP";
             boughtItem.enabled = false;
 
             // Clear existing buttons and price pool
@@ -193,7 +193,7 @@ public class ShopManager : MonoBehaviour
             int randomPrice = Random.Range(10, 100); // Random price between 10 and 100
             pricePool.Add(randomPrice);
             TextMeshProUGUI priceText = button.transform.Find("Price").GetComponent<TextMeshProUGUI>();
-            priceText.text = randomPrice.ToString();
+            priceText.text = randomPrice.ToString() + " EXP";
 
             // Add button click listener
             button.GetComponent<Button>().onClick.AddListener(() => BuyItem(itemText));

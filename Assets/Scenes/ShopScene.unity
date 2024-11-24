@@ -131,7 +131,7 @@ GameObject:
   - component: {fileID: 80152072}
   - component: {fileID: 80152071}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: Name
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -153,8 +153,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -32.4}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0.000030518}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &80152071
 MonoBehaviour:
@@ -176,7 +176,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: REROLL
+  m_text: Reroll
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -209,7 +209,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -241,7 +241,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 17.354187, z: 0, w: 150.7561}
+  m_margin: {x: 0, y: 71.34303, z: 0, w: 150.7561}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -267,6 +267,7 @@ GameObject:
   - component: {fileID: 135505436}
   - component: {fileID: 135505435}
   - component: {fileID: 135505434}
+  - component: {fileID: 135505437}
   m_Layer: 5
   m_Name: Reroll
   m_TagString: Untagged
@@ -389,6 +390,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 135505432}
   m_CullTransparentMesh: 1
+--- !u!114 &135505437
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 135505432}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b51d243312ad09049a69310ed00a5852, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isItem: 0
+  isReroll: 1
+  whiteBG: {fileID: 7741546075851053965, guid: cd9f30ad3af5b07428e902c826828967, type: 3}
+  blackBG: {fileID: 2739293242993378311, guid: 7639ab2832fc73140ad04385348faa68, type: 3}
 --- !u!114 &435037521 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8584045141074783902, guid: 135a33f42603095498418b3997897017, type: 3}
@@ -661,6 +678,7 @@ GameObject:
   - component: {fileID: 957944367}
   - component: {fileID: 957944366}
   - component: {fileID: 957944365}
+  - component: {fileID: 957944369}
   m_Layer: 5
   m_Name: ToNextFight
   m_TagString: Untagged
@@ -794,6 +812,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 957944363}
   m_CullTransparentMesh: 1
+--- !u!114 &957944369
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 957944363}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b51d243312ad09049a69310ed00a5852, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isItem: 0
+  isReroll: 0
+  whiteBG: {fileID: 7741546075851053965, guid: cd9f30ad3af5b07428e902c826828967, type: 3}
+  blackBG: {fileID: 2739293242993378311, guid: 7639ab2832fc73140ad04385348faa68, type: 3}
 --- !u!1 &1195563166
 GameObject:
   m_ObjectHideFlags: 0
@@ -829,7 +863,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -93, y: 443}
-  m_SizeDelta: {x: 454.0013, y: 53.938}
+  m_SizeDelta: {x: 728.32, y: 53.94}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1195563168
 MonoBehaviour:
@@ -1166,8 +1200,8 @@ Canvas:
   m_GameObject: {fileID: 1232424834}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
-  m_Camera: {fileID: 0}
+  m_RenderMode: 1
+  m_Camera: {fileID: 613121695}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
@@ -1384,6 +1418,18 @@ PrefabInstance:
       propertyPath: m_Spacing
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 3356871274144024845, guid: 3b48a3fbd7fae164c9e97778d791dda1, type: 3}
+      propertyPath: m_UiScaleMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3356871274144024845, guid: 3b48a3fbd7fae164c9e97778d791dda1, type: 3}
+      propertyPath: m_ReferenceResolution.x
+      value: 1920
+      objectReference: {fileID: 0}
+    - target: {fileID: 3356871274144024845, guid: 3b48a3fbd7fae164c9e97778d791dda1, type: 3}
+      propertyPath: m_ReferenceResolution.y
+      value: 1080
+      objectReference: {fileID: 0}
     - target: {fileID: 4697667935425667573, guid: 3b48a3fbd7fae164c9e97778d791dda1, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -1504,6 +1550,14 @@ PrefabInstance:
       propertyPath: m_PixelsPerUnitMultiplier
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6277694286514179471, guid: 3b48a3fbd7fae164c9e97778d791dda1, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 613121695}
+    - target: {fileID: 6277694286514179471, guid: 3b48a3fbd7fae164c9e97778d791dda1, type: 3}
+      propertyPath: m_RenderMode
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7538236933781895940, guid: 3b48a3fbd7fae164c9e97778d791dda1, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0.5
@@ -1557,7 +1611,7 @@ GameObject:
   - component: {fileID: 1936139770}
   - component: {fileID: 1936139769}
   m_Layer: 5
-  m_Name: RerollPrice
+  m_Name: Price
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1583,7 +1637,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 1
+  m_text: 1 EXP
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1693,7 +1747,7 @@ GameObject:
   - component: {fileID: 1937123776}
   - component: {fileID: 1937123775}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: Name
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1771,7 +1825,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
