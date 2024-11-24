@@ -125,7 +125,7 @@ public class HotbarManager : MonoBehaviour
                     "Range: " + actionData.style.range + "\nDamage: " + actionData.style.damage;
             }
 
-            if (currentAction.m_action == actionData.action)
+            if (currentAction.m_action == actionData.action && SceneManager.GetActiveScene().name != "ShopScene")
             {
                 slot.GetComponent<Image>().color = Color.yellow; // Highlight selected action
             }
