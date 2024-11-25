@@ -13,6 +13,7 @@ public class HotbarManager : MonoBehaviour
     public GameObject actionSlotPrefab;
 
     private List<GameObject> actionSlots = new List<GameObject>();
+    private List<PlayerData.ActionData> actionsDisplayed = new List<PlayerData.ActionData>();
     float originalCount;
     void Start()
     {
@@ -48,6 +49,7 @@ public class HotbarManager : MonoBehaviour
                 }
 
                 actionSlots.Add(slot);
+                actionsDisplayed.Add(action);
             }
             else
             {
@@ -82,22 +84,48 @@ public class HotbarManager : MonoBehaviour
                 }
 
                 actionSlots.Add(slot);
+                actionsDisplayed.Add(action);
             }
         }
     }
 
     void Update()
     {
-        UpdateHotbar();
-        if(originalCount != actionSlots.Count) { 
-            foreach(var action in actionSlots)
+        if (FindAnyObjectByType<PlayerBase>().playerData.availableActions.Count > actionsDisplayed.Count && actionSlots.Count < 4)
+        {
+            foreach(PlayerData.ActionData action in FindAnyObjectByType<PlayerBase>().playerData.availableActions)
             {
-                Destroy(action);
+                bool exists = false;
+
+                foreach(PlayerData.ActionData da in actionsDisplayed)
+                {
+                    if(action.action == da.action && action.style == da.style)
+                        exists = true;
+                }
+
+                if(!exists)
+                {
+                    GameObject slot = Instantiate(actionSlotPrefab, hotbarPanel.transform);
+                    slot.transform.Find("Texts").transform.Find("Action Name").GetComponent<TextMeshProUGUI>().text = FindAnyObjectByType<ShopManager>().GetActionDisplayName(action);
+                    slot.transform.Find("Action Image").GetComponent<Image>().overrideSprite = FindAnyObjectByType<ShopManager>().GetActionImage(action);
+                    slot.transform.Find("Action Image").GetComponent<Image>().preserveAspect = true;
+                    slot.transform.Find("Texts").transform.Find("Action Type").GetComponent<TextMeshProUGUI>().text = action.actionType.ToString();
+
+                    if (action.actionType == PlayerBase.ActionType.PASSIVE || action.actionType == PlayerBase.ActionType.SINGLE_USE)
+                        slot.transform.Find("Texts").transform.Find("Action Stats").gameObject.SetActive(false);
+                    else
+                    {
+                        slot.transform.Find("Texts").transform.Find("Action Stats").GetComponent<TextMeshProUGUI>().text =
+                            "Range: " + action.style.range + "\nDamage: " + action.style.damage;
+                    }
+
+                    actionSlots.Add(slot);
+                    actionsDisplayed.Add(action);
+                }
             }
-            actionSlots.Clear();
-            InitializeHotbar();
-            originalCount = actionSlots.Count;
         }
+
+        UpdateHotbar();
     }
 
     void UpdateHotbar()
@@ -109,12 +137,12 @@ public class HotbarManager : MonoBehaviour
         }
 
         var player = playerActionManager.GetPlayer();
-
         var currentAction = player.GetAction();
 
-        for (int i = 0; i < actionSlots.Count; i++)
+        for (int i = 0; i < player.playerData.availableActions.Count; i++)
         {
             var actionData = player.playerData.availableActions[i];
+
             var slot = actionSlots[i];
 
             if (actionData.actionType == PlayerBase.ActionType.PASSIVE || actionData.actionType == PlayerBase.ActionType.SINGLE_USE)
