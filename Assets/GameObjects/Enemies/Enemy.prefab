@@ -155,6 +155,10 @@ MonoBehaviour:
   collider: {fileID: 0}
   rb2d: {fileID: 0}
   isAlive: 1
+  damageClips:
+  - {fileID: 8300000, guid: 94e3b24d75a0cda4980ec5134a8e6da9, type: 3}
+  - {fileID: 8300000, guid: fc8dae0e97caff040998967dcf1ff972, type: 3}
+  - {fileID: 8300000, guid: f76dafa51ef36cc42a86cc9a6ecbabdc, type: 3}
 --- !u!95 &3406163879126349490
 Animator:
   serializedVersion: 7

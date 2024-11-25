@@ -52,6 +52,7 @@ public class PlayerBase : MonoBehaviour
     private bool isAlive;
     public bool victory;
     public bool defeat;
+    [SerializeField] AudioClip[] damageClips;
 
     #endregion
 
@@ -176,7 +177,7 @@ public class PlayerBase : MonoBehaviour
 
         activeAction = Action.nothing;
     }
-    public void Damage(int val = 1) { health -= val; playerData.health-=val; }
+    public void Damage(int val = 1) { health -= val; playerData.health-=val; SoundEffectsManager.instance.PlaySoundFXClip(damageClips, transform, 1f); }
     public void SetRange(float newRange) { range = newRange; }
     public void SetInAction(bool newVal) { isInAction = newVal; }
     public void AddNewAction(Action action) { availableActions.Add(action); }

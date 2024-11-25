@@ -16,7 +16,7 @@ public class EnemyBase : MonoBehaviour
     private bool isMoving;
     private bool isShoooting;
     public bool isAlive;
-
+    [SerializeField]AudioClip[] damageClips; 
     // Start is called before the first frame update
     void Start()
     {
@@ -47,7 +47,7 @@ public class EnemyBase : MonoBehaviour
 
 
     public int GetHealth() { return health; }
-    public void Damage(int val) { health -= val; Debug.Log("OOF"); }
+    public void Damage(int val) { health -= val; SoundEffectsManager.instance.PlaySoundFXClip(damageClips, transform, 1f); }
     public float GetRange() { return range; }
     public void SetRange(float newRange) { range = newRange; }
     public float GetOldRange() { return oldRange; }
