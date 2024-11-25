@@ -25,6 +25,8 @@ public class PlayerActionManager : MonoBehaviour
     private bool hasShot = false; // Flag to track if a shot has been fired
     private bool actionPointReduced;
     private Animator animationToExecute;
+    [SerializeField] AudioClip[] shootClip;
+    [SerializeField] AudioClip[] walkingClips;
 
     #endregion
 
@@ -100,8 +102,10 @@ public class PlayerActionManager : MonoBehaviour
         {
             isMoving = true;
             activeActions[PlayerBase.ActionEnum.MOVE].Execute(player, newPos);
+            SoundEffectsManager.instance.PlaySoundFXClip(walkingClips, transform, 1f);
             if (!actionPointReduced)
             {
+                
                 actionPointReduced = true;
                 player.actionPoints++;
                 player.actionPoints = MathF.Min(player.actionPoints, player.maxActionPoints);
@@ -178,6 +182,7 @@ public class PlayerActionManager : MonoBehaviour
         if(action == PlayerBase.ActionEnum.SHOOT)
         {
             ((ShootAction)activeActions[PlayerBase.ActionEnum.SHOOT]).bulletPrefab = player.activeStyle.prefab;
+            SoundEffectsManager.instance.PlaySoundFXClip(shootClip, transform,1f);
             activeActions[PlayerBase.ActionEnum.SHOOT].Execute(player, newPos);
         }
         else

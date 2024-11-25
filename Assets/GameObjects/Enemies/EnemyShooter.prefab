@@ -176,6 +176,10 @@ MonoBehaviour:
   collider: {fileID: 779711176196000108}
   rb2d: {fileID: 4449962838169955803}
   isAlive: 0
+  damageClips:
+  - {fileID: 8300000, guid: 94e3b24d75a0cda4980ec5134a8e6da9, type: 3}
+  - {fileID: 8300000, guid: fc8dae0e97caff040998967dcf1ff972, type: 3}
+  - {fileID: 8300000, guid: f76dafa51ef36cc42a86cc9a6ecbabdc, type: 3}
 --- !u!114 &-5676328429409097243
 MonoBehaviour:
   m_ObjectHideFlags: 0
