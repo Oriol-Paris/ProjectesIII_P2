@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class EnemyMovementShooter : MonoBehaviour
 {
+    private enum TurnActions { APPROACH, SHOOT, BACK_AWAY, NOTHING };
+    private TurnActions turnAction;
+
     [SerializeField] private List<OG_MovementByMouse> players; // Array of player references
     private OG_MovementByMouse closestPlayer;
     private Vector3 closestPlayerPos;
@@ -29,7 +32,7 @@ public class EnemyMovementShooter : MonoBehaviour
         {
             players.Add(player);
         }
-        FindClosestPlayer();
+        DecideAction();
     }
 
     void Update()
@@ -38,56 +41,32 @@ public class EnemyMovementShooter : MonoBehaviour
 
         if (enemyStats.isAlive && closestPlayer != null)
         {
-            bool currentIsMoving = closestPlayer.GetIsMoving();
-
-            // Only take action on a new turn (when GetIsMoving toggles from false to true)
-            if (closestPlayer.t < 1 && currentIsMoving)
+            if (closestPlayer.isMoving)
             {
-                if (!haveChosenAnAction)
-                {
-                    TakeAction();
-                    haveChosenAnAction = true;
-                }
+                ExecuteAction();
             }
-            if (!currentIsMoving)
-            {
-                haveChosenAnAction = false;
-            }
-            
-            // Update the last state of GetIsMoving
-            lastIsMovingState = currentIsMoving;
         }
     }
 
     // Decides whether to shoot or move based on distance
-    private void TakeAction()
+    private void ExecuteAction()
     {
-        FindClosestPlayer();
-         distanceToPlayer = Vector3.Distance(transform.position, closestPlayerPos);
-        if (!haveChosenAnAction&&closestPlayer.isMoving)
+        switch (turnAction)
         {
-            if (distanceToPlayer > range)
-            {
-                // Move towards the player if out of range
-                if(haveChosenAnAction)
+            case TurnActions.APPROACH:
                 MoveTowardsPlayer();
                 this.GetComponent<Animator>().SetBool("isMoving", true);
-            }
-            else if (distanceToPlayer < minDistance)
-            {
-                if (haveChosenAnAction)
-                    // Move away from the player if too close
-                    MoveAwayFromPlayer();
-                this.GetComponent<Animator>().SetBool("isMoving", true);
-            }
-            else if (!hasShot && !isReloading) // Shoot only once per turn
-            {
-                if (haveChosenAnAction)
-                    // In range, shoot
-                    this.GetComponent<Animator>().SetBool("isMoving", false);
+                break;
+
+            case TurnActions.SHOOT:
+                this.GetComponent<Animator>().SetBool("isMoving", false);
                 StartCoroutine(AttackCoroutine());
-                StartCoroutine(Reload());
-            }
+                break;
+
+            case TurnActions.BACK_AWAY:
+                MoveAwayFromPlayer();
+                this.GetComponent<Animator>().SetBool("isMoving", true);
+                break;
         }
     }
 
@@ -124,16 +103,19 @@ public class EnemyMovementShooter : MonoBehaviour
     // Shoots a bullet towards the closest player
     private void Shoot()
     {
-        Debug.Log("BANG");
-        GameObject bullet = Instantiate(bulletShot, transform.position, Quaternion.identity);
-        GunBullet bulletScript = bullet.GetComponent<GunBullet>();
-        bulletScript.isFromPlayer = false;
-        bulletScript.Shoot((closestPlayerPos - transform.position).normalized); // Set bullet direction
+        if(!hasShot)
+        {
+            Debug.Log("BANG");
+            GameObject bullet = Instantiate(bulletShot, transform.position, Quaternion.identity);
+            GunBullet bulletScript = bullet.GetComponent<GunBullet>();
+            bulletScript.isFromPlayer = false;
+            bulletScript.Shoot((closestPlayerPos - transform.position).normalized); // Set bullet direction
 
-        // Register the bullet with the closest player's movement script
-        closestPlayer.RegisterBullet(bulletScript);
+            // Register the bullet with the closest player's movement script
+            closestPlayer.RegisterBullet(bulletScript);
 
-        hasShot = true; // Mark that it has shot this turn
+            hasShot = true; // Mark that it has shot this turn
+        }
     }
 
     // Reload coroutine to wait until the next GetIsMoving toggle after shooting
@@ -160,5 +142,40 @@ public class EnemyMovementShooter : MonoBehaviour
         Shoot();
 
         fx.ResetTrigger("playFX");
+
+        StartCoroutine(Reload());
+    }
+
+    public void DecideAction()
+    {
+        FindClosestPlayer();
+        distanceToPlayer = Vector3.Distance(transform.position, closestPlayerPos);
+
+        if (distanceToPlayer > range)
+        {
+            // Move towards the player if out of range
+            turnAction = TurnActions.APPROACH;
+        }
+        else if (distanceToPlayer < minDistance)
+        {
+            // Move away from the player if too close
+            turnAction = TurnActions.BACK_AWAY;    
+        }
+        else if (!hasShot && !isReloading) // Shoot only once per turn
+        {
+            //In range, shoot
+            turnAction = TurnActions.SHOOT;
+        }
+        else
+        {
+            //Something went wrong
+            Debug.LogError("EnemyShooter can't decide");
+            turnAction = TurnActions.NOTHING;
+        }
+    }
+
+    public void ResetTurnAction()
+    {
+        turnAction = TurnActions.NOTHING;
     }
 }
