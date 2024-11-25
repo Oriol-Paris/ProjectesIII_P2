@@ -41,12 +41,19 @@ public class EnemyMovementShooter : MonoBehaviour
             bool currentIsMoving = closestPlayer.GetIsMoving();
 
             // Only take action on a new turn (when GetIsMoving toggles from false to true)
-            if (!currentIsMoving)
+            if (closestPlayer.t > 1 && currentIsMoving)
             {
                 if (!haveChosenAnAction)
                 {
                     TakeAction();
+                    haveChosenAnAction = true;
+
+
                 }
+            }
+            if (!currentIsMoving)
+            {
+                haveChosenAnAction = false;
             }
             
             // Update the last state of GetIsMoving
@@ -64,19 +71,22 @@ public class EnemyMovementShooter : MonoBehaviour
             if (distanceToPlayer > range)
             {
                 // Move towards the player if out of range
+                if(haveChosenAnAction)
                 MoveTowardsPlayer();
                 this.GetComponent<Animator>().SetBool("isMoving", true);
             }
             else if (distanceToPlayer < minDistance)
             {
-                // Move away from the player if too close
-                MoveAwayFromPlayer();
+                if (haveChosenAnAction)
+                    // Move away from the player if too close
+                    MoveAwayFromPlayer();
                 this.GetComponent<Animator>().SetBool("isMoving", true);
             }
             else if (!hasShot && !isReloading) // Shoot only once per turn
             {
-                // In range, shoot
-                this.GetComponent<Animator>().SetBool("isMoving", false);
+                if (haveChosenAnAction)
+                    // In range, shoot
+                    this.GetComponent<Animator>().SetBool("isMoving", false);
                 StartCoroutine(AttackCoroutine());
                 StartCoroutine(Reload());
             }

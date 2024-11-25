@@ -28,6 +28,7 @@ public class OG_MovementByMouse : MonoBehaviour
 
     void Start()
     {
+        this.enabled = false;
         placeSelected = false;
         playerPosition = transform.position;
 
@@ -39,6 +40,7 @@ public class OG_MovementByMouse : MonoBehaviour
         playerActionManager = GetComponent<PlayerActionManager>();
 
         timer = movementTimeLimit; // Initialize timer
+        this.enabled = true;
     }
 
     void Update()

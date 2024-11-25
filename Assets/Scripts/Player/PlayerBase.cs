@@ -13,18 +13,21 @@ public class PlayerBase : MonoBehaviour
     [System.Serializable]
     public struct Action
     {
-        public Action(ActionType type, ActionEnum action, KeyCode key, PlayerData.BulletStyle style = null)
+        public Action(ActionType type, ActionEnum action, KeyCode key, int cost, PlayerData.BulletStyle style = null)
         {
             m_action = action;
             m_key = key;
             m_style = style;
+            m_cost = cost;
         }
 
-        public static Action nothing { get { return new Action(ActionType.ACTIVE, ActionEnum.NOTHING, KeyCode.None); } }
+        public static Action nothing { get { return new Action(ActionType.ACTIVE, ActionEnum.NOTHING, KeyCode.None,0); } }
 
         public ActionEnum m_action { get; private set; }
         public KeyCode m_key { get; private set; }
         public PlayerData.BulletStyle m_style { get; private set; }
+
+        public int m_cost { get;private set; }
 
         public void ChangeKey(KeyCode newKey) { m_key = newKey; }
     }
@@ -46,6 +49,7 @@ public class PlayerBase : MonoBehaviour
     private bool isInAction;
     private bool isAlive;
     public bool victory;
+    public bool defeat;
 
     #endregion
 
@@ -78,6 +82,7 @@ public class PlayerBase : MonoBehaviour
                 actionData.actionType,
                 actionData.action,
                 actionData.key,
+                actionData.cost,
                 actionData.style
             ));
         }
@@ -87,7 +92,7 @@ public class PlayerBase : MonoBehaviour
 
     void Update()
     {
-        if (!victory && isAlive)
+        if (!victory && isAlive && !defeat)
         {
             if (!checkMovement.GetIsMoving())
             {

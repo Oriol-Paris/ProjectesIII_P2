@@ -23,7 +23,7 @@ public class PlayerActionManager : MonoBehaviour
 
     private CombatManager combatManager;
     private bool hasShot = false; // Flag to track if a shot has been fired
-
+    private bool actionPointReduced;
     private Animator animationToExecute;
 
     #endregion
@@ -100,15 +100,26 @@ public class PlayerActionManager : MonoBehaviour
         {
             isMoving = true;
             activeActions[PlayerBase.ActionEnum.MOVE].Execute(player, newPos);
+            if (!actionPointReduced)
+            {
+                actionPointReduced = true;
+                playerData.actionPoints++;
+            }
         }
 
         if (currentAction.m_action == PlayerBase.ActionEnum.SHOOT && (!player.GetComponent<OG_MovementByMouse>().isMoving || isShooting))
         {
+            if (currentAction.m_cost < playerData.actionPoints) 
             if (!hasShot)
             {
                 isShooting = true;
                 hasShot = true; // Set the flag to indicate a shot has been fired
                 StartCoroutine(AttackCoroutine(PlayerBase.ActionEnum.SHOOT, newPos));
+                if (!actionPointReduced)
+                {
+                    actionPointReduced = true;
+                    playerData.actionPoints-=currentAction.m_cost;
+                }
             }
         }
 
@@ -116,11 +127,21 @@ public class PlayerActionManager : MonoBehaviour
         {
             isMoving = true;
             StartCoroutine(AttackCoroutine(PlayerBase.ActionEnum.MELEE, newPos));
+            if (!actionPointReduced)
+            {
+                actionPointReduced = true;
+                playerData.actionPoints--;
+            }
         }
 
         if (currentAction.m_action == PlayerBase.ActionEnum.HEAL && isHealing)
         {
             passiveActions[PlayerBase.ActionEnum.HEAL].Execute(player, newPos);
+            if (!actionPointReduced)
+            {
+                actionPointReduced = true;
+                playerData.actionPoints--;
+            }
         }
 
         if (t >= 1)
@@ -144,7 +165,7 @@ public class PlayerActionManager : MonoBehaviour
         this.GetComponent<Animator>().SetTrigger("attack");
         fx.SetTrigger("playFX");
 
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.4f);
 
         if(action == PlayerBase.ActionEnum.SHOOT)
         {

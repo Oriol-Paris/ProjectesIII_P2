@@ -32,18 +32,20 @@ public class PlayerData : ScriptableObject
     [System.Serializable]
     public class ActionData
     {
-        public ActionData(PlayerBase.ActionType _actionType, PlayerBase.ActionEnum _action, KeyCode _key, BulletStyle _style = null)
+        public ActionData(PlayerBase.ActionType _actionType, PlayerBase.ActionEnum _action, KeyCode _key, int _cost, BulletStyle _style = null)
         {
             actionType = _actionType;
             action = _action;
             key = _key;
             style = _style;
+            cost = _cost;
         }
         public PlayerBase.ActionType actionType;
         public PlayerBase.ActionEnum action;
         public PlayerBase player;
         public KeyCode key;
         public BulletStyle style;
+        public int cost;
         
     }
 }
