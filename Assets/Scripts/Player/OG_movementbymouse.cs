@@ -21,11 +21,14 @@ public class OG_MovementByMouse : MonoBehaviour
     private PlayerActionManager playerActionManager;
 
     // Timer variables
-    [SerializeField] private float movementTimeLimit = 5f; // Adjustable time limit
-    private float timer;
+    [SerializeField] public float movementTimeLimit = 5f; // Adjustable time limit
+    public float timer;
+
+    private List<BulletPrefab> bullets = new List<BulletPrefab>();
 
     void Start()
     {
+        this.enabled = false;
         placeSelected = false;
         playerPosition = transform.position;
 
@@ -37,10 +40,28 @@ public class OG_MovementByMouse : MonoBehaviour
         playerActionManager = GetComponent<PlayerActionManager>();
 
         timer = movementTimeLimit; // Initialize timer
+        this.enabled = true;
     }
 
     void Update()
     {
+        if (bullets.Count > 0)
+        {
+            for (int i = 0; i < bullets.Count; i++)
+            {
+                if (bullets[i].isFromPlayer)
+                {
+                    if (bullets[i].isHit&&i==bullets.Count-1)
+                    {
+                        isMoving = false;
+                        positionDesired = transform.position;
+                        t = 1;
+                        bullets.Remove(bullets[i]);
+                        return;
+                    }
+                }
+            }
+        }
         if (combatManager != null && combatManager.allEnemiesDead)
         {
             return; // Do not allow any mouse interactions if victory condition is met
@@ -141,6 +162,15 @@ public class OG_MovementByMouse : MonoBehaviour
                 }
             }
         }
+        else if (!isMoving && !placeSelected)
+        {
+            // Resume all bullets when player starts moving again
+            foreach (var bullet in bullets)
+            {
+                if(bullet != null)
+                bullet.Resume();
+            }
+        }
     }
 
     private void StopMovement()
@@ -152,6 +182,13 @@ public class OG_MovementByMouse : MonoBehaviour
         t = 1;
         timer = movementTimeLimit; // Reset timer
         playerActionManager.ResetFlags();
+
+        // Pause all bullets
+        foreach (var bullet in bullets)
+        {
+            if(bullet != null)
+            bullet.Pause();
+        }
     }
 
     private void UpdateLineRenderer(Vector3 targetPosition)
@@ -212,5 +249,20 @@ public class OG_MovementByMouse : MonoBehaviour
                 t = 1;
             }
         }
+    }
+
+    public void RegisterBullet(BulletPrefab bullet)
+    {
+        bullets.Add(bullet);
+    }
+
+    public void UnregisterBullet(BulletPrefab bullet)
+    {
+        bullets.Remove(bullet);
+    }
+
+    public List<BulletPrefab> GetPausedBullets()
+    {
+        return bullets;
     }
 }

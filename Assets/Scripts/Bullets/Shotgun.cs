@@ -2,10 +2,10 @@ using UnityEngine;
 
 public class Shotgun : BulletPrefab
 {
-    public bool isHit;
     private Vector3 targetPosition; // Target position the bullet is moving towards
-    private float lifetime = 5f; // Lifetime in seconds before auto-destruction
-    [SerializeField] Vector3 offset;
+    //private float lifetime = 5f; // Lifetime in seconds before auto-destruction
+    private Vector3 offset; // Offset for the bullet
+
     void Start()
     {
         isHit = false;
@@ -15,16 +15,19 @@ public class Shotgun : BulletPrefab
 
     void Update()
     {
+        if (IsPaused()) return;
+
         // Move towards the target position
-        transform.position = Vector3.MoveTowards(transform.position, targetPosition+offset, speed * Time.deltaTime);
+        transform.position = Vector3.MoveTowards(transform.position, targetPosition, speed * Time.deltaTime);
 
         // Decrease lifetime over time
-        lifetime -= Time.deltaTime;
+        //lifetime -= Time.deltaTime;
 
         // Check if the bullet has reached its destination, hit something, or if its lifetime has expired
-        if (isHit || Vector3.Distance(transform.position, targetPosition+offset) < 0.1f || lifetime <= 0f)
+        if (isHit || Vector3.Distance(transform.position, targetPosition) < 0.1f)
         {
             DestroyBullet();
+
         }
     }
 
@@ -56,13 +59,16 @@ public class Shotgun : BulletPrefab
 
     public override void Shoot(Vector3 direction)
     {
-        targetPosition += offset+direction;
-        // Set target position in the direction, adjust range as needed
+        // Store the original direction and target position
+        originalDirection = direction;
         targetPosition = transform.position + direction.normalized * 20f;
     }
 
-    private void DestroyBullet()
+    public void Shoot(Vector3 direction, Vector3 offset)
     {
-        Destroy(gameObject);
+        this.offset = offset;
+        // Store the original direction and target position
+        originalDirection = direction + offset;
+        targetPosition = transform.position + (direction + offset).normalized * 20f;
     }
 }

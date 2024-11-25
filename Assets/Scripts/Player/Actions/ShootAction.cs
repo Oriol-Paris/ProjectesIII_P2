@@ -5,6 +5,12 @@ public class ShootAction : ActiveAction
 {
     public GameObject spawnedBullet;
     public GameObject bulletPrefab;
+    public Vector3[] offsets = new Vector3[]
+    {
+        new Vector3(-1f, 0, 0), // Left offset
+        Vector3.zero,             // Center
+        new Vector3(1f, 0, 0)   // Right offset
+    };
 
     public override void Execute(PlayerBase player, Vector3 targetPosition)
     {
@@ -14,19 +20,59 @@ public class ShootAction : ActiveAction
             return;
         }
 
+        OG_MovementByMouse movementScript = player.GetComponent<OG_MovementByMouse>();
+
         // Instantiate the bullet at the player's position
         GameObject bulletInstance = Instantiate(bulletPrefab, player.transform.position, Quaternion.identity);
 
-        // Get the GunBullet component and set the direction
-        BulletPrefab gunBullet = bulletInstance.GetComponent<BulletPrefab>();
-        if (gunBullet != null)
+        // Determine the type of bullet and call the appropriate Shoot method
+        BulletPrefab bullet = bulletInstance.GetComponent<BulletPrefab>();
+        if (bullet != null)
         {
-            Vector3 direction = (targetPosition - player.transform.position).normalized*gunBullet.GetRange();
-            gunBullet.Shoot(direction);
+            Vector3 direction = (targetPosition - player.transform.position).normalized;
+
+            if (bullet is Shotgun)
+            {
+                // Loop through each offset and instantiate a bullet for Shotgun
+                foreach (var offset in offsets)
+                {
+                    GameObject shotgunBulletInstance = Instantiate(bulletPrefab, player.transform.position, Quaternion.identity);
+                    Shotgun shotgunBullet = shotgunBulletInstance.GetComponent<Shotgun>();
+                    if (shotgunBullet != null)
+                    {
+                        shotgunBullet.Shoot(direction, offset);
+                        movementScript.RegisterBullet(shotgunBullet);
+                    }
+                    else
+                    {
+                        Debug.LogError("Shotgun component not found on the instantiated bullet.");
+                    }
+                }
+            }
+            else if (bullet is GunBullet)
+            {
+                bullet.Shoot(direction);
+                movementScript.RegisterBullet(bullet);
+            }
+            else if (bullet is LaserBullet)
+            {
+                bullet.Shoot(direction);
+                movementScript.RegisterBullet(bullet);
+            }
+            else
+            {
+                Debug.LogError("Unknown bullet type.");
+            }
+            if (bullet.isHit)
+            {
+                movementScript.positionDesired = movementScript.transform.position;
+                movementScript.t = 1;
+                movementScript.isMoving = false;
+            }
         }
         else
         {
-            Debug.LogError("GunBullet component not found on the instantiated bullet.");
+            Debug.LogError("BulletPrefab component not found on the instantiated bullet.");
         }
     }
 }

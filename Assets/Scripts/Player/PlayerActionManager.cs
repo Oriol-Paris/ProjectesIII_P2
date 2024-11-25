@@ -23,7 +23,7 @@ public class PlayerActionManager : MonoBehaviour
 
     private CombatManager combatManager;
     private bool hasShot = false; // Flag to track if a shot has been fired
-
+    private bool actionPointReduced;
     private Animator animationToExecute;
 
     #endregion
@@ -66,7 +66,10 @@ public class PlayerActionManager : MonoBehaviour
                     }
                     else if (actionData.action == PlayerBase.ActionEnum.SHOOT)
                     {
-                        activeActions.Add(actionData.action, new ShootAction());
+                        if (!activeActions.ContainsKey(actionData.action))
+                        {
+                            activeActions.Add(actionData.action, new ShootAction());
+                        }
                     }
                     else if (actionData.action == PlayerBase.ActionEnum.MELEE)
                     {
@@ -97,27 +100,53 @@ public class PlayerActionManager : MonoBehaviour
         {
             isMoving = true;
             activeActions[PlayerBase.ActionEnum.MOVE].Execute(player, newPos);
+            if (!actionPointReduced)
+            {
+                actionPointReduced = true;
+                player.actionPoints++;
+                playerData.actionPoints++;
+            }
         }
 
         if (currentAction.m_action == PlayerBase.ActionEnum.SHOOT && (!player.GetComponent<OG_MovementByMouse>().isMoving || isShooting))
         {
+            if (currentAction.m_cost <= playerData.actionPoints) 
             if (!hasShot)
             {
                 isShooting = true;
                 hasShot = true; // Set the flag to indicate a shot has been fired
                 StartCoroutine(AttackCoroutine(PlayerBase.ActionEnum.SHOOT, newPos));
+                if (!actionPointReduced)
+                {
+                    actionPointReduced = true;
+                    player.actionPoints-=currentAction.m_cost;
+                    playerData.actionPoints-=currentAction.m_cost;
+                }
             }
         }
 
         if (currentAction.m_action == PlayerBase.ActionEnum.MELEE && (!player.GetComponent<OG_MovementByMouse>().GetIsMoving() || isMoving))
         {
-            isMoving = true;
-            StartCoroutine(AttackCoroutine(PlayerBase.ActionEnum.MELEE, newPos));
+            if (currentAction.m_cost <= playerData.actionPoints) {
+                isMoving = true;
+                StartCoroutine(AttackCoroutine(PlayerBase.ActionEnum.MELEE, newPos));
+                if (!actionPointReduced)
+                {
+                    actionPointReduced = true;
+                    player.actionPoints -= currentAction.m_cost;
+                    playerData.actionPoints -= currentAction.m_cost;
+                }
+            }
         }
 
         if (currentAction.m_action == PlayerBase.ActionEnum.HEAL && isHealing)
         {
             passiveActions[PlayerBase.ActionEnum.HEAL].Execute(player, newPos);
+            if (!actionPointReduced)
+            {
+                actionPointReduced = true;
+                playerData.actionPoints--;
+            }
         }
 
         if (t >= 1)
@@ -131,6 +160,7 @@ public class PlayerActionManager : MonoBehaviour
         
         hasShot = false; // Reset the flag when the player stops moving
         turnAdded = false;
+        actionPointReduced = false;
     }
 
     public PlayerBase GetPlayer() { return player; }
@@ -141,7 +171,7 @@ public class PlayerActionManager : MonoBehaviour
         this.GetComponent<Animator>().SetTrigger("attack");
         fx.SetTrigger("playFX");
 
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.4f);
 
         if(action == PlayerBase.ActionEnum.SHOOT)
         {

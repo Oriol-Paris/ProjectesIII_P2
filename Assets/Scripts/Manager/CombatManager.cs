@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -7,6 +8,7 @@ public class CombatManager : MonoBehaviour
     public List<PlayerBase> playerParty = new List<PlayerBase>();  // Lista para jugadores
     public EnemyBase[] enemyParty;  // Array para enemigos
     public bool allEnemiesDead;
+    public bool allPlayersDead;
     [SerializeField] private int numberOfTurns;
     [SerializeField] Canvas winCondition;
 
@@ -34,11 +36,16 @@ public class CombatManager : MonoBehaviour
     void Update()
     {
         allEnemiesDead = true;
-
+        allPlayersDead = true;
         for (int i = 0; i < enemyParty.Length; i++)
         {
             if (enemyParty[i].isAlive)
                 allEnemiesDead = false;
+        }
+        for(int i = 0; i< playerParty.Count; i++)
+        {
+            if (playerParty[i].GetIsAlive())
+                allPlayersDead = false;
         }
 
         // Si todos los enemigos están muertos y aún no hemos calculado la experiencia
@@ -46,6 +53,8 @@ public class CombatManager : MonoBehaviour
         {
             // Habilitar la condición de victoria
             winCondition.enabled = true;
+            winCondition.GetComponentInChildren<TextMeshProUGUI>().text = "YOU WIN!";
+
 
             // Realizar el cálculo de la experiencia
             for (int i = 0; i < playerParty.Count; i++)
@@ -63,6 +72,17 @@ public class CombatManager : MonoBehaviour
 
             // Marcar que ya se calculó la experiencia
             hasCalculatedExp = true;
+        }
+        if (allPlayersDead)
+        {
+            // Habilitar la condición de victoria
+            winCondition.enabled = true;
+            winCondition.GetComponentInChildren<TextMeshProUGUI>().text = "YOU LOSE";
+            for (int i = 0;i< playerParty.Count;i++)
+            {
+                playerParty[i].defeat = true;
+            }
+            
         }
     }
 }

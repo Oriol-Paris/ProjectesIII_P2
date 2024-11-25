@@ -2,15 +2,29 @@ using UnityEngine;
 using TMPro;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using static PlayerData;
+using UnityEngine.EventSystems;
 
 public class ShopManager : MonoBehaviour
 {
+    [System.Serializable]
+    public class ItemImage
+    {
+        public Sprite whiteImage;
+        public Sprite blackImage;
+    }
+
+
     public TextMeshProUGUI rerollText;
     [SerializeField] private GameObject buttonPrefab; // Reference to the button prefab
     public Transform buttonContainer; // Reference to the container where buttons will be instantiated
     [SerializeField] public PlayerBase player;
     [SerializeField] public TextMeshProUGUI boughtItem;
     [SerializeField] public TextMeshProUGUI currentXP;
+    public ItemImage moveImage;
+    public ItemImage gunImage;
+    public ItemImage shotgunImage;
+    public ItemImage healImage;
 
     public int rerollPrice;
     bool actionExists;
@@ -36,7 +50,7 @@ public class ShopManager : MonoBehaviour
         {
             player.playerData.exp -= rerollPrice;
             rerollPrice++;
-            rerollText.text = rerollPrice + "";
+            rerollText.text = rerollPrice + " EXP";
             boughtItem.enabled = false;
 
             // Clear existing buttons and price pool
@@ -59,22 +73,44 @@ public class ShopManager : MonoBehaviour
         int index = buttons.FindIndex(button => button.transform.Find("Item Name").GetComponent<TextMeshProUGUI>().text == itemName);
         if (actionData != null)
         {
-            for(int i = 0;i<player.playerData.availableActions.Count;i++) { 
-                
-                // Check if the action type already exists in the player's available actions
-                actionExists = player.playerData.availableActions.Exists(action => 
-                actionData.action == player.playerData.availableActions[i].action && actionData.style == player.playerData.availableActions[i].style);
-               
-                if (actionExists)
-                {
-                    
-                    player.playerData.exp -= pricePool[index];
-                    boughtItem.enabled = true;
-                    IncreaseStat(player.playerData.availableActions[i]);
-                    return;
-                }
+            bool actionExists = false;
+            PlayerData.ActionData repeatAction = null;
 
+            foreach (var playerAction in player.playerData.availableActions)
+            {
+                if(actionData.action == playerAction.action)
+                {
+                    if(actionData.action == PlayerBase.ActionEnum.SHOOT)
+                    {
+                        if(actionData.style.prefab == playerAction.style.prefab)
+                        {
+                            Debug.Log("MISMOESTILO");
+                            actionExists = true;
+                            repeatAction = playerAction;
+                        }
+                    }
+                    else
+                    {
+                        actionExists = true;
+                        repeatAction = playerAction;
+                    }
+                }
             }
+
+            if (actionExists)
+            {
+                for (int i = 0; i < player.playerData.availableActions.Count; ++i)
+                {
+                    if (player.playerData.availableActions[i] == repeatAction)
+                    {
+                        player.playerData.exp -= pricePool[index];
+                        boughtItem.enabled = true;
+                        IncreaseStat(player.playerData.availableActions[i]);
+                        return;
+                    }
+                }
+            }
+
             if (!actionExists&&index != -1 && player.playerData.exp >= pricePool[index])
             {
                 player.playerData.exp -= pricePool[index];
@@ -121,10 +157,10 @@ public class ShopManager : MonoBehaviour
 
     private void InitializeShop()
     {
-        PlayerData.ActionData shotgunShot = new PlayerData.ActionData(PlayerBase.ActionType.ACTIVE, PlayerBase.ActionEnum.SHOOT, KeyCode.None, player.playerData.shotgun);
-        PlayerData.ActionData gunShot = new PlayerData.ActionData(PlayerBase.ActionType.ACTIVE, PlayerBase.ActionEnum.SHOOT, KeyCode.None, player.playerData.gun);
-        PlayerData.ActionData heal = new PlayerData.ActionData(PlayerBase.ActionType.PASSIVE, PlayerBase.ActionEnum.HEAL, KeyCode.None, player.playerData.healStyle);
-        PlayerData.ActionData move = new PlayerData.ActionData(PlayerBase.ActionType.ACTIVE, PlayerBase.ActionEnum.MOVE, KeyCode.None, player.playerData.moveStyle);
+        PlayerData.ActionData shotgunShot = new PlayerData.ActionData(PlayerBase.ActionType.ACTIVE, PlayerBase.ActionEnum.SHOOT, KeyCode.None, 1,player.playerData.shotgun);
+        PlayerData.ActionData gunShot = new PlayerData.ActionData(PlayerBase.ActionType.ACTIVE, PlayerBase.ActionEnum.SHOOT, KeyCode.None, 1,player.playerData.gun);
+        PlayerData.ActionData heal = new PlayerData.ActionData(PlayerBase.ActionType.PASSIVE, PlayerBase.ActionEnum.HEAL, KeyCode.None, 1, player.playerData.healStyle);
+        PlayerData.ActionData move = new PlayerData.ActionData(PlayerBase.ActionType.ACTIVE, PlayerBase.ActionEnum.MOVE, KeyCode.None, 1, player.playerData.moveStyle);
         actionPool = new List<PlayerData.ActionData>
         {
             shotgunShot, gunShot, heal, move
@@ -147,26 +183,32 @@ public class ShopManager : MonoBehaviour
             TextMeshProUGUI itemText = button.transform.Find("Item Name").GetComponent<TextMeshProUGUI>();
             itemText.text = GetActionDisplayName(actionData);
 
+            //Set item image
+            Image itemImage = button.transform.Find("Item Image").GetComponent<Image>();
+            itemImage.overrideSprite = GetActionImage(actionData);
+            itemImage.preserveAspect = true;
+            //itemImage.SetNativeSize();
+
             // Set price text
             int randomPrice = Random.Range(10, 100); // Random price between 10 and 100
             pricePool.Add(randomPrice);
             TextMeshProUGUI priceText = button.transform.Find("Price").GetComponent<TextMeshProUGUI>();
-            priceText.text = randomPrice.ToString();
+            priceText.text = randomPrice.ToString() + " EXP";
 
             // Add button click listener
             button.GetComponent<Button>().onClick.AddListener(() => BuyItem(itemText));
         }
     }
 
-    private string GetActionDisplayName(PlayerData.ActionData actionData)
+    public string GetActionDisplayName(PlayerData.ActionData actionData)
     {
         if (actionData.action == PlayerBase.ActionEnum.SHOOT)
         {
-            if (actionData.style == player.playerData.gun)
+            if (actionData.style.prefab == player.playerData.gun.prefab)
             {
                 return "Gun";
             }
-            else if (actionData.style == player.playerData.shotgun)
+            else if (actionData.style.prefab == player.playerData.shotgun.prefab)
             {
                 return "Shotgun";
             }
@@ -180,5 +222,29 @@ public class ShopManager : MonoBehaviour
             return "Move";
         }
         return actionData.action.ToString();
+    }
+
+    public Sprite GetActionImage(PlayerData.ActionData actionData)
+    {
+        if (actionData.action == PlayerBase.ActionEnum.SHOOT)
+        {
+            if (actionData.style.prefab == player.playerData.gun.prefab)
+            {
+                return gunImage.whiteImage;
+            }
+            else if (actionData.style.prefab == player.playerData.shotgun.prefab)
+            {
+                return shotgunImage.whiteImage;
+            }
+        }
+        else if (actionData.action == PlayerBase.ActionEnum.HEAL)
+        {
+            return healImage.whiteImage;
+        }
+        else if (actionData.action == PlayerBase.ActionEnum.MOVE)
+        {
+            return moveImage.whiteImage;
+        }
+        return null;
     }
 }
