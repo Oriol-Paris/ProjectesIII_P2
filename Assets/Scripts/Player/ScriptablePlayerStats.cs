@@ -4,8 +4,10 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "PlayerData", menuName = "ScriptableObjects/PlayerData")]
 public class PlayerData : ScriptableObject
 {
-    public int health;
-    public int actionPoints;
+    public float health;
+    public float maxHealth;
+    public float actionPoints;
+    public float maxActionPoints;
     public int baseRange;
     public int exp;
     public bool isAlive;
