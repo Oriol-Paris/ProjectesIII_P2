@@ -36,8 +36,10 @@ public class PlayerBase : MonoBehaviour
 
     public PlayerData.BulletStyle activeStyle { get; private set; }
 
-    public int health;
-    public int actionPoints;
+    public float health;
+    public float maxHealth;
+    public float actionPoints;
+    public float maxActionPoints;
     public float range;
     public int exp = 0;
     private OG_MovementByMouse checkMovement;
@@ -71,8 +73,10 @@ public class PlayerBase : MonoBehaviour
     private void LoadPlayerData()
     {
         // Load health, range, and other properties from the ScriptableObject
+        maxHealth = playerData.maxHealth;
         health = playerData.health;
-        actionPoints = playerData.actionPoints;
+        actionPoints = playerData.maxActionPoints;
+        maxActionPoints = playerData.maxActionPoints;
         exp = playerData.exp;
 
         // Load available actions from playerData and populate availableActions list
@@ -129,7 +133,7 @@ public class PlayerBase : MonoBehaviour
             collision.gameObject.GetComponent<EnemyMovement>().Attack();
             this.GetComponent<Animator>().SetTrigger("hit");
 
-            if (health > 0)
+            if (health > 0||playerData.health>0)
             {
                 Damage();
             }
@@ -161,8 +165,8 @@ public class PlayerBase : MonoBehaviour
 
     #region SETTERS
 
-    public void Damage(int val = 1) { health -= val; Debug.Log("OOF"); }
-    public void Heal(int amount) { health += amount; Debug.Log("Healed by " + amount); activeAction = Action.nothing; }
+    public void Damage(int val = 1) { health -= val; playerData.health-=val; }
+    public void Heal(int amount) { health += amount; playerData.health+=amount; activeAction = Action.nothing; }
     public void SetRange(float newRange) { range = newRange; }
     public void SetInAction(bool newVal) { isInAction = newVal; }
     public void AddNewAction(Action action) { availableActions.Add(action); }

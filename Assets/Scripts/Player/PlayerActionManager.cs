@@ -103,13 +103,14 @@ public class PlayerActionManager : MonoBehaviour
             if (!actionPointReduced)
             {
                 actionPointReduced = true;
+                player.actionPoints++;
                 playerData.actionPoints++;
             }
         }
 
         if (currentAction.m_action == PlayerBase.ActionEnum.SHOOT && (!player.GetComponent<OG_MovementByMouse>().isMoving || isShooting))
         {
-            if (currentAction.m_cost < playerData.actionPoints) 
+            if (currentAction.m_cost <= playerData.actionPoints) 
             if (!hasShot)
             {
                 isShooting = true;
@@ -118,6 +119,7 @@ public class PlayerActionManager : MonoBehaviour
                 if (!actionPointReduced)
                 {
                     actionPointReduced = true;
+                    player.actionPoints-=currentAction.m_cost;
                     playerData.actionPoints-=currentAction.m_cost;
                 }
             }
@@ -125,12 +127,15 @@ public class PlayerActionManager : MonoBehaviour
 
         if (currentAction.m_action == PlayerBase.ActionEnum.MELEE && (!player.GetComponent<OG_MovementByMouse>().GetIsMoving() || isMoving))
         {
-            isMoving = true;
-            StartCoroutine(AttackCoroutine(PlayerBase.ActionEnum.MELEE, newPos));
-            if (!actionPointReduced)
-            {
-                actionPointReduced = true;
-                playerData.actionPoints--;
+            if (currentAction.m_cost <= playerData.actionPoints) {
+                isMoving = true;
+                StartCoroutine(AttackCoroutine(PlayerBase.ActionEnum.MELEE, newPos));
+                if (!actionPointReduced)
+                {
+                    actionPointReduced = true;
+                    player.actionPoints -= currentAction.m_cost;
+                    playerData.actionPoints -= currentAction.m_cost;
+                }
             }
         }
 
@@ -155,6 +160,7 @@ public class PlayerActionManager : MonoBehaviour
         
         hasShot = false; // Reset the flag when the player stops moving
         turnAdded = false;
+        actionPointReduced = false;
     }
 
     public PlayerBase GetPlayer() { return player; }
