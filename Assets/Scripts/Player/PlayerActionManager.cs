@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerActionManager : MonoBehaviour
@@ -158,6 +159,12 @@ public class PlayerActionManager : MonoBehaviour
         if (t >= 1)
         {
             ResetFlags();
+
+            foreach(EnemyMovementShooter enemy in FindObjectsByType<EnemyMovementShooter>(FindObjectsSortMode.None))
+            {
+                enemy.ResetTurnAction();
+                enemy.DecideAction();
+            }
         }
     }
 
