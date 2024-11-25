@@ -45,23 +45,23 @@ public class OG_MovementByMouse : MonoBehaviour
 
     void Update()
     {
-        if (bullets.Count > 0)
-        {
-            for (int i = 0; i < bullets.Count; i++)
-            {
-                if (bullets[i].isFromPlayer)
-                {
-                    if (bullets[i].isHit&&i==bullets.Count-1)
-                    {
-                        isMoving = false;
-                        positionDesired = transform.position;
-                        t = 1;
-                        bullets.Remove(bullets[i]);
-                        return;
-                    }
-                }
-            }
-        }
+        //if (bullets.Count > 0)
+        //{
+        //    for (int i = 0; i < bullets.Count; i++)
+        //    {
+        //        if (bullets[i].isFromPlayer)
+        //        {
+        //            if (bullets[i].isHit&&i==bullets.Count-1)
+        //            {
+        //                isMoving = false;
+        //                positionDesired = transform.position;
+        //                t = 1;
+        //                bullets.Remove(bullets[i]);
+        //                return;
+        //            }
+        //        }
+        //    }
+        //}
         if (combatManager != null && combatManager.allEnemiesDead)
         {
             return; // Do not allow any mouse interactions if victory condition is met

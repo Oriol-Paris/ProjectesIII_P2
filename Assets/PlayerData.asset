@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe6b8f5bf0e5ea24fa2c8558c5c006ce, type: 3}
   m_Name: PlayerData
   m_EditorClassIdentifier: 
-  health: 7
+  health: 5
   maxHealth: 10
-  actionPoints: 3
+  actionPoints: 8
   maxActionPoints: 10
   baseRange: 5
-  exp: 468615
+  exp: 468631
   isAlive: 1
   victory: 0
   gun:

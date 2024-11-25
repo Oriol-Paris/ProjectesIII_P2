@@ -63,8 +63,7 @@ public class PlayerBase : MonoBehaviour
         {
             activeAction = availableActions[0];
         }
-        isAlive = playerData.isAlive;
-        victory = playerData.victory;
+       
         isInAction = false;
         turnsDone = GetComponent<PlayerActionManager>();
         checkMovement = GetComponent<OG_MovementByMouse>();
@@ -75,9 +74,11 @@ public class PlayerBase : MonoBehaviour
         // Load health, range, and other properties from the ScriptableObject
         maxHealth = playerData.maxHealth;
         health = playerData.health;
-        actionPoints = playerData.maxActionPoints;
+        actionPoints = playerData.actionPoints;
         maxActionPoints = playerData.maxActionPoints;
         exp = playerData.exp;
+         isAlive = playerData.isAlive;
+        victory = playerData.victory;
 
         // Load available actions from playerData and populate availableActions list
         foreach (var actionData in playerData.availableActions)
@@ -165,8 +166,17 @@ public class PlayerBase : MonoBehaviour
 
     #region SETTERS
 
+    public void Heal(int amount)
+    {
+        health += amount;
+        playerData.health += amount;
+
+        health = Mathf.Min(health, maxHealth);
+        playerData.health = Mathf.Min(playerData.health, maxHealth);
+
+        activeAction = Action.nothing;
+    }
     public void Damage(int val = 1) { health -= val; playerData.health-=val; }
-    public void Heal(int amount) { health += amount; playerData.health+=amount; activeAction = Action.nothing; }
     public void SetRange(float newRange) { range = newRange; }
     public void SetInAction(bool newVal) { isInAction = newVal; }
     public void AddNewAction(Action action) { availableActions.Add(action); }

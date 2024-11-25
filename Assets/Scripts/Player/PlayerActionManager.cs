@@ -104,7 +104,9 @@ public class PlayerActionManager : MonoBehaviour
             {
                 actionPointReduced = true;
                 player.actionPoints++;
+                player.actionPoints = MathF.Min(player.actionPoints, player.maxActionPoints);
                 playerData.actionPoints++;
+                playerData.actionPoints = Mathf.Min(playerData.actionPoints, playerData.maxActionPoints);
             }
         }
 
