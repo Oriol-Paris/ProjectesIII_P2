@@ -309,6 +309,7 @@ MonoBehaviour:
   playerPosition: {x: 0, y: 0, z: 0}
   placeSelected: 0
   isMoving: 0
+  isResting: 0
   t: 0
   velocity: 3
   lineRenderer: {fileID: 1145941097933022349}
@@ -336,6 +337,7 @@ MonoBehaviour:
   isHealing: 1
   turnAdded: 0
   turnsDone: 0
+  walkSoundDelay: 0
   shootClip:
   - {fileID: 8300000, guid: 6a3e850acd190164d9bea800f4e24812, type: 3}
   walkingClips:

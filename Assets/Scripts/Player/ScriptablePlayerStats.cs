@@ -28,7 +28,7 @@ public class PlayerData : ScriptableObject
     public BulletStyle laser; // Add this line for laser bullet
 
     public int healAmount = 10; 
-
+    
     public List<ActionData> availableActions = new List<ActionData>();
 
     [System.Serializable]
@@ -48,6 +48,5 @@ public class PlayerData : ScriptableObject
         public KeyCode key;
         public BulletStyle style;
         public int cost;
-        
     }
 }

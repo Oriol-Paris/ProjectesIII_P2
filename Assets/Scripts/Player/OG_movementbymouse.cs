@@ -8,6 +8,7 @@ public class OG_MovementByMouse : MonoBehaviour
     public Vector3 playerPosition;
     public bool placeSelected;
     public bool isMoving;
+    public bool isResting;
     public float t; // Parameter to control position along the curve
     [SerializeField] public float velocity; // Speed in units per second
     [SerializeField] LineRenderer lineRenderer;
@@ -45,23 +46,6 @@ public class OG_MovementByMouse : MonoBehaviour
 
     void Update()
     {
-        //if (bullets.Count > 0)
-        //{
-        //    for (int i = 0; i < bullets.Count; i++)
-        //    {
-        //        if (bullets[i].isFromPlayer)
-        //        {
-        //            if (bullets[i].isHit&&i==bullets.Count-1)
-        //            {
-        //                isMoving = false;
-        //                positionDesired = transform.position;
-        //                t = 1;
-        //                bullets.Remove(bullets[i]);
-        //                return;
-        //            }
-        //        }
-        //    }
-        //}
         if (combatManager != null && combatManager.allEnemiesDead)
         {
             return; // Do not allow any mouse interactions if victory condition is met
@@ -171,10 +155,34 @@ public class OG_MovementByMouse : MonoBehaviour
                 bullet.Resume();
             }
         }
+
+        // Check for rest action key press (W)
+        if (Input.GetKeyUp(KeyCode.W) && !placeSelected)
+        {
+            placeSelected = true;
+            t = 0;
+            isResting = true;
+            isMoving = true;
+            timer = movementTimeLimit+.5f; // Reset timer
+            placeSelected = true;
+        }
+
+        // Handle the rest action countdown
+        if (isResting && isMoving && placeSelected && timer > 0f)
+        {
+            t = 0;
+            timer -= Time.deltaTime; // Decrease timer
+            if (timer < 0f)
+            {
+                ExecuteRestAction();
+                StopMovement();
+            }
+        }
     }
 
     private void StopMovement()
     {
+        isResting = false;
         playerBase.SetInAction(false);
         placeSelected = false;
         isMoving = false;
@@ -264,5 +272,17 @@ public class OG_MovementByMouse : MonoBehaviour
     public List<BulletPrefab> GetPausedBullets()
     {
         return bullets;
+    }
+
+    public void ExecuteRestAction()
+    {
+        playerBase.Rest();
+        playerActionManager.EndTurn(); // End the turn after resting
+
+        // Trigger enemies' turn
+        foreach (EnemyMovementShooter enemy in GameObject.FindObjectsOfType<EnemyMovementShooter>())
+        {
+            enemy.DecideAction();
+        }
     }
 }

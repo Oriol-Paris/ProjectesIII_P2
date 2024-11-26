@@ -212,6 +212,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 715834105f9324b4d94aaf31e67bff83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerData: {fileID: 11400000, guid: 30cde2f3bd3a0de47a315ed687870d98, type: 2}
   isHit: 0
   range: 5
   speed: 1

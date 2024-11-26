@@ -7,7 +7,7 @@ public class PlayerBase : MonoBehaviour
 {
     public PlayerData playerData; // Reference to the ScriptableObject containing player data
 
-    public enum ActionEnum { MOVE, SHOOT, HEAL, MELEE, NOTHING };
+    public enum ActionEnum { MOVE, SHOOT, HEAL, MELEE, REST, NOTHING };
     public enum ActionType { ACTIVE, PASSIVE, SINGLE_USE };
 
     [System.Serializable]
@@ -21,13 +21,13 @@ public class PlayerBase : MonoBehaviour
             m_cost = cost;
         }
 
-        public static Action nothing { get { return new Action(ActionType.ACTIVE, ActionEnum.NOTHING, KeyCode.None,0); } }
+        public static Action nothing { get { return new Action(ActionType.ACTIVE, ActionEnum.NOTHING, KeyCode.None, 0); } }
 
         public ActionEnum m_action { get; private set; }
         public KeyCode m_key { get; private set; }
         public PlayerData.BulletStyle m_style { get; private set; }
 
-        public int m_cost { get;private set; }
+        public int m_cost { get; private set; }
 
         public void ChangeKey(KeyCode newKey) { m_key = newKey; }
     }
@@ -64,7 +64,7 @@ public class PlayerBase : MonoBehaviour
         {
             activeAction = availableActions[0];
         }
-       
+
         isInAction = false;
         turnsDone = GetComponent<PlayerActionManager>();
         checkMovement = GetComponent<OG_MovementByMouse>();
@@ -78,7 +78,7 @@ public class PlayerBase : MonoBehaviour
         actionPoints = playerData.actionPoints;
         maxActionPoints = playerData.maxActionPoints;
         exp = playerData.exp;
-         isAlive = playerData.isAlive;
+        isAlive = playerData.isAlive;
         victory = playerData.victory;
 
         // Load available actions from playerData and populate availableActions list
@@ -110,6 +110,12 @@ public class PlayerBase : MonoBehaviour
 
                         if (action.m_style != null)
                             activeStyle = action.m_style;
+
+                        if (activeAction.m_action == ActionEnum.REST)
+                        {
+                            checkMovement.ExecuteRestAction();
+                            turnsDone.EndTurn(); // End the turn after resting
+                        }
                     }
                 }
             }
@@ -126,6 +132,16 @@ public class PlayerBase : MonoBehaviour
             activeAction = Action.nothing;
             Debug.Log("Doing nothing");
         }
+
+        // Check for death condition
+        if (health <= 0 || playerData.health <= 0)
+        {
+            if (isAlive)
+            {
+                isAlive = false;
+                StartCoroutine(DeathCoroutine());
+            }
+        }
     }
 
     void OnCollisionEnter2D(Collision2D collision)
@@ -135,14 +151,15 @@ public class PlayerBase : MonoBehaviour
             collision.gameObject.GetComponent<EnemyMovement>().Attack();
             this.GetComponent<Animator>().SetTrigger("hit");
 
-            if (health > 0||playerData.health>0)
+            if (health > 0 || playerData.health > 0)
             {
                 Damage();
             }
-            else
+            else if(health<=0||playerData.health<=0) 
             {
                 isAlive = false;
                 Debug.Log("YOU DIED");
+                StartCoroutine(DeathCoroutine());
             }
         }
     }
@@ -177,10 +194,41 @@ public class PlayerBase : MonoBehaviour
 
         activeAction = Action.nothing;
     }
-    public void Damage(int val = 1) { health -= val; playerData.health-=val; SoundEffectsManager.instance.PlaySoundFXClip(damageClips, transform, 1f); }
+
+    public void Rest()
+    {
+        actionPoints += 3;
+        playerData.actionPoints += 3;
+
+        actionPoints = Mathf.Min(actionPoints, maxActionPoints);
+        playerData.actionPoints = Mathf.Min(playerData.actionPoints, maxActionPoints);
+
+        activeAction = Action.nothing;
+        turnsDone.ResetFlags(); // End the turn after resting
+    }
+
+    public void Damage(int val = 1) 
+    { 
+        health -= val; 
+        playerData.health -= val; 
+        SoundEffectsManager.instance.PlaySoundFXClip(damageClips, transform, 1f); 
+
+        // Check for death condition immediately after taking damage
+        if (health <= 0 || playerData.health <= 0)
+        {
+            if (isAlive)
+            {
+                isAlive = false;
+                StartCoroutine(DeathCoroutine());
+            }
+        }
+    }
+
     public void SetRange(float newRange) { range = newRange; }
     public void SetInAction(bool newVal) { isInAction = newVal; }
     public void AddNewAction(Action action) { availableActions.Add(action); }
 
     #endregion
+
+    
 }

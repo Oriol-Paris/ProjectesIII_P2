@@ -88,6 +88,12 @@ public class PlayerActionManager : MonoBehaviour
                         passiveActions.Add(actionData.action, new HealAction());
                     }
                     break;
+                case PlayerBase.ActionType.SINGLE_USE:
+                    if (actionData.action == PlayerBase.ActionEnum.REST)
+                    {
+                        activeActions.Add(actionData.action, new RestAction());
+                    }
+                    break;
                     // Add other cases if you have SingleUse or other action types
             }
         }
@@ -188,7 +194,7 @@ public class PlayerActionManager : MonoBehaviour
     }
 
     public PlayerBase GetPlayer() { return player; }
-
+    public void EndTurn() { turnsDone++; } // Add this method to end the turn after resting
 
     public IEnumerator AttackCoroutine(PlayerBase.ActionEnum action, Vector3 newPos)
     {

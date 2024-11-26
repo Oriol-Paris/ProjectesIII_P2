@@ -9,11 +9,13 @@ public class GunBullet : BulletPrefab
     {
         isHit = false;
         speed = 10f;
-        for (int i = 0; i < playerData.availableActions.Count; i++)
-        {
-            if (playerData.availableActions[i].style.prefab == playerData.gun.prefab)
+        if(isFromPlayer) {
+            for (int i = 0; i < playerData.availableActions.Count; i++)
             {
-                damage = playerData.availableActions[i].style.damage; break;
+                if (playerData.availableActions[i].style.prefab == playerData.gun.prefab)
+                {
+                    damage = playerData.availableActions[i].style.damage; break;
+                }
             }
         }
     }
