@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class EnemyMovementShooter : MonoBehaviour
 {
-    private enum TurnActions { APPROACH, SHOOT, BACK_AWAY, NOTHING };
-    private TurnActions turnAction;
+    public enum TurnActions { APPROACH, SHOOT, BACK_AWAY, NOTHING };
+    public TurnActions turnAction;
 
     [SerializeField] private List<OG_MovementByMouse> players; // Array of player references
-    private OG_MovementByMouse closestPlayer;
+    public OG_MovementByMouse closestPlayer;
     private Vector3 closestPlayerPos;
     private float moveTime;
-    private EnemyBase enemyStats;
+    public EnemyBase enemyStats;
     [SerializeField] private GameObject bulletShot; // Bullet prefab to shoot
     [SerializeField] private float velocity; // Movement speed
     [SerializeField] private float range; // Shooting range
@@ -44,6 +44,9 @@ public class EnemyMovementShooter : MonoBehaviour
             if (closestPlayer.isMoving)
             {
                 ExecuteAction();
+            } else
+            {
+                DecideAction();
             }
         }
     }
@@ -121,13 +124,13 @@ public class EnemyMovementShooter : MonoBehaviour
     // Reload coroutine to wait until the next GetIsMoving toggle after shooting
     private IEnumerator Reload()
     {
-        Debug.Log("RELOAD");
+        //Debug.Log("RELOAD");
         isReloading = true;
         yield return new WaitUntil(() => closestPlayer.GetIsMoving() == false);
         yield return new WaitUntil(() => closestPlayer.GetIsMoving() == true);
         yield return new WaitUntil(() => closestPlayer.GetIsMoving() == false);
         yield return new WaitUntil(() => closestPlayer.GetIsMoving() == false);
-        yield return new WaitUntil(() => closestPlayer.GetIsMoving() == true);
+        
         isReloading = false;
         hasShot = false; // Reset shooting state for the next turn
     }
@@ -136,7 +139,7 @@ public class EnemyMovementShooter : MonoBehaviour
     {
         fx.SetTrigger("playFX");
         this.GetComponent<Animator>().SetTrigger("attack");
-        yield return new WaitForSeconds(0.8f);
+        yield return new WaitForSeconds(0.3f);
         closestPlayerPos = closestPlayer.GetPosition();
 
         Shoot();
@@ -153,23 +156,26 @@ public class EnemyMovementShooter : MonoBehaviour
 
         if (distanceToPlayer > range)
         {
+            Debug.Log("MOVING");
             // Move towards the player if out of range
             turnAction = TurnActions.APPROACH;
         }
         else if (distanceToPlayer < minDistance)
         {
+            Debug.Log("MOVING");
             // Move away from the player if too close
             turnAction = TurnActions.BACK_AWAY;    
         }
         else if (!hasShot && !isReloading) // Shoot only once per turn
         {
+
+            Debug.Log("PIUM");
             //In range, shoot
             turnAction = TurnActions.SHOOT;
         }
         else
         {
-            //Something went wrong
-            Debug.LogError("EnemyShooter can't decide");
+            Debug.Log("NOTHING");
             turnAction = TurnActions.NOTHING;
         }
     }
