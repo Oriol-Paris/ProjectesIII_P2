@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem.XR;
 
 public class PlayerActionManager : MonoBehaviour
 {
@@ -22,6 +23,8 @@ public class PlayerActionManager : MonoBehaviour
     public bool turnAdded = false;
     public int turnsDone = 0;
 
+    [SerializeField] private float walkSoundDelay;
+    float actualWalkSoundDelay;
     private CombatManager combatManager;
     private bool hasShot = false; // Flag to track if a shot has been fired
     private bool actionPointReduced;
@@ -103,7 +106,15 @@ public class PlayerActionManager : MonoBehaviour
         {
             isMoving = true;
             activeActions[PlayerBase.ActionEnum.MOVE].Execute(player, newPos);
-            SoundEffectsManager.instance.PlaySoundFXClip(walkingClips, transform, 1f);
+            if (actualWalkSoundDelay < 0)
+            {
+                SoundEffectsManager.instance.PlaySoundFXClip(walkingClips,transform,1f);
+                actualWalkSoundDelay = walkSoundDelay;
+            }
+            else
+            {
+                actualWalkSoundDelay -= Time.deltaTime;
+            }
             if (!actionPointReduced)
             {
                 
@@ -139,20 +150,20 @@ public class PlayerActionManager : MonoBehaviour
                 StartCoroutine(AttackCoroutine(PlayerBase.ActionEnum.MELEE, newPos));
                 if (!actionPointReduced)
                 {
-                    actionPointReduced = true;
-                    player.actionPoints -= currentAction.m_cost;
-                    playerData.actionPoints -= currentAction.m_cost;
+                    
                 }
             }
         }
 
         if (currentAction.m_action == PlayerBase.ActionEnum.HEAL && isHealing)
         {
+            isMoving = true;
             passiveActions[PlayerBase.ActionEnum.HEAL].Execute(player, newPos);
             if (!actionPointReduced)
             {
                 actionPointReduced = true;
-                playerData.actionPoints--;
+                player.actionPoints -= currentAction.m_cost;
+                playerData.actionPoints -= currentAction.m_cost;
             }
         }
 

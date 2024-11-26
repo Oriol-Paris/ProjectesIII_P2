@@ -3,6 +3,7 @@ using UnityEngine;
 
 public abstract class BulletPrefab : MonoBehaviour
 {
+    public PlayerData playerData;
     public bool isHit;
     [SerializeField] public int range;
     [SerializeField] public float speed;
@@ -18,11 +19,14 @@ public abstract class BulletPrefab : MonoBehaviour
 
     private void Start()
     {
-        movementScript = FindObjectOfType<OG_MovementByMouse>();
+        playerData = FindAnyObjectByType<PlayerData>();
+        movementScript = FindAnyObjectByType<OG_MovementByMouse>();
         if (movementScript != null)
         {
             movementScript.RegisterBullet(this);
         }
+        
+        
     }
 
     // Commenting out the OnBecameInvisible method for debugging

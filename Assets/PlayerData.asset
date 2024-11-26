@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 5
   maxHealth: 10
-  actionPoints: 8
+  actionPoints: 1
   maxActionPoints: 10
   baseRange: 5
-  exp: 468631
+  exp: 468679
   isAlive: 1
   victory: 0
   gun:
@@ -77,4 +77,4 @@ MonoBehaviour:
       prefab: {fileID: 0}
       range: 0
       damage: 0
-    cost: 0
+    cost: 1

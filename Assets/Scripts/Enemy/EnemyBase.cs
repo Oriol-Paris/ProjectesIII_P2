@@ -6,7 +6,6 @@ using UnityEngine;
 public class EnemyBase : MonoBehaviour
 {
     [SerializeField] private int health;
-    private int actionPoints;
     [SerializeField] private float range;
     [SerializeField] private float oldRange;//Esto para clase shooter
     [SerializeField] private float shootingRange;//Esto para cuando hagamos clase shooter
@@ -47,7 +46,13 @@ public class EnemyBase : MonoBehaviour
 
 
     public int GetHealth() { return health; }
-    public void Damage(int val) { health -= val; SoundEffectsManager.instance.PlaySoundFXClip(damageClips, transform, 1f); }
+    public void Damage(int val)
+    {
+        health -= val;
+        health = Mathf.Max(health, 0); // Ensure health doesn't go below 0
+        SoundEffectsManager.instance.PlaySoundFXClip(damageClips, transform, 1f);
+    }
+
     public float GetRange() { return range; }
     public void SetRange(float newRange) { range = newRange; }
     public float GetOldRange() { return oldRange; }

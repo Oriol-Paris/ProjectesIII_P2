@@ -10,7 +10,13 @@ public class Shotgun : BulletPrefab
     {
         isHit = false;
         speed = 10f;
-        damage = FindObjectOfType<PlayerBase>().playerData.gun.damage; // Use updated damage value
+        for (int i = 0; i < playerData.availableActions.Count; i++)
+        {
+            if (playerData.availableActions[i].style.prefab == playerData.shotgun.prefab)
+            {
+                damage = playerData.availableActions[i].style.damage; break;
+            }
+        }
     }
 
     void Update()

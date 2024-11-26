@@ -7,9 +7,9 @@ public class ShootAction : ActiveAction
     public GameObject bulletPrefab;
     public Vector3[] offsets = new Vector3[]
     {
-        //new Vector3(-0.65f, 0, 0), // Left offset
-        Vector3.zero,             // Center
-        new Vector3(0.65f, 0, 0)   // Right offset
+        new Vector3(-0.5f, 0, 0), // Left offset
+        //Vector3.zero,             // Center
+        new Vector3(0.5f, 0, 0)   // Right offset
     };
 
     public override void Execute(PlayerBase player, Vector3 targetPosition)
