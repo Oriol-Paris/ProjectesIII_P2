@@ -59,13 +59,13 @@ public class HotbarManager : MonoBehaviour
 
                 slot.transform.Find("Texts").transform.Find("Action Name").GetComponent<TextMeshProUGUI>().text = GetActionName(action);
                 slot.transform.Find("Texts").transform.Find("Action Name").position =
-                    new Vector3(slot.transform.Find("Texts").transform.position.x + 110,
+                    new Vector3(slot.transform.Find("Texts").transform.position.x + 70,
                         slot.transform.Find("Texts").transform.Find("Action Name").position.y,
                         slot.transform.Find("Texts").transform.Find("Action Name").position.z);
 
                 slot.transform.Find("Texts").transform.Find("Action Type").GetComponent<TextMeshProUGUI>().text = action.actionType.ToString();
                 slot.transform.Find("Texts").transform.Find("Action Type").position =
-                    new Vector3(slot.transform.Find("Texts").transform.position.x + 110,
+                    new Vector3(slot.transform.Find("Texts").transform.position.x + 70,
                         slot.transform.Find("Texts").transform.Find("Action Type").position.y,
                         slot.transform.Find("Texts").transform.Find("Action Type").position.z);
 
@@ -78,7 +78,7 @@ public class HotbarManager : MonoBehaviour
                     slot.transform.Find("Texts").transform.Find("Action Stats").GetComponent<TextMeshProUGUI>().text =
                         "Range: " + action.style.range + "\nDamage: " + action.style.damage;
                     slot.transform.Find("Texts").transform.Find("Action Stats").position = 
-                        new Vector3(slot.transform.Find("Texts").transform.position.x + 110, 
+                        new Vector3(slot.transform.Find("Texts").transform.position.x + 70, 
                         slot.transform.Find("Texts").transform.Find("Action Stats").position.y,
                         slot.transform.Find("Texts").transform.Find("Action Stats").position.z);
                 }

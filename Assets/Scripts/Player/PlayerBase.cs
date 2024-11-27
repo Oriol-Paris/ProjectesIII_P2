@@ -58,13 +58,16 @@ public class PlayerBase : MonoBehaviour
 
     void Start()
     {
+        if(playerData.health<=0){
+            playerData.health = playerData.maxHealth;
+        }
         LoadPlayerData();
 
         if (availableActions.Count > 0)
         {
             activeAction = availableActions[0];
         }
-
+        
         isInAction = false;
         turnsDone = GetComponent<PlayerActionManager>();
         checkMovement = GetComponent<OG_MovementByMouse>();
