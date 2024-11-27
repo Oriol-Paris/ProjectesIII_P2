@@ -331,6 +331,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
+  dialogueManager: {fileID: 0}
   fx: {fileID: 6904931311285059048}
   isMoving: 1
   isShooting: 1

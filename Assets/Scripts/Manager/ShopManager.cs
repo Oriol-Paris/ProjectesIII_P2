@@ -21,6 +21,8 @@ public class ShopManager : MonoBehaviour
     public Sprite recoveryImage;
     public Sprite speedUpImage;
     public Sprite restImage;
+    public Sprite maxHPImage;
+    public Sprite manaImage;
 
     public int rerollPrice;
     bool actionExists;
@@ -160,12 +162,20 @@ public class ShopManager : MonoBehaviour
                 break;
             case PlayerBase.ActionEnum.RECOVERY:
                 boughtItem.text = "Player Healed";
-                player.health += 3;
+                player.InstantHeal(3);
                 player.playerData.timesHealed += 1;
                 break;
             case PlayerBase.ActionEnum.SPEED_UP:
                 boughtItem.text = "Player Speed Up";
                 //player speed up
+                break;
+            case PlayerBase.ActionEnum.MAX_HP_INCREASE:
+                boughtItem.text = "Player MaxHP Up";
+                player.InstantMaxHPIncrease();
+                break;
+            case PlayerBase.ActionEnum.MANA_POTION:
+                boughtItem.text = "Player Mana Up";
+                player.InstantManaIncrease(2);
                 break;
         }
     }
@@ -177,10 +187,12 @@ public class ShopManager : MonoBehaviour
         PlayerData.ActionData heal = new PlayerData.ActionData(PlayerBase.ActionType.PASSIVE, PlayerBase.ActionEnum.HEAL, KeyCode.None, 1, player.playerData.healStyle);
         PlayerData.ActionData move = new PlayerData.ActionData(PlayerBase.ActionType.ACTIVE, PlayerBase.ActionEnum.MOVE, KeyCode.None, 1, player.playerData.moveStyle);
         PlayerData.ActionData recovery = new PlayerData.ActionData(PlayerBase.ActionType.SINGLE_USE, PlayerBase.ActionEnum.RECOVERY, KeyCode.None, 1, player.playerData.moveStyle);
+        PlayerData.ActionData maxHpIncrease = new PlayerData.ActionData(PlayerBase.ActionType.SINGLE_USE, PlayerBase.ActionEnum.MAX_HP_INCREASE, KeyCode.None, 1, player.playerData.moveStyle);
+        PlayerData.ActionData manaPotion = new PlayerData.ActionData(PlayerBase.ActionType.SINGLE_USE, PlayerBase.ActionEnum.MANA_POTION, KeyCode.None, 1, player.playerData.moveStyle);
         //PlayerData.ActionData speedUp = new PlayerData.ActionData(PlayerBase.ActionType.SINGLE_USE, PlayerBase.ActionEnum.SPEED_UP, KeyCode.None, 1, player.playerData.moveStyle);
         actionPool = new List<PlayerData.ActionData>
         {
-            shotgunShot, gunShot, heal, move, recovery
+            shotgunShot, gunShot, heal, move, recovery, maxHpIncrease, manaPotion
         };
 
         activeActions = new List<ActionData>(4);
@@ -242,11 +254,19 @@ public class ShopManager : MonoBehaviour
         }
         else if (actionData.action == PlayerBase.ActionEnum.RECOVERY)
         {
-            return "Instant Recovery";
+            return "Instant HP Recovery";
         }
         else if (actionData.action == PlayerBase.ActionEnum.SPEED_UP)
         {
             return "Speed Up";
+        }
+        else if (actionData.action == PlayerBase.ActionEnum.MAX_HP_INCREASE)
+        {
+            return "Max HP Up";
+        }
+        else if (actionData.action == PlayerBase.ActionEnum.MANA_POTION)
+        {
+            return "Mana Points Up";
         }
         return actionData.action.ToString();
     }
@@ -284,6 +304,14 @@ public class ShopManager : MonoBehaviour
         {
             return restImage;
         }
+        else if (actionData.action == PlayerBase.ActionEnum.MAX_HP_INCREASE)
+        {
+            return maxHPImage;
+        }
+        else if (actionData.action == PlayerBase.ActionEnum.MANA_POTION)
+        {
+            return manaImage;
+        }
         return null;
     }
 
@@ -314,6 +342,10 @@ public class ShopManager : MonoBehaviour
             return 25;
         else if (action.action == PlayerBase.ActionEnum.RECOVERY)
             return 10 + 10 * player.playerData.timesHealed;
+        else if (action.action == PlayerBase.ActionEnum.MAX_HP_INCREASE)
+            return 20 + 20 * player.playerData.timesIncreasedMaxHP;
+        else if (action.action == PlayerBase.ActionEnum.MANA_POTION)
+            return 15 + 15 * player.playerData.timesIncreasedMana;
 
         return 100000;
     }

@@ -1145,6 +1145,8 @@ MonoBehaviour:
   recoveryImage: {fileID: 21300000, guid: c736331b63dca6144ad0525e3e96d8da, type: 3}
   speedUpImage: {fileID: 21300000, guid: b9bc929fd54993045b339890237facb5, type: 3}
   restImage: {fileID: 21300000, guid: 252812397870d2842ba9b8bd138af9f6, type: 3}
+  maxHPImage: {fileID: 21300000, guid: 4cb56cf2a0681824facd7f87a5ac7886, type: 3}
+  manaImage: {fileID: 21300000, guid: d34f683dd9279764eb05181899c20099, type: 3}
   rerollPrice: 10
 --- !u!114 &1232424836
 MonoBehaviour:
