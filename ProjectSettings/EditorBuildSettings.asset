@@ -12,6 +12,21 @@ EditorBuildSettings:
     path: Assets/Scenes/GymShootingTest.unity
     guid: 24452737433a9f043b7800a9023cb918
   - enabled: 1
+    path: Assets/Scenes/Levels/Level1f.unity
+    guid: 2f7f153fd584fb54297d77976c651983
+  - enabled: 1
+    path: Assets/Scenes/Levels/Level2.unity
+    guid: 9bec991ea6f32d845a36f7a04b0b21cf
+  - enabled: 1
+    path: Assets/Scenes/Levels/Level3.unity
+    guid: 8707b99c5ecd7114b95ea7f33ff73346
+  - enabled: 1
+    path: Assets/Scenes/Levels/Level4.unity
+    guid: 9ec67ee7be17e364eabc988b33ba62f2
+  - enabled: 1
+    path: Assets/Scenes/Levels/Level5.unity
+    guid: 59c35dde21bf86342b458ebb8c302788
+  - enabled: 1
     path: Assets/Scenes/ShopScene.unity
     guid: 7199331da1ea89b478cb1e8b2e13be49
   - enabled: 1

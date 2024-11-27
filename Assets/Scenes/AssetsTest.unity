@@ -1312,7 +1312,8 @@ PrefabInstance:
       value: Map3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 1067535179846773202, guid: 4dbb02ad1516f0b4680d2a22723db87b, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4dbb02ad1516f0b4680d2a22723db87b, type: 3}
@@ -1487,6 +1488,18 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 971190824}
+    - target: {fileID: 6678225274821996644, guid: de0bf87b2e6d1a440ba19d3d71f2bea3, type: 3}
+      propertyPath: m_Colors.m_DisabledColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6678225274821996644, guid: de0bf87b2e6d1a440ba19d3d71f2bea3, type: 3}
+      propertyPath: m_Colors.m_DisabledColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6678225274821996644, guid: de0bf87b2e6d1a440ba19d3d71f2bea3, type: 3}
+      propertyPath: m_Colors.m_DisabledColor.r
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7280014274883716432, guid: de0bf87b2e6d1a440ba19d3d71f2bea3, type: 3}
       propertyPath: m_Pivot.x
       value: 0

@@ -1,8 +1,10 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
+using System.Data;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using static PlayerData;
 
 public class HotbarManager : MonoBehaviour
 {
@@ -14,7 +16,6 @@ public class HotbarManager : MonoBehaviour
     private List<GameObject> actionSlots = new List<GameObject>();
     private List<PlayerData.ActionData> actionsDisplayed = new List<PlayerData.ActionData>();
     float originalCount;
-
     void Start()
     {
         InitializeHotbar();
@@ -23,6 +24,7 @@ public class HotbarManager : MonoBehaviour
 
     void InitializeHotbar()
     {
+        //playerData = playerActionManager.GetPlayer();
         if (playerData == null)
         {
             Debug.LogError("Player is null in HotbarManager.");
@@ -31,15 +33,17 @@ public class HotbarManager : MonoBehaviour
 
         foreach (var action in playerData.playerData.availableActions)
         {
-            GameObject slot = Instantiate(actionSlotPrefab, hotbarPanel.transform);
-
             if (SceneManager.GetActiveScene().name == "ShopScene")
             {
+                GameObject slot = Instantiate(actionSlotPrefab, hotbarPanel.transform);
                 slot.transform.Find("Texts").transform.Find("Action Name").GetComponent<TextMeshProUGUI>().text = FindAnyObjectByType<ShopManager>().GetActionDisplayName(action);
                 slot.transform.Find("Action Image").GetComponent<Image>().overrideSprite = FindAnyObjectByType<ShopManager>().GetActionImage(action);
                 slot.transform.Find("Action Image").GetComponent<Image>().preserveAspect = true;
                 slot.transform.Find("Texts").transform.Find("Action Type").GetComponent<TextMeshProUGUI>().text = action.actionType.ToString();
-
+                if (action.actionType == PlayerBase.ActionType.ACTIVE)
+                {
+                    slot.transform.Find("Texts").transform.Find("Action Type").gameObject.SetActive(false);
+                }
                 if (action.actionType == PlayerBase.ActionType.PASSIVE || action.actionType == PlayerBase.ActionType.SINGLE_USE)
                     slot.transform.Find("Texts").transform.Find("Action Stats").gameObject.SetActive(false);
                 else
@@ -47,102 +51,143 @@ public class HotbarManager : MonoBehaviour
                     slot.transform.Find("Texts").transform.Find("Action Stats").GetComponent<TextMeshProUGUI>().text =
                         "Range: " + action.style.range + "\nDamage: " + action.style.damage;
                 }
+
+                actionSlots.Add(slot);
+                actionsDisplayed.Add(action);
+                Debug.Log(action.actionType);
             }
             else
             {
+                GameObject slot = Instantiate(actionSlotPrefab, hotbarPanel.transform);
+
                 slot.transform.Find("Action Image").GetComponent<Image>().enabled = false;
-               
+
                 slot.transform.Find("Texts").transform.Find("Action Name").GetComponent<TextMeshProUGUI>().text = GetActionName(action);
                 slot.transform.Find("Texts").transform.Find("Action Name").position =
-                    new Vector3(slot.transform.Find("Texts").transform.position.x + 75,
+                    new Vector3(slot.transform.Find("Texts").transform.position.x + 70,
                         slot.transform.Find("Texts").transform.Find("Action Name").position.y,
                         slot.transform.Find("Texts").transform.Find("Action Name").position.z);
 
                 slot.transform.Find("Texts").transform.Find("Action Type").GetComponent<TextMeshProUGUI>().text = action.actionType.ToString();
                 slot.transform.Find("Texts").transform.Find("Action Type").position =
-                    new Vector3(slot.transform.Find("Texts").transform.position.x + 75,
+                    new Vector3(slot.transform.Find("Texts").transform.position.x + 70,
                         slot.transform.Find("Texts").transform.Find("Action Type").position.y,
                         slot.transform.Find("Texts").transform.Find("Action Type").position.z);
-                if(action.actionType == PlayerBase.ActionType.ACTIVE)
-                {
-                    slot.transform.Find("Texts").transform.Find("Action Type").gameObject.SetActive(false);
-                }
-                // Mostrar estadísticas solo para acciones activas
+
                 if (action.actionType == PlayerBase.ActionType.PASSIVE || action.actionType == PlayerBase.ActionType.SINGLE_USE)
                 {
-                    slot.transform.Find("Texts").transform.Find("Action Stats").gameObject.SetActive(false);  // No mostrar estadísticas para acciones pasivas
+                    slot.transform.Find("Texts").transform.Find("Action Stats").gameObject.SetActive(false);
                 }
                 else
                 {
                     slot.transform.Find("Texts").transform.Find("Action Stats").GetComponent<TextMeshProUGUI>().text =
-                        "Range: " + action.style.range + "\nDamage: " + action.style.damage;  // Mostrar estadísticas para acciones activas
+                        "Range: " + action.style.range + "\nDamage: " + action.style.damage;
                     slot.transform.Find("Texts").transform.Find("Action Stats").position =
-                        new Vector3(slot.transform.Find("Texts").transform.position.x + 75,
+                        new Vector3(slot.transform.Find("Texts").transform.position.x + 70,
                         slot.transform.Find("Texts").transform.Find("Action Stats").position.y,
                         slot.transform.Find("Texts").transform.Find("Action Stats").position.z);
                 }
-
-                // Añadir el texto que muestra el input vinculado a la acción
                 TextMeshProUGUI inputText = slot.transform.Find("Texts").transform.Find("Action Input").GetComponent<TextMeshProUGUI>();
                 if (inputText != null)
                 {
-                    string inputKey = action.key.ToString();  // Accede a la clave de la acción, que es el input asignado
-                    inputText.text = inputKey;  // Muestra el input asignado a la acción
+                    string inputKey = action.key.ToString();  // Accede a la clave de la acciï¿½n, que es el input asignado
+                    inputText.text = inputKey;  // Muestra el input asignado a la acciï¿½n
                 }
+                actionSlots.Add(slot);
+                actionsDisplayed.Add(action);
             }
-
-            actionSlots.Add(slot);
-            actionsDisplayed.Add(action);
         }
     }
 
     void Update()
     {
-        if (FindAnyObjectByType<PlayerBase>().playerData.availableActions.Count > actionsDisplayed.Count && actionSlots.Count < 4)
+        var availableActions = FindAnyObjectByType<PlayerBase>().playerData.availableActions;
+        if (availableActions.Count > actionsDisplayed.Count && actionSlots.Count < 4)
         {
-            foreach (PlayerData.ActionData action in FindAnyObjectByType<PlayerBase>().playerData.availableActions)
+            foreach (PlayerData.ActionData action in availableActions)
             {
                 bool exists = false;
 
+                // AsegÃºrate de que la acciÃ³n no exista en actionsDisplayed antes de agregarla
                 foreach (PlayerData.ActionData da in actionsDisplayed)
                 {
                     if (action.action == da.action && action.style == da.style)
+                    {
                         exists = true;
+                        break; // Si ya existe, no la aÃ±adimos
+                    }
                 }
 
                 if (!exists)
                 {
-                    GameObject slot = Instantiate(actionSlotPrefab, hotbarPanel.transform);
-                    slot.transform.Find("Texts").transform.Find("Action Name").GetComponent<TextMeshProUGUI>().text = FindAnyObjectByType<ShopManager>().GetActionDisplayName(action);
-                    slot.transform.Find("Action Image").GetComponent<Image>().overrideSprite = FindAnyObjectByType<ShopManager>().GetActionImage(action);
-                    slot.transform.Find("Action Image").GetComponent<Image>().preserveAspect = true;
-                    slot.transform.Find("Texts").transform.Find("Action Type").GetComponent<TextMeshProUGUI>().text = action.actionType.ToString();
+                    if (SceneManager.GetActiveScene().name == "ShopScene")
+                    {
+                        GameObject slot = Instantiate(actionSlotPrefab, hotbarPanel.transform);
+                        slot.transform.Find("Texts").transform.Find("Action Name").GetComponent<TextMeshProUGUI>().text = FindAnyObjectByType<ShopManager>().GetActionDisplayName(action);
+                        slot.transform.Find("Action Image").GetComponent<Image>().overrideSprite = FindAnyObjectByType<ShopManager>().GetActionImage(action);
+                        slot.transform.Find("Action Image").GetComponent<Image>().preserveAspect = true;
+                        slot.transform.Find("Texts").transform.Find("Action Type").GetComponent<TextMeshProUGUI>().text = action.actionType.ToString();
 
-                    // Mostrar estadísticas solo para acciones activas
-                    if (action.actionType == PlayerBase.ActionType.PASSIVE || action.actionType == PlayerBase.ActionType.SINGLE_USE)
-                        slot.transform.Find("Texts").transform.Find("Action Stats").gameObject.SetActive(false);
+                        if (action.actionType == PlayerBase.ActionType.PASSIVE || action.actionType == PlayerBase.ActionType.SINGLE_USE)
+                            slot.transform.Find("Texts").transform.Find("Action Stats").gameObject.SetActive(false);
+                        else
+                        {
+                            slot.transform.Find("Texts").transform.Find("Action Stats").GetComponent<TextMeshProUGUI>().text =
+                                "Range: " + action.style.range + "\nDamage: " + action.style.damage;
+                        }
+
+                        actionSlots.Add(slot);
+                        actionsDisplayed.Add(action);  // Agregar a la lista de acciones mostradas
+                    }
                     else
                     {
-                        slot.transform.Find("Texts").transform.Find("Action Stats").GetComponent<TextMeshProUGUI>().text =
-                            "Range: " + action.style.range + "\nDamage: " + action.style.damage;
-                    }
+                        
+                            GameObject slot = Instantiate(actionSlotPrefab, hotbarPanel.transform);
 
-                    // Añadir el texto que muestra el input vinculado a la acción
-                    TextMeshProUGUI inputText = slot.transform.Find("Texts").transform.Find("Action Input").GetComponent<TextMeshProUGUI>();
-                    if (inputText != null)
-                    {
-                        string inputKey = action.key.ToString();  // Accede a la clave de la acción, que es el input asignado
-                        inputText.text = "Input: " + inputKey;  // Muestra el input asignado a la acción
-                    }
+                            slot.transform.Find("Action Image").GetComponent<Image>().enabled = false;
 
-                    actionSlots.Add(slot);
-                    actionsDisplayed.Add(action);
+                            slot.transform.Find("Texts").transform.Find("Action Name").GetComponent<TextMeshProUGUI>().text = GetActionName(action);
+                            slot.transform.Find("Texts").transform.Find("Action Name").position =
+                                new Vector3(slot.transform.Find("Texts").transform.position.x + 70,
+                                    slot.transform.Find("Texts").transform.Find("Action Name").position.y,
+                                    slot.transform.Find("Texts").transform.Find("Action Name").position.z);
+
+                            slot.transform.Find("Texts").transform.Find("Action Type").GetComponent<TextMeshProUGUI>().text = action.actionType.ToString();
+                            slot.transform.Find("Texts").transform.Find("Action Type").position =
+                                new Vector3(slot.transform.Find("Texts").transform.position.x + 70,
+                                    slot.transform.Find("Texts").transform.Find("Action Type").position.y,
+                                    slot.transform.Find("Texts").transform.Find("Action Type").position.z);
+
+                            if (action.actionType == PlayerBase.ActionType.PASSIVE || action.actionType == PlayerBase.ActionType.SINGLE_USE)
+                            {
+                                slot.transform.Find("Texts").transform.Find("Action Stats").gameObject.SetActive(false);
+                            }
+                            else
+                            {
+                                slot.transform.Find("Texts").transform.Find("Action Stats").GetComponent<TextMeshProUGUI>().text =
+                                    "Range: " + action.style.range + "\nDamage: " + action.style.damage;
+                                slot.transform.Find("Texts").transform.Find("Action Stats").position =
+                                    new Vector3(slot.transform.Find("Texts").transform.position.x + 70,
+                                    slot.transform.Find("Texts").transform.Find("Action Stats").position.y,
+                                    slot.transform.Find("Texts").transform.Find("Action Stats").position.z);
+                            }
+                            TextMeshProUGUI inputText = slot.transform.Find("Texts").transform.Find("Action Input").GetComponent<TextMeshProUGUI>();
+                            if (inputText != null)
+                            {
+                                string inputKey = action.key.ToString();  // Accede a la clave de la acciï¿½n, que es el input asignado
+                                inputText.text = inputKey;  // Muestra el input asignado a la acciï¿½n
+                            }
+                            actionSlots.Add(slot);
+                            actionsDisplayed.Add(action);
+                        
+                    }
                 }
             }
         }
 
         UpdateHotbar();
     }
+
 
     void UpdateHotbar()
     {
@@ -160,24 +205,25 @@ public class HotbarManager : MonoBehaviour
             var actionData = player.playerData.availableActions[i];
 
             var slot = actionSlots[i];
-
-            // Mostrar estadísticas solo para acciones activas
+            if (actionData.actionType == PlayerBase.ActionType.ACTIVE)
+            {
+                slot.transform.Find("Texts").transform.Find("Action Type").gameObject.SetActive(false);
+            }
             if (actionData.actionType == PlayerBase.ActionType.PASSIVE || actionData.actionType == PlayerBase.ActionType.SINGLE_USE)
-                slot.transform.Find("Texts").transform.Find("Action Stats").gameObject.SetActive(false); // No mostrar estadísticas para acciones pasivas
+                slot.transform.Find("Texts").transform.Find("Action Stats").gameObject.SetActive(false);
             else
             {
                 slot.transform.Find("Texts").transform.Find("Action Stats").GetComponent<TextMeshProUGUI>().text =
-                    "Range: " + actionData.style.range + "\nDamage: " + actionData.style.damage; // Mostrar estadísticas para acciones activas
+                    "Range: " + actionData.style.range + "\nDamage: " + actionData.style.damage;
             }
 
-            // Resaltar la acción seleccionada
             if (currentAction.m_action == actionData.action && currentAction.m_style == actionData.style && SceneManager.GetActiveScene().name != "ShopScene")
             {
-                slot.GetComponent<Image>().color = Color.yellow; // Resaltar acción seleccionada
+                slot.GetComponent<Image>().color = Color.yellow; // Highlight selected action
             }
             else
             {
-                slot.GetComponent<Image>().color = Color.white; // Color predeterminado
+                slot.GetComponent<Image>().color = Color.white; // Default color
             }
         }
     }
