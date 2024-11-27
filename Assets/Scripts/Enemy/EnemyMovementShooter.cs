@@ -32,6 +32,10 @@ public class EnemyMovementShooter : MonoBehaviour
         {
             players.Add(player);
         }
+
+        velocity = velocity * FindAnyObjectByType<CombatManager>().enemyStatMultiplier;
+        range = range * FindAnyObjectByType<CombatManager>().enemyStatMultiplier;
+
         DecideAction();
     }
 

@@ -8,15 +8,15 @@ public class ChangeScene : MonoBehaviour
     [SerializeField] CombatManager expObtained;
     public void GoToShop()
     {
+        FindAnyObjectByType<PlayerData>().lastClearedLevel = SceneManager.GetActiveScene().name;
         SceneManager.LoadScene("ShopScene");
     }
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+
     void Start()
     {
         
     }
 
-    // Update is called once per frame
     void Update()
     {
         expValue.text = "Exp: "+expObtained.playerParty[0].exp+"";

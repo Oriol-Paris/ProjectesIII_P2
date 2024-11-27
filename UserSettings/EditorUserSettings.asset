@@ -6,25 +6,34 @@ EditorUserSettings:
   serializedVersion: 4
   m_ConfigSettings:
     RecentlyUsedSceneGuid-0:
-      value: 5b520d0503545b0d0c0c0a2715770748154f4d2c7d7d7e627a7d4a35b4e1646a
-      flags: 0
-    RecentlyUsedSceneGuid-1:
-      value: 070952055153505e545d5b2646225c44414e4f292d7c75622c284962b0b1623c
-      flags: 0
-    RecentlyUsedSceneGuid-2:
       value: 02530455030c5b0b095f5a7242760a444e161b7b7d7027652e281c62b0b8673c
       flags: 0
-    RecentlyUsedSceneGuid-3:
+    RecentlyUsedSceneGuid-1:
       value: 5105005357025a0c595d5f2349250f4445154f727c7827697d7b4e30e0b96560
       flags: 0
-    RecentlyUsedSceneGuid-4:
+    RecentlyUsedSceneGuid-2:
       value: 54000d5f5606585f0c5f0923487a5d44414f1b287d2d7e327f2c4c60e0e56061
       flags: 0
-    RecentlyUsedSceneGuid-5:
+    RecentlyUsedSceneGuid-3:
+      value: 010356505d505d5e580a0d7413705b44144e40297b292462742b4e32e1e2643c
+      flags: 0
+    RecentlyUsedSceneGuid-4:
       value: 0606015304025a035d57557448720a44454e48297d2a7f617d2f1f31bab4646c
       flags: 0
+    RecentlyUsedSceneGuid-5:
+      value: 5157030054005a5d095b547616210a44444e4f2e7b7f7f677b2a4b66b3b96c6b
+      flags: 0
     RecentlyUsedSceneGuid-6:
-      value: 010356505d505d5e580a0d7413705b44144e40297b292462742b4e32e1e2643c
+      value: 5a5351055c0c585e0c580a714227074443164b7c2a7f2760792b4d31b0b1373e
+      flags: 0
+    RecentlyUsedSceneGuid-7:
+      value: 5b060451070c5058580b0f2647720e44144e4d2f2d7f20637e2f1b64b1b3606e
+      flags: 0
+    RecentlyUsedSceneGuid-8:
+      value: 5a54575052500c0c0f0b5d751570094413161a2975707e327e7a1f32b4b2326a
+      flags: 0
+    RecentlyUsedSceneGuid-9:
+      value: 5608575550510d5e5f5f0e2448750c4444154c7f742d2432752a4e63b0b76c60
       flags: 0
     UnityEditor.ShaderGraph.Blackboard:
       value: 18135939215a0a5004000b0e15254b524c030a3f2964643d120d1230e9e93a3fd6e826abbd3c3e302a07a37e0901373ae01e0008f707250d171df81a53a5405d41895ac825e0100ec20313c0d91cddccd3d0c7efcca9bd80908fecb0f9cfddf1eff4e7a1b1eae482f0feaae0e1928b86d888ed909c968797a7cf

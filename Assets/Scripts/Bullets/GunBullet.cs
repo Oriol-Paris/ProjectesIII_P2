@@ -57,7 +57,7 @@ public class GunBullet : BulletPrefab
             PlayerBase player = collision.gameObject.GetComponent<PlayerBase>();
             if (player != null)
             {
-                player.Damage();
+                player.Damage(FindAnyObjectByType<CombatManager>().enemyStatMultiplier >= 1.5f? 2 : 1);
                 isHit = true;
             }
         }

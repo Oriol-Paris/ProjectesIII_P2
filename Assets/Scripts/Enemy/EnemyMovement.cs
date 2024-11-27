@@ -13,7 +13,6 @@ public class EnemyMovement : MonoBehaviour
     private Vector3 PlayerPos;
     float moveTime;
     EnemyBase enemyStats;
-    [SerializeField] private GameObject bulletShot;
     [SerializeField] private float velocity;
     [SerializeField] private float range;
 
@@ -25,6 +24,9 @@ public class EnemyMovement : MonoBehaviour
     {
         Player = FindAnyObjectByType<OG_MovementByMouse>();
         enemyStats = GetComponent<EnemyBase>();
+
+        velocity = velocity * FindAnyObjectByType<CombatManager>().enemyStatMultiplier;
+        range = range * FindAnyObjectByType<CombatManager>().enemyStatMultiplier;
     }
 
     void Update()
@@ -63,6 +65,4 @@ public class EnemyMovement : MonoBehaviour
     {
         StartCoroutine(AttackCoroutine());
     }
-
-  
 }
