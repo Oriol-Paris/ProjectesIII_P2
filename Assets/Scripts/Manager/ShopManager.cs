@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using static PlayerData;
 using UnityEngine.EventSystems;
+using System.Xml;
 
 public class ShopManager : MonoBehaviour
 {
@@ -67,7 +68,7 @@ public class ShopManager : MonoBehaviour
         string itemName = itemText.text;
         PlayerData.ActionData actionData = actionPool.Find(action => GetActionDisplayName(action) == itemName);
         int index = buttons.FindIndex(button => button.transform.Find("Item Name").GetComponent<TextMeshProUGUI>().text == itemName);
-        if (actionData != null)
+        if (actionData != null && player.playerData.exp >= pricePool[index])
         {
             bool actionExists = false;
             PlayerData.ActionData repeatAction = null;
@@ -108,7 +109,13 @@ public class ShopManager : MonoBehaviour
                 }
             }
 
-            if (!actionExists&&index != -1 && player.playerData.exp >= pricePool[index])
+            if(actionData.actionType == PlayerBase.ActionType.SINGLE_USE)
+            {
+                IncreaseStat(actionData);
+                UpdatePrices();
+            }
+
+            if (!actionExists && index != -1)
             {
                 player.playerData.exp -= pricePool[index];
 
@@ -117,12 +124,9 @@ public class ShopManager : MonoBehaviour
                 boughtItem.enabled = true;
                 boughtItem.text = "Just bought: " + itemName;
             }
-            else
-            {
-                boughtItem.enabled = true;
-                boughtItem.text = "Not enough experience";
-            }
         }
+        else if (player.exp < pricePool[index])
+            boughtItem.text = "Not enough experience";
 
         UpdatePrices();
     }
@@ -290,9 +294,9 @@ public class ShopManager : MonoBehaviour
             if (action.action == playerAction.action && action.style.prefab == playerAction.style.prefab)
             {
                 if (action.action == PlayerBase.ActionEnum.MOVE)
-                    return 10 + (Mathf.FloorToInt(Mathf.Pow(action.style.range, 1.75f)));
+                    return 10 + (Mathf.FloorToInt(Mathf.Pow(action.style.range, 1.25f)));
                 else if (action.action == PlayerBase.ActionEnum.HEAL)
-                    return 10 + (Mathf.FloorToInt(Mathf.Pow(player.playerData.healAmount, 1.75f)));
+                    return 10 + (Mathf.FloorToInt(Mathf.Pow(player.playerData.healAmount, 1.25f)));
                 else if (action.action == PlayerBase.ActionEnum.SHOOT && action.style.prefab == player.playerData.gun.prefab)
                     return 15 + (Mathf.FloorToInt(Mathf.Pow(action.style.range, 1.25f)));
                 else if (action.action == PlayerBase.ActionEnum.SHOOT && action.style.prefab == player.playerData.shotgun.prefab)
@@ -309,7 +313,7 @@ public class ShopManager : MonoBehaviour
         else if (action.action == PlayerBase.ActionEnum.SHOOT && action.style.prefab == player.playerData.shotgun.prefab)
             return 25;
         else if (action.action == PlayerBase.ActionEnum.RECOVERY)
-            return player.playerData.timesHealed == 0 ? 10 : 10 + 10 * player.playerData.timesHealed;
+            return 10 + 10 * player.playerData.timesHealed;
 
         return 100000;
     }
