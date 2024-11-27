@@ -1226,7 +1226,7 @@ MonoBehaviour:
   restImage: {fileID: 21300000, guid: 252812397870d2842ba9b8bd138af9f6, type: 3}
   maxHPImage: {fileID: 21300000, guid: 4cb56cf2a0681824facd7f87a5ac7886, type: 3}
   manaImage: {fileID: 21300000, guid: d34f683dd9279764eb05181899c20099, type: 3}
-  rerollPrice: 10
+  rerollPrice: 1
 --- !u!114 &1232424836
 MonoBehaviour:
   m_ObjectHideFlags: 0

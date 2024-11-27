@@ -117,7 +117,6 @@ public class ShopManager : MonoBehaviour
             if(actionData.actionType == PlayerBase.ActionType.SINGLE_USE)
             {
                 IncreaseStat(actionData);
-                UpdatePrices();
             }
 
             if (!actionExists && index != -1)
@@ -129,11 +128,12 @@ public class ShopManager : MonoBehaviour
                 boughtItem.enabled = true;
                 boughtItem.text = "Just bought: " + itemName;
             }
+
+            // Update prices after the item has been bought
+            UpdatePrices();
         }
         else if (player.exp < pricePool[index])
             boughtItem.text = "Not enough experience";
-
-        UpdatePrices();
     }
 
     private void EquipNewAction(PlayerData.ActionData actionData)
