@@ -1,10 +1,16 @@
 fileFormatVersion: 2
-guid: 79e58a954c645594180228af47ec7568
+guid: 252812397870d2842ba9b8bd138af9f6
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 2375687113717954393
-    second: Artboard 117_0
+      213: 7674728309307496601
+    second: Artboard 34_0
+  - first:
+      213: -6526121909517558590
+    second: Artboard 34_1
+  - first:
+      213: 734412517153499296
+    second: Artboard 34_2
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +119,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Artboard 117_0
+      name: Artboard 34_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 54
-        width: 290
-        height: 184
+        x: 15
+        y: 0
+        width: 122
+        height: 205
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +134,52 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 957b1aec7d228f020800000000000000
-      internalID: 2375687113717954393
+      spriteID: 99858ef1cbc128a60800000000000000
+      internalID: 7674728309307496601
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Artboard 34_1
+      rect:
+        serializedVersion: 2
+        x: 75
+        y: 165
+        width: 129
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2ccdf4e33be8e65a0800000000000000
+      internalID: -6526121909517558590
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Artboard 34_2
+      rect:
+        serializedVersion: 2
+        x: 152
+        y: 1
+        width: 123
+        height: 203
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0a8e8831b48213a00800000000000000
+      internalID: 734412517153499296
       vertices: []
       indices: 
       edges: []
@@ -148,7 +198,9 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Artboard 117_0: 2375687113717954393
+      Artboard 34_0: 7674728309307496601
+      Artboard 34_1: -6526121909517558590
+      Artboard 34_2: 734412517153499296
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

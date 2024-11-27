@@ -1138,19 +1138,14 @@ MonoBehaviour:
   player: {fileID: 435037521}
   boughtItem: {fileID: 1195563168}
   currentXP: {fileID: 1208965283}
-  moveImage:
-    whiteImage: {fileID: 21300000, guid: 80a31360147518a4c878052c987d2472, type: 3}
-    blackImage: {fileID: 21300000, guid: f2d270ae7cdedd64fafb016240d58738, type: 3}
-  gunImage:
-    whiteImage: {fileID: 21300000, guid: 04c9e5448c757a54a9482dd91faef38a, type: 3}
-    blackImage: {fileID: 21300000, guid: 79e58a954c645594180228af47ec7568, type: 3}
-  shotgunImage:
-    whiteImage: {fileID: 21300000, guid: 982cfee97721db245a0c0ea21a8fbddc, type: 3}
-    blackImage: {fileID: 21300000, guid: 1a89ee3388c4dfd42bdd9d297d86f88b, type: 3}
-  healImage:
-    whiteImage: {fileID: 21300000, guid: 800fb34dc71becd4f98a6c0c7bca341b, type: 3}
-    blackImage: {fileID: 21300000, guid: 22d2ac07264e9b540ac968b92cedc4e2, type: 3}
-  rerollPrice: 1
+  moveImage: {fileID: 21300000, guid: 80a31360147518a4c878052c987d2472, type: 3}
+  gunImage: {fileID: 21300000, guid: 04c9e5448c757a54a9482dd91faef38a, type: 3}
+  shotgunImage: {fileID: 21300000, guid: 982cfee97721db245a0c0ea21a8fbddc, type: 3}
+  healImage: {fileID: 21300000, guid: 800fb34dc71becd4f98a6c0c7bca341b, type: 3}
+  recoveryImage: {fileID: 21300000, guid: c736331b63dca6144ad0525e3e96d8da, type: 3}
+  speedUpImage: {fileID: 21300000, guid: b9bc929fd54993045b339890237facb5, type: 3}
+  restImage: {fileID: 21300000, guid: 252812397870d2842ba9b8bd138af9f6, type: 3}
+  rerollPrice: 10
 --- !u!114 &1232424836
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -7,28 +7,24 @@ using UnityEngine.EventSystems;
 
 public class ShopManager : MonoBehaviour
 {
-    [System.Serializable]
-    public class ItemImage
-    {
-        public Sprite whiteImage;
-        public Sprite blackImage;
-    }
-
-
     public TextMeshProUGUI rerollText;
     [SerializeField] private GameObject buttonPrefab; // Reference to the button prefab
     public Transform buttonContainer; // Reference to the container where buttons will be instantiated
     [SerializeField] public PlayerBase player;
     [SerializeField] public TextMeshProUGUI boughtItem;
     [SerializeField] public TextMeshProUGUI currentXP;
-    public ItemImage moveImage;
-    public ItemImage gunImage;
-    public ItemImage shotgunImage;
-    public ItemImage healImage;
+    public Sprite moveImage;
+    public Sprite gunImage;
+    public Sprite shotgunImage;
+    public Sprite healImage;
+    public Sprite recoveryImage;
+    public Sprite speedUpImage;
+    public Sprite restImage;
 
     public int rerollPrice;
     bool actionExists;
     private List<PlayerData.ActionData> actionPool;
+    private List<PlayerData.ActionData> activeActions;
     private List<int> pricePool;
     private List<GameObject> buttons;
 
@@ -106,6 +102,7 @@ public class ShopManager : MonoBehaviour
                         player.playerData.exp -= pricePool[index];
                         boughtItem.enabled = true;
                         IncreaseStat(player.playerData.availableActions[i]);
+                        UpdatePrices();
                         return;
                     }
                 }
@@ -126,12 +123,17 @@ public class ShopManager : MonoBehaviour
                 boughtItem.text = "Not enough experience";
             }
         }
+
+        UpdatePrices();
     }
 
     private void EquipNewAction(PlayerData.ActionData actionData)
     {
-        actionData.key = (KeyCode)System.Enum.Parse(typeof(KeyCode), "Alpha" + (player.playerData.availableActions.Count + 1));
-        player.playerData.availableActions.Add(actionData);
+        if(actionData.actionType != PlayerBase.ActionType.SINGLE_USE)
+        {
+            actionData.key = (KeyCode)System.Enum.Parse(typeof(KeyCode), "Alpha" + (player.playerData.availableActions.Count + 1));
+            player.playerData.availableActions.Add(actionData);
+        }
     }
 
     private void IncreaseStat(PlayerData.ActionData actionData)
@@ -152,6 +154,15 @@ public class ShopManager : MonoBehaviour
                 actionData.style.range += 1;
                 player.playerData.baseRange += 1; // Increase move range
                 break;
+            case PlayerBase.ActionEnum.RECOVERY:
+                boughtItem.text = "Player Healed";
+                player.health += 3;
+                player.playerData.timesHealed += 1;
+                break;
+            case PlayerBase.ActionEnum.SPEED_UP:
+                boughtItem.text = "Player Speed Up";
+                //player speed up
+                break;
         }
     }
 
@@ -161,11 +172,14 @@ public class ShopManager : MonoBehaviour
         PlayerData.ActionData gunShot = new PlayerData.ActionData(PlayerBase.ActionType.ACTIVE, PlayerBase.ActionEnum.SHOOT, KeyCode.None, 1,player.playerData.gun);
         PlayerData.ActionData heal = new PlayerData.ActionData(PlayerBase.ActionType.PASSIVE, PlayerBase.ActionEnum.HEAL, KeyCode.None, 1, player.playerData.healStyle);
         PlayerData.ActionData move = new PlayerData.ActionData(PlayerBase.ActionType.ACTIVE, PlayerBase.ActionEnum.MOVE, KeyCode.None, 1, player.playerData.moveStyle);
+        PlayerData.ActionData recovery = new PlayerData.ActionData(PlayerBase.ActionType.SINGLE_USE, PlayerBase.ActionEnum.RECOVERY, KeyCode.None, 1, player.playerData.moveStyle);
+        //PlayerData.ActionData speedUp = new PlayerData.ActionData(PlayerBase.ActionType.SINGLE_USE, PlayerBase.ActionEnum.SPEED_UP, KeyCode.None, 1, player.playerData.moveStyle);
         actionPool = new List<PlayerData.ActionData>
         {
-            shotgunShot, gunShot, heal, move
+            shotgunShot, gunShot, heal, move, recovery
         };
 
+        activeActions = new List<ActionData>(4);
         pricePool = new List<int>(4);
         buttons = new List<GameObject>(4);
 
@@ -174,6 +188,7 @@ public class ShopManager : MonoBehaviour
         {
             int randomIndex = Random.Range(0, actionPool.Count);
             PlayerData.ActionData actionData = actionPool[randomIndex];
+            activeActions.Add(actionData);
 
             // Instantiate button
             GameObject button = Instantiate(buttonPrefab, buttonContainer);
@@ -190,10 +205,10 @@ public class ShopManager : MonoBehaviour
             //itemImage.SetNativeSize();
 
             // Set price text
-            int randomPrice = Random.Range(10, 100); // Random price between 10 and 100
-            pricePool.Add(randomPrice);
+            int price = CalculateActionPrice(actionData);
+            pricePool.Add(price);
             TextMeshProUGUI priceText = button.transform.Find("Price").GetComponent<TextMeshProUGUI>();
-            priceText.text = randomPrice.ToString() + " EXP";
+            priceText.text = price.ToString() + " EXP";
 
             // Add button click listener
             button.GetComponent<Button>().onClick.AddListener(() => BuyItem(itemText));
@@ -221,6 +236,14 @@ public class ShopManager : MonoBehaviour
         {
             return "Move";
         }
+        else if (actionData.action == PlayerBase.ActionEnum.RECOVERY)
+        {
+            return "Instant Recovery";
+        }
+        else if (actionData.action == PlayerBase.ActionEnum.SPEED_UP)
+        {
+            return "Speed Up";
+        }
         return actionData.action.ToString();
     }
 
@@ -230,21 +253,76 @@ public class ShopManager : MonoBehaviour
         {
             if (actionData.style.prefab == player.playerData.gun.prefab)
             {
-                return gunImage.whiteImage;
+                return gunImage;
             }
             else if (actionData.style.prefab == player.playerData.shotgun.prefab)
             {
-                return shotgunImage.whiteImage;
+                return shotgunImage;
             }
         }
         else if (actionData.action == PlayerBase.ActionEnum.HEAL)
         {
-            return healImage.whiteImage;
+            return healImage;
         }
         else if (actionData.action == PlayerBase.ActionEnum.MOVE)
         {
-            return moveImage.whiteImage;
+            return moveImage;
+        }
+        else if (actionData.action == PlayerBase.ActionEnum.RECOVERY)
+        {
+            return recoveryImage;
+        }
+        else if (actionData.action == PlayerBase.ActionEnum.SPEED_UP)
+        {
+            return speedUpImage;
+        }
+        else if (actionData.action == PlayerBase.ActionEnum.REST)
+        {
+            return restImage;
         }
         return null;
+    }
+
+    int CalculateActionPrice(ActionData action)
+    {
+        foreach(ActionData playerAction in FindAnyObjectByType<PlayerBase>().playerData.availableActions)
+        {
+            if (action.action == playerAction.action && action.style.prefab == playerAction.style.prefab)
+            {
+                if (action.action == PlayerBase.ActionEnum.MOVE)
+                    return 10 + (Mathf.FloorToInt(Mathf.Pow(action.style.range, 1.75f)));
+                else if (action.action == PlayerBase.ActionEnum.HEAL)
+                    return 10 + (Mathf.FloorToInt(Mathf.Pow(player.playerData.healAmount, 1.75f)));
+                else if (action.action == PlayerBase.ActionEnum.SHOOT && action.style.prefab == player.playerData.gun.prefab)
+                    return 15 + (Mathf.FloorToInt(Mathf.Pow(action.style.range, 1.25f)));
+                else if (action.action == PlayerBase.ActionEnum.SHOOT && action.style.prefab == player.playerData.shotgun.prefab)
+                    return 25 + (Mathf.FloorToInt(Mathf.Pow(action.style.range, 1.25f)));
+            }
+        }
+
+        if (action.action == PlayerBase.ActionEnum.MOVE)
+            return 10;
+        else if (action.action == PlayerBase.ActionEnum.HEAL)
+            return 10;
+        else if (action.action == PlayerBase.ActionEnum.SHOOT && action.style.prefab == player.playerData.gun.prefab)
+            return 15;
+        else if (action.action == PlayerBase.ActionEnum.SHOOT && action.style.prefab == player.playerData.shotgun.prefab)
+            return 25;
+        else if (action.action == PlayerBase.ActionEnum.RECOVERY)
+            return player.playerData.timesHealed == 0 ? 10 : 10 + 10 * player.playerData.timesHealed;
+
+        return 100000;
+    }
+
+    void UpdatePrices()
+    {
+        pricePool.Clear();
+
+        for(int i = 0; i < buttons.Count; ++i)
+        {
+            int price = CalculateActionPrice(activeActions[i]);
+            pricePool.Add(price);
+            buttons[i].transform.Find("Price").GetComponent<TextMeshProUGUI>().text = price.ToString() + " EXP";
+        }
     }
 }

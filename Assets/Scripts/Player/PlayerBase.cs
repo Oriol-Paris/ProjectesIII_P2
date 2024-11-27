@@ -7,7 +7,7 @@ public class PlayerBase : MonoBehaviour
 {
     public PlayerData playerData; // Reference to the ScriptableObject containing player data
 
-    public enum ActionEnum { MOVE, SHOOT, HEAL, MELEE, REST, NOTHING };
+    public enum ActionEnum { MOVE, SHOOT, HEAL, MELEE, REST, RECOVERY, SPEED_UP, NOTHING };
     public enum ActionType { ACTIVE, PASSIVE, SINGLE_USE };
 
     [System.Serializable]

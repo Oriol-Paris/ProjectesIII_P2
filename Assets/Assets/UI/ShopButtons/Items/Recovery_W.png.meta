@@ -1,16 +1,16 @@
 fileFormatVersion: 2
-guid: 1a89ee3388c4dfd42bdd9d297d86f88b
+guid: c736331b63dca6144ad0525e3e96d8da
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -2911945857955092669
-    second: Artboard 118_0
+      213: 7940180811921313436
+    second: Artboard 46_0
   - first:
-      213: 5780264646435909888
-    second: Artboard 118_1
+      213: 2604946069722220682
+    second: Artboard 46_1
   - first:
-      213: -3555662694764555666
-    second: Artboard 118_2
+      213: 2792852049682770678
+    second: Artboard 46_2
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -119,13 +119,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Artboard 118_0
+      name: Artboard 46_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 82
-        width: 277
-        height: 161
+        x: 107
+        y: 246
+        width: 41
+        height: 45
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -134,20 +134,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 347aa6b9ba0b697d0800000000000000
-      internalID: -2911945857955092669
+      spriteID: c9e41fa2160313e60800000000000000
+      internalID: 7940180811921313436
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Artboard 118_1
+      name: Artboard 46_1
       rect:
         serializedVersion: 2
-        x: 168
-        y: 176
-        width: 122
-        height: 78
+        x: 134
+        y: 231
+        width: 43
+        height: 27
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -156,20 +156,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 001bf8e1210a73050800000000000000
-      internalID: 5780264646435909888
+      spriteID: a88c7d816a0a62420800000000000000
+      internalID: 2604946069722220682
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Artboard 118_2
+      name: Artboard 46_2
       rect:
         serializedVersion: 2
-        x: 113
-        y: 38
-        width: 129
-        height: 59
+        x: 50
+        y: 0
+        width: 190
+        height: 224
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -178,8 +178,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: e6253792e9fb7aec0800000000000000
-      internalID: -3555662694764555666
+      spriteID: 6fa209b542432c620800000000000000
+      internalID: 2792852049682770678
       vertices: []
       indices: 
       edges: []
@@ -198,9 +198,9 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Artboard 118_0: -2911945857955092669
-      Artboard 118_1: 5780264646435909888
-      Artboard 118_2: -3555662694764555666
+      Artboard 46_0: 7940180811921313436
+      Artboard 46_1: 2604946069722220682
+      Artboard 46_2: 2792852049682770678
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
