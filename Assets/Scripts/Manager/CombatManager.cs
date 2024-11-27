@@ -9,6 +9,7 @@ public class CombatManager : MonoBehaviour
     public EnemyBase[] enemyParty;  // Array para enemigos
     public bool allEnemiesDead;
     public bool allPlayersDead;
+    [SerializeField] public float enemyStatMultiplier = 1;
     [SerializeField] private int numberOfTurns;
     [SerializeField] Canvas winCondition;
 

@@ -3,21 +3,25 @@ using UnityEngine.SceneManagement;
 
 public class GoToFight : MonoBehaviour
 {
-
     public void NextRound()
     {
-        SceneManager.LoadScene("AssetsTest");
-
-    }
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        switch(FindAnyObjectByType<PlayerData>().lastClearedLevel)
+        {
+            case "Level1":
+                SceneManager.LoadScene("Level2");
+                break;
+            case "Level2":
+                SceneManager.LoadScene("Level3");
+                break;
+            case "Level3":
+                SceneManager.LoadScene("Level4");
+                break;
+            case "Level4":
+                SceneManager.LoadScene("Level5");
+                break;
+            case "Level5":
+                SceneManager.LoadScene("Level1");
+                break;
+        }
     }
 }
