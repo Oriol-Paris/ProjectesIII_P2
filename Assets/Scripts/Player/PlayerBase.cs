@@ -189,6 +189,10 @@ public class PlayerBase : MonoBehaviour
 
     public void Heal(int amount)
     {
+        actionPoints -= activeAction.m_cost;
+        playerData.actionPoints -= activeAction.m_cost;
+        actionPoints = Mathf.Min(actionPoints, maxActionPoints);
+        playerData.actionPoints = Mathf.Min(playerData.actionPoints, maxActionPoints);
         health += amount;
         playerData.health += amount;
 
