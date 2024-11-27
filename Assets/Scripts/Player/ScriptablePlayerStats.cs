@@ -8,7 +8,8 @@ public class PlayerData : ScriptableObject
     public float maxHealth;
     public float actionPoints;
     public float maxActionPoints;
-    public string lastClearedLevel;
+    public string lastLevel;
+    public bool levelCompleted;
     public int baseRange;
     public int exp;
     public bool isAlive;
