@@ -5,9 +5,11 @@ public class GoToFight : MonoBehaviour
 {
     public void NextRound()
     {
-        if (FindAnyObjectByType<PlayerBase>().playerData.levelCompleted)
+        var playerData = FindAnyObjectByType<PlayerBase>().playerData;
+
+        if (playerData.levelCompleted)
         {
-            switch (FindAnyObjectByType<PlayerBase>().playerData.lastLevel)
+            switch (playerData.lastLevel)
             {
                 case "Level1":
                     SceneManager.LoadScene("Level2");
@@ -24,9 +26,21 @@ public class GoToFight : MonoBehaviour
                 case "Level5":
                     SceneManager.LoadScene("Level1");
                     break;
+                case "Tutorial":
+                    SceneManager.LoadScene("Level1");
+                    break;
             }
         }
         else
-            SceneManager.LoadScene(FindAnyObjectByType<PlayerBase>().playerData.lastLevel);
+        {
+            if (playerData.lastLevel == string.Empty || playerData.lastLevel == "Tutorial")
+            {
+                SceneManager.LoadScene("Level1");
+            }
+            else
+            {
+                SceneManager.LoadScene(playerData.lastLevel);
+            }
+        }
     }
 }
