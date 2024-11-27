@@ -208,6 +208,7 @@ public class PlayerBase : MonoBehaviour
 
         activeAction = Action.nothing;
         turnsDone.ResetFlags(); // End the turn after resting
+
     }
 
     public void Damage(int val = 1) 
