@@ -8,7 +8,8 @@ public class ChangeScene : MonoBehaviour
     [SerializeField] CombatManager expObtained;
     public void GoToShop()
     {
-        //FindAnyObjectByType<PlayerData>().lastClearedLevel = SceneManager.GetActiveScene().name;
+        FindAnyObjectByType<PlayerBase>().playerData.lastLevel = SceneManager.GetActiveScene().name;
+        FindAnyObjectByType<PlayerBase>().playerData.levelCompleted = FindAnyObjectByType<CombatManager>().allEnemiesDead;
         SceneManager.LoadScene("ShopScene");
     }
 
