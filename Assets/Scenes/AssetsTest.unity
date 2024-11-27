@@ -1659,11 +1659,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1088591690453367189, guid: 86b5e03058826fa47abc3c555286ee76, type: 3}
       propertyPath: m_CellSize.x
-      value: 135
+      value: 150
       objectReference: {fileID: 0}
     - target: {fileID: 1088591690453367189, guid: 86b5e03058826fa47abc3c555286ee76, type: 3}
       propertyPath: m_CellSize.y
-      value: 135
+      value: 150
       objectReference: {fileID: 0}
     - target: {fileID: 1088591690453367189, guid: 86b5e03058826fa47abc3c555286ee76, type: 3}
       propertyPath: m_Constraint
@@ -1675,7 +1675,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1088591690453367189, guid: 86b5e03058826fa47abc3c555286ee76, type: 3}
       propertyPath: m_ChildAlignment
-      value: 0
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 2102460365194555068, guid: 86b5e03058826fa47abc3c555286ee76, type: 3}
       propertyPath: m_Name
@@ -1691,19 +1691,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4535277555018116947, guid: 86b5e03058826fa47abc3c555286ee76, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 830
+      value: 940
       objectReference: {fileID: 0}
     - target: {fileID: 4535277555018116947, guid: 86b5e03058826fa47abc3c555286ee76, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 150
+      value: 170
       objectReference: {fileID: 0}
     - target: {fileID: 4535277555018116947, guid: 86b5e03058826fa47abc3c555286ee76, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 524.55774
+      value: 469.78
       objectReference: {fileID: 0}
     - target: {fileID: 4535277555018116947, guid: 86b5e03058826fa47abc3c555286ee76, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -460
+      value: -449.56378
       objectReference: {fileID: 0}
     - target: {fileID: 5838785314503126080, guid: 86b5e03058826fa47abc3c555286ee76, type: 3}
       propertyPath: m_AnchorMax.y
@@ -1781,6 +1781,18 @@ PrefabInstance:
       propertyPath: m_Player
       value: 
       objectReference: {fileID: 774920524}
+    - target: {fileID: 8391054879866722628, guid: 86b5e03058826fa47abc3c555286ee76, type: 3}
+      propertyPath: m_Type
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8391054879866722628, guid: 86b5e03058826fa47abc3c555286ee76, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 8867979931147399559, guid: 35518bf9797525444a6e0525d1698a37, type: 3}
+    - target: {fileID: 8391054879866722628, guid: 86b5e03058826fa47abc3c555286ee76, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 9204683591655732369, guid: 86b5e03058826fa47abc3c555286ee76, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
