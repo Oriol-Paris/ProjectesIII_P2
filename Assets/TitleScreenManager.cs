@@ -34,4 +34,8 @@ public class TitleScreenManager : MonoBehaviour
             }
         }
     }
+    public void CloseGame()
+    {
+        Application.Quit();
+    }
 }

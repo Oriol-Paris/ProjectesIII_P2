@@ -204,6 +204,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioMixer: {fileID: 24100000, guid: 45b75f7574a90e4458d75870f0902f17, type: 2}
+  masterVolumeSlider: {fileID: 0}
+  soundFXVolumeSlider: {fileID: 0}
+  musicVolumeSlider: {fileID: 0}
 --- !u!4 &533759385
 Transform:
   m_ObjectHideFlags: 0
@@ -9072,12 +9075,13 @@ MonoBehaviour:
   intro:
   - 'Welcome to Senka! '
   - In this tutorial we will teach you how to battle
-  - Move your mouse around and clicl wherever you want to go
+  - Move your mouse around and click wherever you want to go
   - You can hold the button and drag to curve your movement
+  - You can use that to dodge oncoming projectiles
   postWalk:
   - Great job! Now for the combat
-  - Your attacks will consist mainly on shooting
-  - Select the action by pressing the key binded
+  - Your attacks will consist on shooting
+  - Select the action by pressing the key binded to the Gun action
   - Point and click wherever you want to shoot
   attack:
   - Your attacks will use action points
@@ -9086,7 +9090,7 @@ MonoBehaviour:
   - Resting recovers triple the points walking does
   - Use it to recover some points and finish the enemy!
   rest: []
-  textSpeed: 0.1
+  textSpeed: 0.05
 --- !u!114 &1513572230
 MonoBehaviour:
   m_ObjectHideFlags: 0

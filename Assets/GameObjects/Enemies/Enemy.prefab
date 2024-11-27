@@ -106,8 +106,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Player: {fileID: 0}
-  bulletShot: {fileID: 0}
-  velocity: 1
+  velocity: 1.5
   range: 5
 --- !u!50 &4449962838169955803
 Rigidbody2D:

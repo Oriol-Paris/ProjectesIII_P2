@@ -171,9 +171,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 1
-  range: 5
+  range: 10
   oldRange: 5
-  shootingRange: 8
+  shootingRange: 10
   spriteRenderer: {fileID: 7086546256689271642}
   collider: {fileID: 779711176196000108}
   rb2d: {fileID: 4449962838169955803}
@@ -202,6 +202,10 @@ MonoBehaviour:
   velocity: 2
   range: 5
   minDistance: 2
+  shootingClips:
+  - {fileID: 8300000, guid: 3fdff599a87b80a4dbdcbe89e60062ce, type: 3}
+  - {fileID: 8300000, guid: 6a3e850acd190164d9bea800f4e24812, type: 3}
+  - {fileID: 8300000, guid: fc8dae0e97caff040998967dcf1ff972, type: 3}
   fx: {fileID: 8189897864542917949}
 --- !u!95 &6209296037174827964
 Animator:

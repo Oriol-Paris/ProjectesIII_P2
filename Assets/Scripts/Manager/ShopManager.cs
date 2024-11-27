@@ -31,8 +31,11 @@ public class ShopManager : MonoBehaviour
     private List<int> pricePool;
     private List<GameObject> buttons;
 
+    private Dictionary<PlayerData.ActionData, int> statIncreaseCount;
+
     public void Start()
     {
+        statIncreaseCount = new Dictionary<PlayerData.ActionData, int>();
         InitializeShop();
         boughtItem.enabled = false;
         currentXP.text = player.playerData.exp + "";
@@ -137,13 +140,25 @@ public class ShopManager : MonoBehaviour
     {
         if(actionData.actionType != PlayerBase.ActionType.SINGLE_USE)
         {
-            actionData.key = (KeyCode)System.Enum.Parse(typeof(KeyCode), "Alpha" + (player.playerData.availableActions.Count + 1));
+            actionData.key = (KeyCode)System.Enum.Parse(typeof(KeyCode), "Alpha" + (player.playerData.availableActions.Count));
             player.playerData.availableActions.Add(actionData);
+            statIncreaseCount[actionData] = 0;  // Initialize the stat increase count
         }
     }
 
     private void IncreaseStat(PlayerData.ActionData actionData)
     {
+        if (!statIncreaseCount.ContainsKey(actionData))
+        {
+            statIncreaseCount[actionData] = 0;
+        }
+
+        statIncreaseCount[actionData]++;
+        if (statIncreaseCount[actionData] > 5 && (actionData.action == PlayerBase.ActionEnum.SHOOT || actionData.action == PlayerBase.ActionEnum.HEAL))
+        {
+            actionData.cost += 1;  // Increase the cost of executing the action
+        }
+
         switch (actionData.action)
         {
             case PlayerBase.ActionEnum.SHOOT:

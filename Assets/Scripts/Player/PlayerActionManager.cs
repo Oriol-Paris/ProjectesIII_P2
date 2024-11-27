@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem.XR;
+using UnityEngine.SceneManagement;
 
 public class PlayerActionManager : MonoBehaviour
 {
@@ -103,7 +104,13 @@ public class PlayerActionManager : MonoBehaviour
             }
         }
     }
-
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            SceneManager.LoadScene("Title Screen");
+        }
+    }
     public void UpdateAction(Vector3 newPos, float t)
     {
         if (combatManager != null && combatManager.allEnemiesDead)

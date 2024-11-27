@@ -16,6 +16,7 @@ public class EnemyMovementShooter : MonoBehaviour
     [SerializeField] private float velocity; // Movement speed
     [SerializeField] private float range; // Shooting range
     [SerializeField] private float minDistance = 2f; // Minimum distance before moving back
+    [SerializeField] private AudioClip[] shootingClips;
     public Animator fx;
     private bool haveChosenAnAction;
     private bool isReloading = false; // To control the "reload" wait after shooting
@@ -113,6 +114,7 @@ public class EnemyMovementShooter : MonoBehaviour
         if(!hasShot)
         {
             Debug.Log("BANG");
+            SoundEffectsManager.instance.PlaySoundFXClip(shootingClips, transform,1f);
             GameObject bullet = Instantiate(bulletShot, transform.position, Quaternion.identity);
             GunBullet bulletScript = bullet.GetComponent<GunBullet>();
             bulletScript.isFromPlayer = false;

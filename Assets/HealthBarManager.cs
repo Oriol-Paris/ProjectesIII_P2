@@ -24,7 +24,7 @@ public class HealthBarManager : MonoBehaviour
     {
         health.value =(float)(m_Player.health/m_Player.maxHealth);
         actionPoints.value = (float)(m_Player.actionPoints / m_Player.maxActionPoints);
-        healthNumber.text = m_Player.health.ToString();
-        actPtNumber.text = m_Player.actionPoints.ToString();
+        healthNumber.text = "Health: "+ m_Player.health.ToString();
+        actPtNumber.text = "ActPt: "+m_Player.actionPoints.ToString();
     }
 }
